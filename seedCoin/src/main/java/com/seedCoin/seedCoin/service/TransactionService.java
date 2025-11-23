@@ -1,0 +1,19 @@
+package com.seedCoin.seedCoin.service;
+
+import com.seedCoin.seedCoin.dto.CreateTransactionDTO;
+import com.seedCoin.seedCoin.dto.TransactionDTO;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface TransactionService {
+    List<TransactionDTO> getAllTransactions();
+
+    Optional<TransactionDTO> getTransactionById(Integer id);
+
+    TransactionDTO createTransaction(CreateTransactionDTO createTransactionDTO);
+
+    TransactionDTO updateTransaction(Integer id, TransactionDTO transactionDTO);
+
+    void deleteTransaction(Integer id);
+}
