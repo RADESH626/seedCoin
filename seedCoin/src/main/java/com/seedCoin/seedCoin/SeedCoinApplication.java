@@ -1,0 +1,13 @@
+package com.seedCoin.seedCoin;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SeedCoinApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SeedCoinApplication.class, args);
+	}
+
+}
