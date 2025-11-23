@@ -1,4 +1,6 @@
-package com.seedCoin.seedCoin.service;
+package com.seedCoin.seedCoin.service.impl;
+
+import com.seedCoin.seedCoin.service.IdentificationTypeService;
 
 import com.seedCoin.seedCoin.dto.IdentificationTypeDTO;
 import com.seedCoin.seedCoin.model.IdentificationType;

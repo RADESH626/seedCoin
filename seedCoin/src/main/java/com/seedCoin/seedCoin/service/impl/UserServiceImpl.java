@@ -1,4 +1,6 @@
-package com.seedCoin.seedCoin.service;
+package com.seedCoin.seedCoin.service.impl;
+
+import com.seedCoin.seedCoin.service.UserService;
 
 import com.seedCoin.seedCoin.dto.CreateUserDTO;
 import com.seedCoin.seedCoin.dto.UserDTO;
