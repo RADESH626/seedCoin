@@ -27,7 +27,7 @@ public class User {
     private IdentificationType identificationType;
 
     @ManyToOne
-    @JoinColumn(name = "role_Id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @Column(name = "identification_number", nullable = false, unique = true, length = 50)

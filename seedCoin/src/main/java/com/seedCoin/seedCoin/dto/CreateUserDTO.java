@@ -10,4 +10,5 @@ public class CreateUserDTO {
     private String password;
     private Integer identificationTypeId;
     private String identificationNumber;
+    private Integer roleId;
 }

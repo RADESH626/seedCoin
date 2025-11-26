@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(this::convertToDTO);
     }
 
+    @Autowired
+    private com.seedCoin.seedCoin.repository.RoleRepository roleRepository;
+
     @Override
     public UserDTO createUser(CreateUserDTO createUserDTO) {
         User user = new User();
@@ -54,6 +57,10 @@ public class UserServiceImpl implements UserService {
                 .findById(createUserDTO.getIdentificationTypeId())
                 .orElseThrow(() -> new RuntimeException("Identification Type not found"));
         user.setIdentificationType(identificationType);
+
+        com.seedCoin.seedCoin.model.Role role = roleRepository.findById(createUserDTO.getRoleId())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        user.setRole(role);
 
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
@@ -91,6 +98,9 @@ public class UserServiceImpl implements UserService {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setIdentificationNumber(user.getIdentificationNumber());
+        if (user.getRole() != null) {
+            dto.setRoleName(user.getRole().getName());
+        }
         dto.setIsActive(user.getIsActive());
         return dto;
     }
