@@ -26,6 +26,10 @@ public class User {
     @JoinColumn(name = "identification_type_id", nullable = false)
     private IdentificationType identificationType;
 
+    @ManyToOne
+    @JoinColumn(name = "role_Id", nullable = false)
+    private Role role;
+
     @Column(name = "identification_number", nullable = false, unique = true, length = 50)
     private String identificationNumber;
 
