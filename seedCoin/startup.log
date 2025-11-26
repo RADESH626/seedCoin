@@ -16,13 +16,15 @@ WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
 [INFO] Copying 0 resource from src\main\resources to target\classes
 [INFO] 
 [INFO] --- compiler:3.14.1:compile (default-compile) @ seedCoin ---
-[INFO] Nothing to compile - all classes are up to date.
+[INFO] Recompiling the module because of added or removed source files.
+[INFO] Compiling 50 source files with javac [debug parameters release 17] to target\classes
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ seedCoin ---
 [INFO] skip non existing resourceDirectory D:\Familia\Documents\emanuel\sena\practicas\proyecto tutor\seedCoin\seedCoin\src\test\resources
 [INFO] 
 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ seedCoin ---
-[INFO] Nothing to compile - all classes are up to date.
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 9 source files with javac [debug parameters release 17] to target\test-classes
 [INFO] 
 [INFO] <<< spring-boot:4.0.0:run (default-cli) < test-compile @ seedCoin <<<
 [INFO] 
@@ -39,22 +41,22 @@ WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
 
  :: Spring Boot ::                (v4.0.0)
 
-2025-11-26T17:22:18.563-05:00  INFO 9696 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : Starting SeedCoinApplication using Java 24.0.1 with PID 9696 (D:\Familia\Documents\emanuel\sena\practicas\proyecto tutor\seedCoin\seedCoin\target\classes started by FamiliaGalviz in D:\Familia\Documents\emanuel\sena\practicas\proyecto tutor\seedCoin\seedCoin)
-2025-11-26T17:22:18.566-05:00  INFO 9696 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : No active profile set, falling back to 1 default profile: "default"
-2025-11-26T17:22:19.270-05:00  INFO 9696 --- [seedCoin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-11-26T17:22:19.369-05:00  INFO 9696 --- [seedCoin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 91 ms. Found 7 JPA repository interfaces.
-2025-11-26T17:22:19.967-05:00  INFO 9696 --- [seedCoin] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2025-11-26T17:22:19.981-05:00  INFO 9696 --- [seedCoin] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-11-26T17:22:19.982-05:00  INFO 9696 --- [seedCoin] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.14]
-2025-11-26T17:22:20.034-05:00  INFO 9696 --- [seedCoin] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1412 ms
-2025-11-26T17:22:20.181-05:00  INFO 9696 --- [seedCoin] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-11-26T17:22:20.218-05:00  INFO 9696 --- [seedCoin] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 7.1.8.Final
-2025-11-26T17:22:20.618-05:00  INFO 9696 --- [seedCoin] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-11-26T17:22:20.646-05:00  INFO 9696 --- [seedCoin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-11-26T17:22:20.982-05:00  INFO 9696 --- [seedCoin] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5f803481
-2025-11-26T17:22:20.984-05:00  INFO 9696 --- [seedCoin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-11-26T17:22:21.023-05:00  WARN 9696 --- [seedCoin] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-11-26T17:22:21.037-05:00  INFO 9696 --- [seedCoin] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2025-11-26T17:34:19.303-05:00  INFO 13684 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : Starting SeedCoinApplication using Java 24.0.1 with PID 13684 (D:\Familia\Documents\emanuel\sena\practicas\proyecto tutor\seedCoin\seedCoin\target\classes started by FamiliaGalviz in D:\Familia\Documents\emanuel\sena\practicas\proyecto tutor\seedCoin\seedCoin)
+2025-11-26T17:34:19.307-05:00  INFO 13684 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-11-26T17:34:20.545-05:00  INFO 13684 --- [seedCoin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-26T17:34:20.757-05:00  INFO 13684 --- [seedCoin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 197 ms. Found 7 JPA repository interfaces.
+2025-11-26T17:34:21.461-05:00  INFO 13684 --- [seedCoin] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2025-11-26T17:34:21.479-05:00  INFO 13684 --- [seedCoin] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-26T17:34:21.480-05:00  INFO 13684 --- [seedCoin] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.14]
+2025-11-26T17:34:21.547-05:00  INFO 13684 --- [seedCoin] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2045 ms
+2025-11-26T17:34:21.781-05:00  INFO 13684 --- [seedCoin] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-26T17:34:21.847-05:00  INFO 13684 --- [seedCoin] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 7.1.8.Final
+2025-11-26T17:34:22.540-05:00  INFO 13684 --- [seedCoin] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-26T17:34:22.580-05:00  INFO 13684 --- [seedCoin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-26T17:34:23.016-05:00  INFO 13684 --- [seedCoin] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b4d9bda
+2025-11-26T17:34:23.018-05:00  INFO 13684 --- [seedCoin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-26T17:34:23.090-05:00  WARN 13684 --- [seedCoin] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-26T17:34:23.111-05:00  INFO 13684 --- [seedCoin] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [jdbc:mysql://localhost:3306/seedCoin]
 	Database driver: MySQL Connector/J
 	Database dialect: MySQLDialect
@@ -66,19 +68,20 @@ WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
 	Pool: DatasourceConnectionProviderImpl
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-11-26T17:22:21.998-05:00  INFO 9696 --- [seedCoin] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-11-26T17:22:22.084-05:00  INFO 9696 --- [seedCoin] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-11-26T17:22:22.152-05:00  INFO 9696 --- [seedCoin] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-11-26T17:22:22.417-05:00  WARN 9696 --- [seedCoin] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-11-26T17:22:22.496-05:00  WARN 9696 --- [seedCoin] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
+2025-11-26T17:34:24.365-05:00  INFO 13684 --- [seedCoin] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-26T17:34:24.486-05:00  INFO 13684 --- [seedCoin] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-26T17:34:24.588-05:00  INFO 13684 --- [seedCoin] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-26T17:34:24.920-05:00  WARN 13684 --- [seedCoin] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-26T17:34:24.991-05:00  WARN 13684 --- [seedCoin] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 5b1237b7-01fd-434c-a9c3-de3ca14409ec
+Using generated security password: 85985472-3944-426a-a4dd-6505a893546c
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2025-11-26T17:22:22.503-05:00  INFO 9696 --- [seedCoin] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2025-11-26T17:22:22.899-05:00  INFO 9696 --- [seedCoin] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2025-11-26T17:22:22.904-05:00  INFO 9696 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : Started SeedCoinApplication in 4.719 seconds (process running for 5.181)
-2025-11-26T17:22:48.514-05:00  INFO 9696 --- [seedCoin] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-11-26T17:22:48.514-05:00  INFO 9696 --- [seedCoin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-11-26T17:22:48.515-05:00  INFO 9696 --- [seedCoin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-11-26T17:34:24.999-05:00  INFO 13684 --- [seedCoin] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-11-26T17:34:25.713-05:00  INFO 13684 --- [seedCoin] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2025-11-26T17:34:25.724-05:00  INFO 13684 --- [seedCoin] [           main] c.seedCoin.seedCoin.SeedCoinApplication  : Started SeedCoinApplication in 6.875 seconds (process running for 7.328)
+2025-11-26T17:35:10.132-05:00  INFO 13684 --- [seedCoin] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-26T17:35:10.133-05:00  INFO 13684 --- [seedCoin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-26T17:35:10.134-05:00  INFO 13684 --- [seedCoin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+^C

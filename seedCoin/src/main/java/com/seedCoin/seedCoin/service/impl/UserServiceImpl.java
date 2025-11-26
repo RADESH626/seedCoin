@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Identification Type not found"));
         user.setIdentificationType(identificationType);
 
-        com.seedCoin.seedCoin.model.Role role = roleRepository.findById(createUserDTO.getRoleId())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+        com.seedCoin.seedCoin.model.Role role = roleRepository.findByName("CUSTOMER")
+                .orElseThrow(() -> new RuntimeException("Default role CUSTOMER not found"));
         user.setRole(role);
 
         User savedUser = userRepository.save(user);
