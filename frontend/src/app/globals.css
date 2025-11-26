@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --background: #E3F2FD;
+  /* Glacial Ice */
+  --foreground: #09316D;
+  /* Deep Navy */
+  --primary: #1A237E;
+  /* Classic Indigo */
+  --primary-hover: #09316D;
+  /* Deep Navy */
+  --secondary: #00897B;
+  /* Oceanic Teal */
+  --accent: #90CAF9;
+  /* Soft Sky */
+  --success: #132A13;
+  /* Fertile Soil */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
