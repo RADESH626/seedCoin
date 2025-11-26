@@ -248,7 +248,7 @@ export default function RegistroPage() {
 
                     <div className="mt-6 text-center text-sm text-gray-600">
                         ¿Ya tienes una cuenta?{' '}
-                        <Link href="/iniciar-sesion" className="text-secondary hover:text-teal-700 font-bold transition-colors">
+                        <Link href="/iniciar-sesion" className="text-primary hover:text-primary-hover font-bold transition-colors">
                             Inicia Sesión
                         </Link>
                     </div>
