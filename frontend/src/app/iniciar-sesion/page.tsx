@@ -4,14 +4,16 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Intento de inicio de sesión:', { email, password });
-        // TODO: Integrar con backend
+        await login(email, password);
     };
 
     return (

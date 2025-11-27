@@ -16,4 +16,6 @@ public interface UserService {
     UserDTO updateUser(Integer id, UserDTO userDTO);
 
     void deleteUser(Integer id);
+
+    UserDTO login(com.seedCoin.seedCoin.dto.LoginRequest loginRequest);
 }
