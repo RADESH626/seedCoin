@@ -50,11 +50,14 @@ class AccountControllerTest {
         accountDTO.setName("Savings");
         accountDTO.setCurrentBalance(BigDecimal.valueOf(1000));
         accountDTO.setIsActive(true);
+        accountDTO.setAccountTypeId(1);
+        accountDTO.setAccountType("Bank");
 
         createAccountDTO = new CreateAccountDTO();
         createAccountDTO.setUserId(1);
         createAccountDTO.setName("Savings");
-        createAccountDTO.setCurrentBalance(BigDecimal.valueOf(1000));
+        createAccountDTO.setInitialBalance(BigDecimal.valueOf(1000));
+        createAccountDTO.setAccountTypeId(1);
     }
 
     @Test

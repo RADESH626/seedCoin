@@ -3,6 +3,7 @@ package com.seedCoin.seedCoin.service.impl;
 import com.seedCoin.seedCoin.dto.CategoryDTO;
 import com.seedCoin.seedCoin.dto.CreateCategoryDTO;
 import com.seedCoin.seedCoin.model.Category;
+import com.seedCoin.seedCoin.model.TransactionType;
 import com.seedCoin.seedCoin.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,8 @@ class CategoryServiceImplTest {
         category.setId(1);
         category.setName("Food");
         category.setIcon("food-icon");
-        category.setType("EXPENSE");
+        category.setType(TransactionType.EXPENSE);
+        category.setCategoryGroup("TRANSACTION_TYPE");
 
         createCategoryDTO = new CreateCategoryDTO();
         createCategoryDTO.setName("Food");

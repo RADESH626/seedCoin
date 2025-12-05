@@ -5,6 +5,7 @@ import com.seedCoin.seedCoin.dto.TransactionDTO;
 import com.seedCoin.seedCoin.model.Account;
 import com.seedCoin.seedCoin.model.Category;
 import com.seedCoin.seedCoin.model.Transaction;
+import com.seedCoin.seedCoin.model.TransactionType;
 import com.seedCoin.seedCoin.model.User;
 import com.seedCoin.seedCoin.repository.AccountRepository;
 import com.seedCoin.seedCoin.repository.CategoryRepository;
@@ -61,6 +62,7 @@ class TransactionServiceImplTest {
 
         category = new Category();
         category.setId(1);
+        category.setType(TransactionType.EXPENSE);
 
         transaction = new Transaction();
         transaction.setId(1);
@@ -68,7 +70,7 @@ class TransactionServiceImplTest {
         transaction.setAccount(account);
         transaction.setCategory(category);
         transaction.setAmount(BigDecimal.valueOf(100));
-        transaction.setType("EXPENSE");
+        transaction.setType(TransactionType.EXPENSE);
         transaction.setDescription("Lunch");
         transaction.setTransactionDate(LocalDateTime.now());
 
