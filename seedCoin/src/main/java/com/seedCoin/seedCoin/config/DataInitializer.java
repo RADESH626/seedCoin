@@ -13,9 +13,27 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private com.seedCoin.seedCoin.repository.RoleRepository roleRepository;
+
     @Override
     public void run(String... args) throws Exception {
+        seedRoles();
         seedUnifiedCategories();
+    }
+
+    private void seedRoles() {
+        if (roleRepository.count() == 0) {
+            createRole("CUSTOMER");
+            createRole("ADMIN");
+            System.out.println("Roles seeded successfully.");
+        }
+    }
+
+    private void createRole(String name) {
+        com.seedCoin.seedCoin.model.Role role = new com.seedCoin.seedCoin.model.Role();
+        role.setName(name);
+        roleRepository.save(role);
     }
 
     private void seedUnifiedCategories() {

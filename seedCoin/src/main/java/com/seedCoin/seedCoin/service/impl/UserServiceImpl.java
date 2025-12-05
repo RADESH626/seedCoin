@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         user.setName(createUserDTO.getName());
         user.setLastName(createUserDTO.getLastName());
         user.setEmail(createUserDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
 
         com.seedCoin.seedCoin.model.Role role = roleRepository.findByName("CUSTOMER")
                 .orElseThrow(() -> new RuntimeException("Default role CUSTOMER not found"));

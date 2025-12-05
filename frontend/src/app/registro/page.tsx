@@ -6,10 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-interface IdentificationType {
-    id: number;
-    name: string;
-}
+
 
 export default function RegistroPage() {
     const router = useRouter();
@@ -19,25 +16,7 @@ export default function RegistroPage() {
         email: '',
         password: '',
         confirmPassword: '',
-        identificationTypeId: '',
-        identificationNumber: '',
     });
-    const [identificationTypes, setIdentificationTypes] = useState<IdentificationType[]>([]);
-
-    useEffect(() => {
-        const fetchIdentificationTypes = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/identification-types');
-                if (response.ok) {
-                    const data = await response.json();
-                    setIdentificationTypes(data);
-                }
-            } catch (error) {
-                console.error('Error fetching identification types:', error);
-            }
-        };
-        fetchIdentificationTypes();
-    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -66,8 +45,6 @@ export default function RegistroPage() {
                     lastName: formData.lastName,
                     email: formData.email,
                     password: formData.password,
-                    identificationTypeId: parseInt(formData.identificationTypeId),
-                    identificationNumber: formData.identificationNumber,
                 }),
             });
 
@@ -156,40 +133,6 @@ export default function RegistroPage() {
                                 </div>
                             </div>
 
-                            <div>
-                                <label htmlFor="identificationTypeId" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Tipo de Documento
-                                </label>
-                                <select
-                                    id="identificationTypeId"
-                                    required
-                                    value={formData.identificationTypeId}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900"
-                                >
-                                    <option value="">Seleccione un tipo</option>
-                                    {identificationTypes.map((type) => (
-                                        <option key={type.id} value={type.id}>
-                                            {type.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label htmlFor="identificationNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Número de Documento
-                                </label>
-                                <input
-                                    id="identificationNumber"
-                                    type="text"
-                                    required
-                                    value={formData.identificationNumber}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 placeholder-gray-400"
-                                    placeholder="1234567890"
-                                />
-                            </div>
 
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
