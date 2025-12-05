@@ -1,12 +1,11 @@
 package com.seedCoin.seedCoin.service.impl;
 
 import com.seedCoin.seedCoin.service.UserService;
+import com.seedCoin.seedCoin.model.User;
 
 import com.seedCoin.seedCoin.dto.CreateUserDTO;
 import com.seedCoin.seedCoin.dto.UserDTO;
-import com.seedCoin.seedCoin.model.IdentificationType;
-import com.seedCoin.seedCoin.model.User;
-import com.seedCoin.seedCoin.repository.IdentificationTypeRepository;
+
 import com.seedCoin.seedCoin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,9 +20,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private IdentificationTypeRepository identificationTypeRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,14 +45,6 @@ public class UserServiceImpl implements UserService {
         user.setName(createUserDTO.getName());
         user.setLastName(createUserDTO.getLastName());
         user.setEmail(createUserDTO.getEmail());
-        user.setIdentificationNumber(createUserDTO.getIdentificationNumber());
-        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
-        user.setIsActive(true);
-
-        IdentificationType identificationType = identificationTypeRepository
-                .findById(createUserDTO.getIdentificationTypeId())
-                .orElseThrow(() -> new RuntimeException("Identification Type not found"));
-        user.setIdentificationType(identificationType);
 
         com.seedCoin.seedCoin.model.Role role = roleRepository.findByName("CUSTOMER")
                 .orElseThrow(() -> new RuntimeException("Default role CUSTOMER not found"));
@@ -74,7 +62,6 @@ public class UserServiceImpl implements UserService {
         user.setName(userDTO.getName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        user.setIdentificationNumber(userDTO.getIdentificationNumber());
 
         // We don't update password or identification type here for simplicity,
         // typically that would be a separate endpoint or handled carefully.
@@ -113,7 +100,7 @@ public class UserServiceImpl implements UserService {
         dto.setName(user.getName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-        dto.setIdentificationNumber(user.getIdentificationNumber());
+
         if (user.getRole() != null) {
             dto.setRoleName(user.getRole().getName());
         }

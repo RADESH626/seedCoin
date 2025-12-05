@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface TransactionService {
     List<TransactionDTO> getAllTransactions();
 
+    List<TransactionDTO> getTransactionsByUserId(Integer userId);
+
     Optional<TransactionDTO> getTransactionById(Integer id);
 
     TransactionDTO createTransaction(CreateTransactionDTO createTransactionDTO);

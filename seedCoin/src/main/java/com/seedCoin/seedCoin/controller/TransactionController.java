@@ -18,7 +18,10 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
+    public ResponseEntity<List<TransactionDTO>> getAllTransactions(@RequestParam(required = false) Integer userId) {
+        if (userId != null) {
+            return ResponseEntity.ok(transactionService.getTransactionsByUserId(userId));
+        }
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 

@@ -41,6 +41,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionDTO> getTransactionsByUserId(Integer userId) {
+        return transactionRepository.findByUserId(userId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<TransactionDTO> getTransactionById(Integer id) {
         return transactionRepository.findById(id).map(this::convertToDTO);
     }
@@ -49,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO createTransaction(CreateTransactionDTO createTransactionDTO) {
         Transaction transaction = new Transaction();
         transaction.setAmount(createTransactionDTO.getAmount());
-        transaction.setType(createTransactionDTO.getType());
+        transaction.setType(com.seedCoin.seedCoin.model.TransactionType.valueOf(createTransactionDTO.getType()));
         transaction.setDescription(createTransactionDTO.getDescription());
         transaction.setTransactionDate(createTransactionDTO.getTransactionDate());
 
@@ -75,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         transaction.setAmount(transactionDTO.getAmount());
-        transaction.setType(transactionDTO.getType());
+        transaction.setType(com.seedCoin.seedCoin.model.TransactionType.valueOf(transactionDTO.getType()));
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setTransactionDate(transactionDTO.getTransactionDate());
 
@@ -99,7 +106,7 @@ public class TransactionServiceImpl implements TransactionService {
         dto.setAccountId(transaction.getAccount().getId());
         dto.setCategoryId(transaction.getCategory().getId());
         dto.setAmount(transaction.getAmount());
-        dto.setType(transaction.getType());
+        dto.setType(transaction.getType().name());
         dto.setDescription(transaction.getDescription());
         dto.setTransactionDate(transaction.getTransactionDate());
         dto.setCreatedAt(transaction.getCreatedAt());
