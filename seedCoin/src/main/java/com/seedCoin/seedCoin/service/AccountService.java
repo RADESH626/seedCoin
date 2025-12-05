@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface AccountService {
     List<AccountDTO> getAllAccounts();
 
+    List<AccountDTO> getAccountsByUserId(Integer userId);
+
     Optional<AccountDTO> getAccountById(Integer id);
 
     AccountDTO createAccount(CreateAccountDTO createAccountDTO);

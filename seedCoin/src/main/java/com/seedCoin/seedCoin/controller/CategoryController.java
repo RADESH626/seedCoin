@@ -18,7 +18,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(@RequestParam(required = false) String group) {
+        if (group != null) {
+            return ResponseEntity.ok(categoryService.getCategoriesByGroup(group));
+
+            // TODO: Implementar la logica de filtro por grupo
+        }
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
