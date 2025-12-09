@@ -38,6 +38,9 @@ export default function Header() {
                         <Link href="/dashboard/transactions" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                             Transacciones
                         </Link>
+                        <Link href="/dashboard/scheduled-expenses" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                            Programación
+                        </Link>
                     </>
                 ) : (
                     <>

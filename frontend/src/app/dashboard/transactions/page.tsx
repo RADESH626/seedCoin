@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import Header from "@/components/Header";
-import { ArrowUpRight, ArrowDownLeft, Search, Filter } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Search, Pencil } from 'lucide-react';
+import TransactionModal from '@/components/Dashboard/TransactionModal';
 
 interface TransactionDTO {
     id: number;
+    accountId: number;
+    categoryId: number;
     categoryName: string;
     description: string;
     amount: number;
@@ -21,6 +24,8 @@ export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<TransactionDTO[]>([]);
     const [isLoadingData, setIsLoadingData] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState<TransactionDTO | null>(null);
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
@@ -46,6 +51,20 @@ export default function TransactionsPage() {
         } finally {
             setIsLoadingData(false);
         }
+    };
+
+    const handleEdit = (transaction: TransactionDTO) => {
+        setSelectedTransaction(transaction);
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setSelectedTransaction(null);
+    };
+
+    const handleModalSuccess = () => {
+        fetchTransactions();
     };
 
     if (isLoading || isLoadingData) {
@@ -93,6 +112,7 @@ export default function TransactionsPage() {
                                     <th className="px-6 py-4 font-medium text-gray-500 dark:text-gray-400">Descripción</th>
                                     <th className="px-6 py-4 font-medium text-gray-500 dark:text-gray-400">Fecha</th>
                                     <th className="px-6 py-4 font-medium text-gray-500 dark:text-gray-400 text-right">Monto</th>
+                                    <th className="px-6 py-4 font-medium text-gray-500 dark:text-gray-400 text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -101,8 +121,8 @@ export default function TransactionsPage() {
                                         <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                             <td className="px-6 py-4">
                                                 <div className={`p-2 rounded-full w-fit ${transaction.type === 'INCOME'
-                                                        ? 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400'
-                                                        : 'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400'
+                                                    ? 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400'
+                                                    : 'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400'
                                                     }`}>
                                                     {transaction.type === 'INCOME'
                                                         ? <ArrowDownLeft className="w-4 h-4" />
@@ -119,16 +139,25 @@ export default function TransactionsPage() {
                                             <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                                 {new Date(transaction.transactionDate).toLocaleDateString()}
                                             </td>
-                                            <td className={`px-6 py-4 text-right font-medium ${transaction.type === 'INCOME' ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'
+                                            <td className={`px-6 py-4 text-right font-medium ${transaction.type === 'INCOME' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                                                 }`}>
                                                 {transaction.type === 'INCOME' ? '+' : '-'}
                                                 ${transaction.amount.toLocaleString()}
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <button
+                                                    onClick={() => handleEdit(transaction)}
+                                                    className="p-2 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                                    title="Editar transacción"
+                                                >
+                                                    <Pencil className="w-4 h-4" />
+                                                </button>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                        <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                             No se encontraron transacciones.
                                         </td>
                                     </tr>
@@ -138,6 +167,13 @@ export default function TransactionsPage() {
                     </div>
                 </div>
             </main>
+
+            <TransactionModal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                onSuccess={handleModalSuccess}
+                transactionToEdit={selectedTransaction}
+            />
         </div>
     );
 }
