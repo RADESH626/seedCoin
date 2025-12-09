@@ -69,6 +69,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createCategory() {
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
 
@@ -80,6 +81,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateCategory() {
         CategoryDTO updateDTO = new CategoryDTO();
         updateDTO.setName("Updated Food");
