@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Objects;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -79,8 +80,8 @@ class CategoryControllerTest {
         when(categoryService.createCategory(any(CreateCategoryDTO.class))).thenReturn(categoryDTO);
 
         mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createCategoryDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(createCategoryDTO))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Food"));
     }
@@ -90,8 +91,8 @@ class CategoryControllerTest {
         when(categoryService.updateCategory(eq(1), any(CategoryDTO.class))).thenReturn(categoryDTO);
 
         mockMvc.perform(put("/api/categories/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(categoryDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDTO))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Food"));
     }

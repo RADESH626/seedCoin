@@ -18,4 +18,6 @@ public interface TransactionService {
     TransactionDTO updateTransaction(Integer id, TransactionDTO transactionDTO);
 
     void deleteTransaction(Integer id);
+
+    List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> getCommonTransactions(Integer userId, String type);
 }

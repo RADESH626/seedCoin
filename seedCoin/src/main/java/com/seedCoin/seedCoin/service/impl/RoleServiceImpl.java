@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -22,17 +23,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<Role> getRoleById(Integer id) {
-        return roleRepository.findById(id);
+        return roleRepository.findById(Objects.requireNonNull(id));
     }
 
     @Override
     public Role createRole(Role role) {
-        return roleRepository.save(role);
+        return roleRepository.save(Objects.requireNonNull(role));
     }
 
     @Override
     public Role updateRole(Integer id, Role roleDetails) {
-        return roleRepository.findById(id).map(role -> {
+        return roleRepository.findById(Objects.requireNonNull(id)).map(role -> {
             role.setName(roleDetails.getName());
             return roleRepository.save(role);
         }).orElse(null);
@@ -40,6 +41,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(Integer id) {
-        roleRepository.deleteById(id);
+        roleRepository.deleteById(Objects.requireNonNull(id));
     }
 }

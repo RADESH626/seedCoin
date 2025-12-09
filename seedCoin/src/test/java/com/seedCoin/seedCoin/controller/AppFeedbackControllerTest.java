@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Objects;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -81,8 +82,8 @@ class AppFeedbackControllerTest {
         when(appFeedbackService.createAppFeedback(any(CreateAppFeedbackDTO.class))).thenReturn(appFeedbackDTO);
 
         mockMvc.perform(post("/api/app-feedback")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createAppFeedbackDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(createAppFeedbackDTO))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.comment").value("Great app!"));
     }
@@ -92,8 +93,8 @@ class AppFeedbackControllerTest {
         when(appFeedbackService.updateAppFeedback(eq(1), any(AppFeedbackDTO.class))).thenReturn(appFeedbackDTO);
 
         mockMvc.perform(put("/api/app-feedback/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(appFeedbackDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(appFeedbackDTO))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comment").value("Great app!"));
     }

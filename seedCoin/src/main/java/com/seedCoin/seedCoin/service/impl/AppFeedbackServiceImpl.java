@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class AppFeedbackServiceImpl implements AppFeedbackService {
 
     @Override
     public Optional<AppFeedbackDTO> getAppFeedbackById(Integer id) {
-        return appFeedbackRepository.findById(id).map(this::convertToDTO);
+        return appFeedbackRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class AppFeedbackServiceImpl implements AppFeedbackService {
         appFeedback.setComment(createAppFeedbackDTO.getComment());
         appFeedback.setStatus("PENDING");
 
-        User user = userRepository.findById(createAppFeedbackDTO.getUserId())
+        User user = userRepository.findById(Objects.requireNonNull(createAppFeedbackDTO.getUserId()))
                 .orElseThrow(() -> new RuntimeException("User not found"));
         appFeedback.setUser(user);
 
@@ -53,7 +54,7 @@ public class AppFeedbackServiceImpl implements AppFeedbackService {
 
     @Override
     public AppFeedbackDTO updateAppFeedback(Integer id, AppFeedbackDTO appFeedbackDTO) {
-        AppFeedback appFeedback = appFeedbackRepository.findById(id)
+        AppFeedback appFeedback = appFeedbackRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("AppFeedback not found"));
 
         appFeedback.setRating(appFeedbackDTO.getRating());
@@ -67,7 +68,7 @@ public class AppFeedbackServiceImpl implements AppFeedbackService {
 
     @Override
     public void deleteAppFeedback(Integer id) {
-        appFeedbackRepository.deleteById(id);
+        appFeedbackRepository.deleteById(Objects.requireNonNull(id));
     }
 
     private AppFeedbackDTO convertToDTO(AppFeedback appFeedback) {

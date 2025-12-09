@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -39,22 +40,22 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDTO> getAccountsByUserId(Integer userId) {
 
-        return accountRepository.findByUserIdAndIsActiveTrue(userId).stream()
+        return accountRepository.findByUserIdAndIsActiveTrue(Objects.requireNonNull(userId)).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<AccountDTO> getAccountById(Integer id) {
-        return accountRepository.findById(id).map(this::convertToDTO);
+        return accountRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
     @Override
     public AccountDTO createAccount(CreateAccountDTO createAccountDTO) {
-        User user = userRepository.findById(createAccountDTO.getUserId())
+        User user = userRepository.findById(Objects.requireNonNull(createAccountDTO.getUserId()))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Category category = categoryRepository.findById(createAccountDTO.getAccountTypeId())
+        Category category = categoryRepository.findById(Objects.requireNonNull(createAccountDTO.getAccountTypeId()))
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         // Ensure it is an Account Type
@@ -76,11 +77,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO updateAccount(Integer id, AccountDTO accountDTO) {
-        Account account = accountRepository.findById(id)
+        Account account = accountRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
         if (accountDTO.getAccountTypeId() != null) {
-            Category category = categoryRepository.findById(accountDTO.getAccountTypeId())
+            Category category = categoryRepository.findById(Objects.requireNonNull(accountDTO.getAccountTypeId()))
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             if (!"ACCOUNT_TYPE".equals(category.getCategoryGroup())) {
                 throw new RuntimeException("Selected category is not an Account Type");
@@ -102,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Integer id) {
-        Account account = accountRepository.findById(id)
+        Account account = accountRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Account not found"));
         account.setIsActive(false);
         accountRepository.save(account);

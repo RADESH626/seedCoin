@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDTO> getCategoriesByGroup(String groupVal) {
 
-        // TODO: SOLUCIONAR EL PROBLEMA DE LA CONSULTA
         return categoryRepository.findByCategoryGroupAndIsActiveTrue(groupVal).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<CategoryDTO> getCategoryById(Integer id) {
-        return categoryRepository.findById(id).map(this::convertToDTO);
+        return categoryRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO updateCategory(Integer id, CategoryDTO categoryDTO) {
-        Category category = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         category.setName(categoryDTO.getName());
@@ -83,7 +83,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Integer id) {
-        categoryRepository.deleteById(id);
+        categoryRepository.deleteById(Objects.requireNonNull(id));
     }
 
     private CategoryDTO convertToDTO(Category category) {

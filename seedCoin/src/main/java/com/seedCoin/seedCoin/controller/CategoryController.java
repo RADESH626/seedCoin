@@ -22,7 +22,6 @@ public class CategoryController {
         if (group != null) {
             return ResponseEntity.ok(categoryService.getCategoriesByGroup(group));
 
-            // TODO: Implementar la logica de filtro por grupo
         }
         return ResponseEntity.ok(categoryService.getAllCategories());
     }

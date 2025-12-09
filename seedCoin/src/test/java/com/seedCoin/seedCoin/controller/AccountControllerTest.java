@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -83,8 +84,8 @@ class AccountControllerTest {
         when(accountService.createAccount(any(CreateAccountDTO.class))).thenReturn(accountDTO);
 
         mockMvc.perform(post("/api/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createAccountDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(createAccountDTO))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Savings"));
     }
@@ -94,8 +95,8 @@ class AccountControllerTest {
         when(accountService.updateAccount(eq(1), any(AccountDTO.class))).thenReturn(accountDTO);
 
         mockMvc.perform(put("/api/accounts/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(accountDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(accountDTO))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Savings"));
     }

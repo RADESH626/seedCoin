@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDTO> getUserById(Integer id) {
-        return userRepository.findById(id).map(this::convertToDTO);
+        return userRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
     @Autowired
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(Integer id, UserDTO userDTO) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setName(userDTO.getName());
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setIsActive(false); // Soft delete
         userRepository.save(user);
