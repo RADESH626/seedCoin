@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Objects;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -88,8 +89,8 @@ class TransactionControllerTest {
         when(transactionService.createTransaction(any(CreateTransactionDTO.class))).thenReturn(transactionDTO);
 
         mockMvc.perform(post("/api/transactions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createTransactionDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(createTransactionDTO))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.description").value("Lunch"));
     }
@@ -99,8 +100,8 @@ class TransactionControllerTest {
         when(transactionService.updateTransaction(eq(1), any(TransactionDTO.class))).thenReturn(transactionDTO);
 
         mockMvc.perform(put("/api/transactions/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(transactionDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(transactionDTO))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Lunch"));
     }
@@ -111,5 +112,30 @@ class TransactionControllerTest {
 
         mockMvc.perform(delete("/api/transactions/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getCommonTransactions() throws Exception {
+        com.seedCoin.seedCoin.dto.CommonTransactionDTO commonDTO = new com.seedCoin.seedCoin.dto.CommonTransactionDTO();
+        commonDTO.setDescription("Lunch");
+        commonDTO.setCategoryName("Food");
+
+        when(transactionService.getCommonTransactions(1, "EXPENSE")).thenReturn(Arrays.asList(commonDTO));
+
+        mockMvc.perform(get("/api/transactions/common")
+                .param("userId", "1")
+                .param("type", "EXPENSE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].description").value("Lunch"));
+    }
+
+    @Test
+    void createTransaction_NegativeAmount_ShouldReturnBadRequest() throws Exception {
+        createTransactionDTO.setAmount(BigDecimal.valueOf(-100));
+
+        mockMvc.perform(post("/api/transactions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createTransactionDTO)))
+                .andExpect(status().isBadRequest());
     }
 }

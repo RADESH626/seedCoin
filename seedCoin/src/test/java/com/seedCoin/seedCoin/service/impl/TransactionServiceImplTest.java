@@ -59,6 +59,7 @@ class TransactionServiceImplTest {
 
         account = new Account();
         account.setId(1);
+        account.setCurrentBalance(BigDecimal.valueOf(1000)); // Initialize with some balance
 
         category = new Category();
         category.setId(1);
@@ -106,6 +107,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createTransaction() {
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
@@ -120,6 +122,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateTransaction() {
         TransactionDTO updateDTO = new TransactionDTO();
         updateDTO.setAmount(BigDecimal.valueOf(200));
@@ -138,10 +141,52 @@ class TransactionServiceImplTest {
 
     @Test
     void deleteTransaction() {
+        when(transactionRepository.findById(1)).thenReturn(Optional.of(transaction));
         doNothing().when(transactionRepository).deleteById(1);
 
         transactionService.deleteTransaction(1);
 
         verify(transactionRepository, times(1)).deleteById(1);
     }
+
+    @Test
+    @SuppressWarnings("null")
+    void getCommonTransactions() {
+        com.seedCoin.seedCoin.dto.CommonTransactionDTO commonDTO = new com.seedCoin.seedCoin.dto.CommonTransactionDTO();
+        commonDTO.setCategoryId(1);
+        commonDTO.setCategoryName("Food");
+        commonDTO.setDescription("Lunch");
+        commonDTO.setUsageCount(5L);
+
+        when(transactionRepository.findCommonTransactions(eq(1), eq(TransactionType.EXPENSE),
+                any(org.springframework.data.domain.Pageable.class)))
+                .thenReturn(Arrays.asList(commonDTO));
+
+        List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> result = transactionService.getCommonTransactions(1,
+                "EXPENSE");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Lunch", result.get(0).getDescription());
+    }
+
+    @Test
+    void createTransaction_InsufficientFunds_ShouldThrowException() {
+        createTransactionDTO.setType("EXPENSE");
+        createTransactionDTO.setAmount(BigDecimal.valueOf(1000)); // Account has 100 probably? Need to check setup
+
+        // Setup Account with low balance
+        account.setCurrentBalance(BigDecimal.valueOf(100)); // Set specific balance for this test
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(accountRepository.findById(1)).thenReturn(Optional.of(account));
+        when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
+
+        assertThrows(org.springframework.web.server.ResponseStatusException.class, () -> {
+            transactionService.createTransaction(createTransactionDTO);
+        });
+
+        verify(transactionRepository, never()).save(any(Transaction.class));
+    }
+
 }
