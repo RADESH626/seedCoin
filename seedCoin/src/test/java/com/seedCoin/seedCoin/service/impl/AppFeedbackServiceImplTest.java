@@ -80,6 +80,7 @@ class AppFeedbackServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createAppFeedback() {
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(appFeedbackRepository.save(any(AppFeedback.class))).thenReturn(appFeedback);
@@ -92,6 +93,7 @@ class AppFeedbackServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateAppFeedback() {
         AppFeedbackDTO updateDTO = new AppFeedbackDTO();
         updateDTO.setRating(4);
