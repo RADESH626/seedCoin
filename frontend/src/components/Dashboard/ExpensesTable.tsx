@@ -44,7 +44,7 @@ export default function ExpensesTable({ expenses, onEdit }: ExpensesTableProps) 
                                     <td className="px-6 py-4 text-center">
                                         <button
                                             onClick={() => onEdit(expense.id)}
-                                            className="p-1 text-gray-400 hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
+                                            className="p-1 text-gray-400 hover:text-primary transition-colors"
                                             title="Editar Gasto"
                                         >
                                             <Edit2 className="w-4 h-4" />

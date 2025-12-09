@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDTO> getTransactionsByUserId(Integer userId) {
-        return transactionRepository.findByUserId(userId).stream()
+        return transactionRepository.findByUserIdOrderByTransactionDateDescIdDesc(userId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

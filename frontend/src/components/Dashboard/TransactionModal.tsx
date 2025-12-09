@@ -82,7 +82,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 // setAccountId(''); 
                 // Don't reset Account too aggressively if user has only one.
 
-                if (type === 'EXPENSE') {
+                if (!transactionToEdit) {
                     fetchCommonTransactions();
                 }
             }
@@ -96,8 +96,8 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         // Maybe clear categoryId as it might not be valid for new type
         setCategoryId('');
 
-        if (newType === 'EXPENSE' && !transactionToEdit) {
-            fetchCommonTransactions();
+        if (!transactionToEdit) {
+            fetchCommonTransactions(newType);
         } else {
             setCommonTransactions([]);
         }
@@ -120,9 +120,9 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         }
     };
 
-    const fetchCommonTransactions = async () => {
+    const fetchCommonTransactions = async (currentType: string = type) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/transactions/common?userId=${user?.id}&type=EXPENSE`);
+            const res = await fetch(`http://localhost:8080/api/transactions/common?userId=${user?.id}&type=${currentType}`);
             if (res.ok) {
                 const data = await res.json();
                 setCommonTransactions(data);
@@ -346,7 +346,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                     </div>
 
                     {/* Suggestions */}
-                    {type === 'EXPENSE' && !transactionToEdit && commonTransactions.length > 0 && (
+                    {!transactionToEdit && commonTransactions.length > 0 && (
                         <div className="space-y-1">
                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Más comunes</label>
                             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">

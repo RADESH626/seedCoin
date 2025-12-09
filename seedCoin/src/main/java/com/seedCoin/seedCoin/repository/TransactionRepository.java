@@ -10,6 +10,8 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
         List<Transaction> findByUserId(Integer userId);
 
+        List<Transaction> findByUserIdOrderByTransactionDateDescIdDesc(Integer userId);
+
         List<Transaction> findByAccountId(Integer accountId);
 
         @org.springframework.data.jpa.repository.Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.user.id = :userId AND t.type = :type AND t.transactionDate BETWEEN :startDate AND :endDate")

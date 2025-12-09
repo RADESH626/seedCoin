@@ -225,7 +225,12 @@ export default function Dashboard() {
 
                 {/* Charts & Movements */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <SummaryChart data={chartData} />
+                    <SummaryChart
+                        data={chartData}
+                        income={dashboardSummary?.monthlyIncome || 0}
+                        expense={dashboardSummary?.monthlyExpense || 0}
+                        balance={(dashboardSummary?.monthlyIncome || 0) - (dashboardSummary?.monthlyExpense || 0)}
+                    />
                     <MovementsList movements={recentMovements} />
                 </section>
             </main>
