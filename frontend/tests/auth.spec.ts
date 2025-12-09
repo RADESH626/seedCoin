@@ -55,6 +55,18 @@ test.describe('Authentication & Security', () => {
             await expect(page.locator('li[data-type="error"]')).toBeVisible();
         });
 
+
+
+        test('Should successfully login with valid credentials', async ({ page }) => {
+            await page.goto('/iniciar-sesion');
+            await page.getByLabel('Correo Electrónico').fill('test@gmail.com');
+            await page.getByLabel('Contraseña').fill('Contraseña123@');
+            await page.click('button:has-text("Iniciar Sesión")');
+
+            // Expect to be redirected to dashboard
+            await expect(page).toHaveURL(/\/dashboard/);
+        });
+
         test('Should redirect unauthenticated user from protected route', async ({ page }) => {
             await page.goto('/dashboard');
             await expect(page).toHaveURL(/\/iniciar-sesion/);

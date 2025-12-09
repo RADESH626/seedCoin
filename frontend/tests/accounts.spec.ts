@@ -25,6 +25,9 @@ test.describe('Account Management Tests', () => {
         await page.getByLabel('Contraseña').fill(STANDARD_USER.password);
         await page.getByRole('button', { name: 'Iniciar Sesión' }).click();
 
+        // Wait for login process
+        await page.waitForTimeout(3000);
+
         // 3. Verify Dashboard access
         await expect(page).toHaveURL('http://localhost:3000/dashboard');
     });
