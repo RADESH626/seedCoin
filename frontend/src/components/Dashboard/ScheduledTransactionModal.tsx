@@ -5,7 +5,6 @@ import { X, DollarSign, Calendar, AlignLeft, CreditCard, Tag, Trash2, Repeat } f
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { ScheduledTransactionDTO, createScheduledTransaction, updateScheduledTransaction, deleteScheduledTransaction } from '@/services/scheduledTransactionService';
-import { error } from 'console';
 
 interface Account {
     id: number;
@@ -151,7 +150,9 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
             }
             onSuccess();
             onClose();
+        } catch (error) {
             console.error("Error submitting:", error);
+            toast.error("Error al guardar la transacción");
         } finally {
             setIsLoading(false);
         }

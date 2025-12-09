@@ -17,7 +17,7 @@ export default function ScheduledTransactionsTable({ transactions, onEdit }: Sch
     if (transactions.length === 0) {
         return (
             <div className="text-center p-8 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-                <p className="text-gray-500 dark:text-gray-400">No tienes gastos programados.</p>
+                <p className="text-gray-500 dark:text-gray-400">No tienes transacciones programadas.</p>
             </div>
         );
     }
