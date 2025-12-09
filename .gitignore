@@ -33,3 +33,5 @@ log.txt
 
 # OS
 Thumbs.db
+
+*.log

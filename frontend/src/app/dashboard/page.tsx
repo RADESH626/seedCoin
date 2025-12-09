@@ -10,6 +10,8 @@ import ExpensesTable from "@/components/Dashboard/ExpensesTable";
 import SummaryChart from "@/components/Dashboard/SummaryChart";
 import MovementsList from "@/components/Dashboard/MovementsList";
 import TransactionModal from "@/components/Dashboard/TransactionModal";
+import AccountModal from "@/components/Dashboard/AccountModal";
+import { Plus } from 'lucide-react';
 
 // Interfaces
 interface AccountDTO {
@@ -17,10 +19,13 @@ interface AccountDTO {
     name: string;
     currentBalance: number;
     accountType: string;
+    accountTypeId: number;
 }
 
 interface TransactionDTO {
     id: number;
+    accountId: number;
+    categoryId: number;
     categoryName: string;
     description: string;
     amount: number;
@@ -43,6 +48,11 @@ export default function Dashboard() {
     const [transactions, setTransactions] = useState<TransactionDTO[]>([]);
     const [isLoadingData, setIsLoadingData] = useState(true);
     const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+    const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
+    // State for Editing
+    const [selectedAccount, setSelectedAccount] = useState<AccountDTO | null>(null);
+    const [selectedTransaction, setSelectedTransaction] = useState<TransactionDTO | null>(null);
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
@@ -78,6 +88,29 @@ export default function Dashboard() {
         } finally {
             setIsLoadingData(false);
         }
+    };
+
+    const handleEditAccount = (account: AccountDTO) => {
+        setSelectedAccount(account);
+        setIsAccountModalOpen(true);
+    };
+
+    const handleCloseAccountModal = () => {
+        setIsAccountModalOpen(false);
+        setTimeout(() => setSelectedAccount(null), 200);
+    };
+
+    const handleEditTransaction = (id: string) => {
+        const tx = transactions.find(t => t.id.toString() === id);
+        if (tx) {
+            setSelectedTransaction(tx);
+            setIsTransactionModalOpen(true);
+        }
+    };
+
+    const handleCloseTransactionModal = () => {
+        setIsTransactionModalOpen(false);
+        setTimeout(() => setSelectedTransaction(null), 200);
     };
 
     if (isLoading || isLoadingData) {
@@ -146,21 +179,48 @@ export default function Dashboard() {
 
                 {/* Top Accounts */}
                 <section>
-                    <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wider">Cuentas Principales</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cuentas Principales</h2>
+                        <button
+                            onClick={() => { setSelectedAccount(null); setIsAccountModalOpen(true); }}
+                            className="bg-primary text-white p-2 rounded-lg border border-primary hover:bg-primary-hover transition-colors shadow-sm"
+                            aria-label="Agregar Cuenta"
+                        >
+                            <Plus className="w-4 h-4" />
+                        </button>
+                    </div>
+
                     {accounts.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {accounts.slice(0, 3).map((account) => (
-                                <BalanceCard key={account.id} title={account.name} amount={account.currentBalance} isDark />
+                                <BalanceCard
+                                    key={account.id}
+                                    title={account.name}
+                                    amount={account.currentBalance}
+                                    isDark
+                                    onEdit={() => handleEditAccount(account)}
+                                />
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-500 text-sm">No tienes cuentas registradas.</p>
+                        <div className="flex flex-col items-center justify-center p-8 bg-gray-100 dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700">
+                            <p className="text-gray-500 dark:text-gray-400 mb-4">No tienes cuentas registradas.</p>
+                            <button
+                                onClick={() => setIsAccountModalOpen(true)}
+                                className="text-primary font-medium hover:underline"
+                            >
+                                Crear mi primera cuenta
+                            </button>
+                        </div>
                     )}
                 </section>
 
                 {/* Recent Expenses Table */}
                 <section>
-                    <ExpensesTable expenses={recentExpenses} />
+                    <ExpensesTable
+                        expenses={recentExpenses}
+                        onEdit={handleEditTransaction}
+                    />
                 </section>
 
                 {/* Charts & Movements */}
@@ -170,11 +230,19 @@ export default function Dashboard() {
                 </section>
             </main>
 
-            {/* Transaction Modal */}
+            {/* Modals */}
             <TransactionModal
                 isOpen={isTransactionModalOpen}
-                onClose={() => setIsTransactionModalOpen(false)}
+                onClose={handleCloseTransactionModal}
                 onSuccess={fetchDashboardData}
+                transactionToEdit={selectedTransaction}
+            />
+
+            <AccountModal
+                isOpen={isAccountModalOpen}
+                onClose={handleCloseAccountModal}
+                onSuccess={fetchDashboardData}
+                accountToEdit={selectedAccount}
             />
         </div>
     );

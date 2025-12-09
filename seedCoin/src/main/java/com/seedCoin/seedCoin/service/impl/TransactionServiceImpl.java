@@ -72,6 +72,14 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         transaction.setCategory(category);
 
+        // Update Account Balance
+        if (transaction.getType() == com.seedCoin.seedCoin.model.TransactionType.INCOME) {
+            account.setCurrentBalance(account.getCurrentBalance().add(transaction.getAmount()));
+        } else {
+            account.setCurrentBalance(account.getCurrentBalance().subtract(transaction.getAmount()));
+        }
+        accountRepository.save(account);
+
         Transaction savedTransaction = transactionRepository.save(transaction);
         return convertToDTO(savedTransaction);
     }
@@ -81,14 +89,33 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
+        Account account = transaction.getAccount();
+
+        // Revert old balance
+        if (transaction.getType() == com.seedCoin.seedCoin.model.TransactionType.INCOME) {
+            account.setCurrentBalance(account.getCurrentBalance().subtract(transaction.getAmount()));
+        } else {
+            account.setCurrentBalance(account.getCurrentBalance().add(transaction.getAmount()));
+        }
+
+        // Apply new values
         transaction.setAmount(transactionDTO.getAmount());
         transaction.setType(com.seedCoin.seedCoin.model.TransactionType.valueOf(transactionDTO.getType()));
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setTransactionDate(transactionDTO.getTransactionDate());
 
-        // Note: Updating relationships (User, Account, Category) is not handled here
-        // for simplicity
-        // but can be added if needed.
+        // Update Account with new balance
+        if (transaction.getType() == com.seedCoin.seedCoin.model.TransactionType.INCOME) {
+            account.setCurrentBalance(account.getCurrentBalance().add(transaction.getAmount()));
+        } else {
+            account.setCurrentBalance(account.getCurrentBalance().subtract(transaction.getAmount()));
+        }
+        accountRepository.save(account);
+
+        // Note: Updating account/category relationships is not handled here for
+        // simplicity
+        // If changed, we'd need to handle balance on old vs new account. Assuming
+        // account doesn't change for now.
 
         Transaction updatedTransaction = transactionRepository.save(transaction);
         return convertToDTO(updatedTransaction);
@@ -96,6 +123,19 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(Integer id) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        Account account = transaction.getAccount();
+
+        // Revert balance before deleting
+        if (transaction.getType() == com.seedCoin.seedCoin.model.TransactionType.INCOME) {
+            account.setCurrentBalance(account.getCurrentBalance().subtract(transaction.getAmount()));
+        } else {
+            account.setCurrentBalance(account.getCurrentBalance().add(transaction.getAmount()));
+        }
+        accountRepository.save(account);
+
         transactionRepository.deleteById(id);
     }
 

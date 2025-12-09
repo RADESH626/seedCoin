@@ -18,7 +18,10 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+    public ResponseEntity<List<AccountDTO>> getAllAccounts(@RequestParam(required = false) Integer userId) {
+        if (userId != null) {
+            return ResponseEntity.ok(accountService.getAccountsByUserId(userId));
+        }
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 

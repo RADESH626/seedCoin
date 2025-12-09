@@ -39,8 +39,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDTO> getAccountsByUserId(Integer userId) {
 
-        // TODO: SOLUCIONAR EL PROBLEMA DE LA CONSULTA
-        return accountRepository.findByUserId(userId).stream()
+        return accountRepository.findByUserIdAndIsActiveTrue(userId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

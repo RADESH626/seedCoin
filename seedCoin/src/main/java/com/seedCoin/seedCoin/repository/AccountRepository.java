@@ -10,6 +10,8 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findByUserId(Integer userId);
 
+    List<Account> findByUserIdAndIsActiveTrue(Integer userId);
+
     @org.springframework.data.jpa.repository.Query("SELECT SUM(a.currentBalance) FROM Account a WHERE a.user.id = :userId AND a.isActive = true")
     java.math.BigDecimal sumCurrentBalanceByUserId(
             @org.springframework.data.repository.query.Param("userId") Integer userId);

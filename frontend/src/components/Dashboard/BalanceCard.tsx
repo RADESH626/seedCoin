@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Settings } from 'lucide-react';
 
 interface BalanceCardProps {
     title: string;
@@ -9,9 +9,10 @@ interface BalanceCardProps {
     currency?: string;
     isTotal?: boolean;
     isDark?: boolean;
+    onEdit?: () => void;
 }
 
-export default function BalanceCard({ title, amount, currency = "COP", isTotal = false, isDark = false }: BalanceCardProps) {
+export default function BalanceCard({ title, amount, currency = "COP", isTotal = false, isDark = false, onEdit }: BalanceCardProps) {
     const [isVisible, setIsVisible] = useState(false);
 
     const getBgColor = () => {
@@ -34,13 +35,20 @@ export default function BalanceCard({ title, amount, currency = "COP", isTotal =
         <div className={`p-6 rounded-xl shadow-sm border ${getBgColor()}`}>
             <div className="flex items-center justify-between mb-2">
                 <h3 className={`font-medium ${getTextColor()}`}>{title}</h3>
-                <button onClick={() => setIsVisible(!isVisible)} className="focus:outline-none">
-                    {isVisible ? (
-                        <EyeOff className={`w-5 h-5 ${getIconColor()}`} />
-                    ) : (
-                        <Eye className={`w-5 h-5 ${getIconColor()}`} />
+                <div className="flex items-center gap-2">
+                    <button onClick={() => setIsVisible(!isVisible)} className="focus:outline-none">
+                        {isVisible ? (
+                            <EyeOff className={`w-5 h-5 ${getIconColor()}`} />
+                        ) : (
+                            <Eye className={`w-5 h-5 ${getIconColor()}`} />
+                        )}
+                    </button>
+                    {onEdit && (
+                        <button onClick={onEdit} className="focus:outline-none" title="Editar cuenta">
+                            <Settings className={`w-5 h-5 ${getIconColor()}`} />
+                        </button>
                     )}
-                </button>
+                </div>
             </div>
             <div className="text-2xl font-bold">
                 {isVisible ? (
