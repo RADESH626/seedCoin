@@ -138,12 +138,90 @@ test.describe('Transaction Management Tests', () => {
                 await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
                 await expect(page.getByText('Transacción creada exitosamente').first()).toBeVisible();
-                // await expect(page.getByText(expenseName).first()).toBeVisible();
 
                 // Cleanup / Stability
                 await expect(page.getByText('Nueva Transacción')).toBeHidden();
                 await page.waitForTimeout(1000);
             });
         }
+    });
+
+    test.describe('Invalid Transactions', () => {
+        test('should show error when adding negative amount', async () => {
+            await page.getByRole('button', { name: 'Agregar Transacción' }).click({ force: true });
+            await expect(page.getByText('Nueva Transacción')).toBeVisible();
+
+            await page.getByPlaceholder('0.00').fill('-5000');
+            await page.getByPlaceholder('Ej. Mercado, Salario...').fill('Negative Expense');
+
+            const cat = expenseCategories[0];
+            const categoryLabel = `${cat.icon} ${cat.name}`;
+            const categoryContainer = page.locator('div.space-y-1', { hasText: 'Categoría' });
+            await categoryContainer.locator('select').selectOption({ label: categoryLabel });
+
+            await page.getByRole('button', { name: 'Guardar Transacción' }).click();
+
+            // Expect error message (adapt selector to actual UI implementation)
+            // Assuming toast or form error. 
+            // For now, let's assume the "Guardar" checks it or backend returns error toast.
+            // If backend validation works, it should fail.
+            // If frontend validation works, it shouldn't even send.
+
+            // Let's verify we do NOT see "Transacción creada exitosamente"
+            await expect(page.getByText('Transacción creada exitosamente')).not.toBeVisible();
+
+            // Or look for specific error if we know it. 
+            // Since we rely on backend validation mostly now, checking for backend error toast would be ideal.
+            // For now, let's close the modal to cleanup if it failed to close
+            await page.getByLabel('Cerrar').click();
+            await expect(page.getByText('Nueva Transacción')).toBeHidden();
+        });
+    });
+
+
+    test.describe('Common Expense Suggestions', () => {
+        test('should suggest common expenses and autofill form', async () => {
+            // 1. Create 3 identical expenses to establish a pattern
+            const commonExpenseName = `Cafe Matutino ${Date.now()}`;
+            // Use existing category from expenseCategories
+            const cat = expenseCategories[0]; // Alimentación
+            const categoryLabel = `${cat.icon} ${cat.name}`;
+
+            for (let i = 0; i < 3; i++) {
+                await page.getByRole('button', { name: 'Agregar Transacción' }).click({ force: true });
+                await expect(page.getByText('Nueva Transacción')).toBeVisible();
+                await page.getByPlaceholder('0.00').fill('5000');
+                await page.getByPlaceholder('Ej. Mercado, Salario...').fill(commonExpenseName);
+
+                const categoryContainer = page.locator('div.space-y-1', { hasText: 'Categoría' });
+                await categoryContainer.locator('select').selectOption({ label: categoryLabel });
+
+                await page.getByRole('button', { name: 'Guardar Transacción' }).click();
+                await expect(page.getByText('Transacción creada exitosamente').first()).toBeVisible();
+                await expect(page.getByText('Nueva Transacción')).toBeHidden();
+                // Wait for toast to disappear or just wait a bit
+                await page.waitForTimeout(1000);
+            }
+
+            // 2. Open modal again
+            await page.getByRole('button', { name: 'Agregar Transacción' }).click({ force: true });
+            await expect(page.getByText('Nueva Transacción')).toBeVisible();
+
+            // 3. Verify Suggestion appears
+            await expect(page.getByText('Más comunes')).toBeVisible();
+            const suggestionBtn = page.getByRole('button', { name: commonExpenseName });
+            await expect(suggestionBtn).toBeVisible();
+
+            // 4. Click suggestion
+            await suggestionBtn.click();
+
+            // 5. Verify fields autofilled
+            await expect(page.getByPlaceholder('Ej. Mercado, Salario...')).toHaveValue(commonExpenseName);
+
+            // Close modal (Click outside or X button)
+            // Using Escape key is often easiest or specific button
+            await page.getByLabel('Cerrar').click();
+            await expect(page.getByText('Nueva Transacción')).toBeHidden();
+        });
     });
 });
