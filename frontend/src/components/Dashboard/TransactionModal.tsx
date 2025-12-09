@@ -27,6 +27,15 @@ interface TransactionDTO {
     transactionDate: string;
 }
 
+interface CommonTransactionDTO {
+    categoryId: number;
+    categoryName: string;
+    categoryIcon: string;
+    description: string;
+    usageCount: number;
+    amount?: number;
+}
+
 interface TransactionModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -45,6 +54,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [commonTransactions, setCommonTransactions] = useState<CommonTransactionDTO[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -71,6 +81,10 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 // Keep accountId if already loaded? Maybe reset.
                 // setAccountId(''); 
                 // Don't reset Account too aggressively if user has only one.
+
+                if (type === 'EXPENSE') {
+                    fetchCommonTransactions();
+                }
             }
         }
     }, [isOpen, user, transactionToEdit]); // Removed type dependency from main effect to avoid loops, explicit calls instead
@@ -81,6 +95,12 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         fetchCategories(newType);
         // Maybe clear categoryId as it might not be valid for new type
         setCategoryId('');
+
+        if (newType === 'EXPENSE' && !transactionToEdit) {
+            fetchCommonTransactions();
+        } else {
+            setCommonTransactions([]);
+        }
     };
 
     const fetchAccounts = async () => {
@@ -97,6 +117,18 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         } catch (error) {
             console.error("Error fetching accounts:", error);
             toast.error("Error al cargar cuentas");
+        }
+    };
+
+    const fetchCommonTransactions = async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/api/transactions/common?userId=${user?.id}&type=EXPENSE`);
+            if (res.ok) {
+                const data = await res.json();
+                setCommonTransactions(data);
+            }
+        } catch (error) {
+            console.error("Error fetching common transactions:", error);
         }
     };
 
@@ -148,10 +180,9 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!amount || !accountId || !categoryId) {
-            toast.error("Por favor completa todos los campos requeridos");
+    const executeTransactionSave = async (transactionData: any) => {
+        if (!transactionData.amount || !transactionData.accountId || !transactionData.categoryId) {
+            toast.error("Por favor completa todos los campos requeridos (Monto y Cuenta)");
             return;
         }
 
@@ -163,23 +194,12 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
             const method = transactionToEdit ? 'PUT' : 'POST';
 
-            // Common Body
-            const body = {
-                userId: user?.id,
-                accountId: parseInt(accountId),
-                categoryId: parseInt(categoryId),
-                amount: parseFloat(amount),
-                type,
-                description,
-                transactionDate: new Date(date).toISOString() // Or just 'date' if backend accepts YYYY-MM-DD
-            };
-
             const response = await fetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body),
+                body: JSON.stringify(transactionData),
             });
 
             if (response.ok) {
@@ -190,8 +210,32 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 setAmount('');
                 setDescription('');
             } else {
-                const errorText = await response.text();
-                toast.error(`Error: ${errorText}`);
+                let errorMessage = 'Ha ocurrido un error inesperado';
+                try {
+                    // Clone response to try reading as text if JSON fails, or just read text and parse
+                    const errorText = await response.text();
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        // Spring Boot default error structure usually has 'message' or 'error'
+                        errorMessage = errorJson.message || errorJson.error || errorMessage;
+                    } catch {
+                        // Not JSON, use text if not empty
+                        if (errorText && errorText.trim().length > 0) {
+                            errorMessage = errorText;
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing error response:", e);
+                }
+
+                // Translate specific backend messages to Spanish if needed
+                if (errorMessage.includes("Insufficient funds")) {
+                    errorMessage = "No tienes fondos suficientes para este gasto 💸";
+                } else if (errorMessage.includes("Amount must be positive")) {
+                    errorMessage = "El monto debe ser mayor a cero";
+                }
+
+                toast.error(errorMessage);
             }
         } catch (error) {
             console.error("Error submitting transaction:", error);
@@ -199,6 +243,53 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const data = {
+            userId: user?.id,
+            accountId: parseInt(accountId),
+            categoryId: parseInt(categoryId),
+            amount: parseFloat(amount),
+            type,
+            description,
+            transactionDate: new Date(date).toISOString()
+        };
+        await executeTransactionSave(data);
+    };
+
+    const handleCommonTransactionClick = (ct: CommonTransactionDTO) => {
+        // Update state for UI feedback
+        setCategoryId(ct.categoryId.toString());
+        setDescription(ct.description);
+
+        let finalAmount = amount ? parseFloat(amount) : 0;
+
+        if (ct.amount) {
+            setAmount(ct.amount.toString());
+            finalAmount = ct.amount;
+        }
+
+        if (!finalAmount) {
+            toast.info("Ingresa el monto para guardar automáticamente");
+            // We focus the amount input if possible, but for now just setting state is enough
+            // The user will have to click save manually or type amount and click again (which is weird)
+            // But if they typed amount first, this works.
+            return;
+        }
+
+        // Auto-save
+        const data = {
+            userId: user?.id,
+            accountId: parseInt(accountId),
+            categoryId: ct.categoryId,
+            amount: finalAmount, // Use the calculated amount
+            type,
+            description: ct.description,
+            transactionDate: new Date(date).toISOString()
+        };
+        executeTransactionSave(data);
     };
 
     if (!isOpen) return null;
@@ -222,7 +313,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                                 <Trash2 className="w-5 h-5" />
                             </button>
                         )}
-                        <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500">
+                        <button onClick={onClose} aria-label="Cerrar" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500">
                             <X className="w-5 h-5" />
                         </button>
                     </div>
@@ -253,6 +344,26 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                             Gasto
                         </button>
                     </div>
+
+                    {/* Suggestions */}
+                    {type === 'EXPENSE' && !transactionToEdit && commonTransactions.length > 0 && (
+                        <div className="space-y-1">
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Más comunes</label>
+                            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                                {commonTransactions.map((ct, idx) => (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => handleCommonTransactionClick(ct)}
+                                        className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm"
+                                    >
+                                        <span>{ct.categoryIcon}</span>
+                                        <span className="text-gray-700 dark:text-gray-300">{ct.description}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Amount */}
                     <div className="space-y-1">
