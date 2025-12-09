@@ -26,7 +26,7 @@ public class TransactionController {
     }
 
     @GetMapping("/common")
-    public ResponseEntity<List<com.seedCoin.seedCoin.dto.CommonTransactionDTO>> getCommonTransactions(
+    public ResponseEntity<?> getCommonTransactions(
             @RequestParam Integer userId,
             @RequestParam(defaultValue = "EXPENSE") String type) {
         return ResponseEntity.ok(transactionService.getCommonTransactions(userId, type));

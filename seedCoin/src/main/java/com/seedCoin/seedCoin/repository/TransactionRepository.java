@@ -21,13 +21,13 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
                         @org.springframework.data.repository.query.Param("startDate") java.time.LocalDateTime startDate,
                         @org.springframework.data.repository.query.Param("endDate") java.time.LocalDateTime endDate);
 
-        @org.springframework.data.jpa.repository.Query("SELECT new com.seedCoin.seedCoin.dto.CommonTransactionDTO(t.category.id, t.category.name, t.category.icon, t.description, COUNT(t), t.amount) "
+        @org.springframework.data.jpa.repository.Query("SELECT t.category.id, MIN(t.category.name), MIN(t.category.icon), t.description, COUNT(t), t.amount "
                         +
                         "FROM Transaction t " +
                         "WHERE t.user.id = :userId AND t.type = :type " +
-                        "GROUP BY t.category.id, t.category.name, t.category.icon, t.description, t.amount " +
+                        "GROUP BY t.category.id, t.description, t.amount " +
                         "ORDER BY COUNT(t) DESC")
-        List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> findCommonTransactions(
+        List<Object[]> findCommonTransactions(
                         @org.springframework.data.repository.query.Param("userId") Integer userId,
                         @org.springframework.data.repository.query.Param("type") com.seedCoin.seedCoin.model.TransactionType type,
                         org.springframework.data.domain.Pageable pageable);

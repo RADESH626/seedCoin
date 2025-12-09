@@ -149,7 +149,16 @@ public class TransactionServiceImpl implements TransactionService {
         com.seedCoin.seedCoin.model.TransactionType transactionType = com.seedCoin.seedCoin.model.TransactionType
                 .valueOf(type);
         org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 5);
-        return transactionRepository.findCommonTransactions(userId, transactionType, pageable);
+
+        List<Object[]> results = transactionRepository.findCommonTransactions(userId, transactionType, pageable);
+        return results.stream().map(result -> new com.seedCoin.seedCoin.dto.CommonTransactionDTO(
+                (Number) result[0], // categoryId
+                (String) result[1], // categoryName
+                (String) result[2], // categoryIcon
+                (String) result[3], // description
+                (Number) result[4], // usageCount
+                (Number) result[5] // amount
+        )).collect(Collectors.toList());
     }
 
     private TransactionDTO convertToDTO(Transaction transaction) {

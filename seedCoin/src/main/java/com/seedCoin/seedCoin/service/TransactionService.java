@@ -2,6 +2,7 @@ package com.seedCoin.seedCoin.service;
 
 import com.seedCoin.seedCoin.dto.CreateTransactionDTO;
 import com.seedCoin.seedCoin.dto.TransactionDTO;
+import com.seedCoin.seedCoin.dto.CommonTransactionDTO;
 
 import java.util.List;
 import java.util.Optional;

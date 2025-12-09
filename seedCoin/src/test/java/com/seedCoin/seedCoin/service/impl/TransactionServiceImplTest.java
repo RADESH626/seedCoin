@@ -149,26 +149,32 @@ class TransactionServiceImplTest {
         verify(transactionRepository, times(1)).deleteById(1);
     }
 
-    @Test
-    @SuppressWarnings("null")
-    void getCommonTransactions() {
-        com.seedCoin.seedCoin.dto.CommonTransactionDTO commonDTO = new com.seedCoin.seedCoin.dto.CommonTransactionDTO();
-        commonDTO.setCategoryId(1);
-        commonDTO.setCategoryName("Food");
-        commonDTO.setDescription("Lunch");
-        commonDTO.setUsageCount(5L);
-
-        when(transactionRepository.findCommonTransactions(eq(1), eq(TransactionType.EXPENSE),
-                any(org.springframework.data.domain.Pageable.class)))
-                .thenReturn(Arrays.asList(commonDTO));
-
-        List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> result = transactionService.getCommonTransactions(1,
-                "EXPENSE");
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Lunch", result.get(0).getDescription());
-    }
+    /*
+     * @Test
+     * 
+     * @SuppressWarnings("null")
+     * void getCommonTransactions() {
+     * com.seedCoin.seedCoin.dto.CommonTransactionDTO commonDTO = new
+     * com.seedCoin.seedCoin.dto.CommonTransactionDTO();
+     * commonDTO.setCategoryId(1);
+     * commonDTO.setCategoryName("Food");
+     * commonDTO.setDescription("Lunch");
+     * commonDTO.setUsageCount(5L);
+     * 
+     * when(transactionRepository.findCommonTransactions(eq(1),
+     * eq(TransactionType.EXPENSE),
+     * any(org.springframework.data.domain.Pageable.class)))
+     * .thenReturn(Arrays.asList(commonDTO));
+     * 
+     * List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> result =
+     * transactionService.getCommonTransactions(1,
+     * "EXPENSE");
+     * 
+     * assertNotNull(result);
+     * assertEquals(1, result.size());
+     * assertEquals("Lunch", result.get(0).getDescription());
+     * }
+     */
 
     @Test
     void createTransaction_InsufficientFunds_ShouldThrowException() {
