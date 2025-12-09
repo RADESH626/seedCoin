@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "*") // Allow requests from Next.js frontend
+// @CrossOrigin(origins = "*") // Allow requests from Next.js frontend
 public class DashboardController {
 
     @Autowired
