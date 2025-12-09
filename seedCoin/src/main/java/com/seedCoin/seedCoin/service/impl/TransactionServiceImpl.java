@@ -14,6 +14,7 @@ import com.seedCoin.seedCoin.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Optional<TransactionDTO> getTransactionById(Integer id) {
-        return transactionRepository.findById(id).map(this::convertToDTO);
+        return transactionRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
     @Override
@@ -60,15 +61,15 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDescription(createTransactionDTO.getDescription());
         transaction.setTransactionDate(createTransactionDTO.getTransactionDate());
 
-        User user = userRepository.findById(createTransactionDTO.getUserId())
+        User user = userRepository.findById(Objects.requireNonNull(createTransactionDTO.getUserId()))
                 .orElseThrow(() -> new RuntimeException("User not found"));
         transaction.setUser(user);
 
-        Account account = accountRepository.findById(createTransactionDTO.getAccountId())
+        Account account = accountRepository.findById(Objects.requireNonNull(createTransactionDTO.getAccountId()))
                 .orElseThrow(() -> new RuntimeException("Account not found"));
         transaction.setAccount(account);
 
-        Category category = categoryRepository.findById(createTransactionDTO.getCategoryId())
+        Category category = categoryRepository.findById(Objects.requireNonNull(createTransactionDTO.getCategoryId()))
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         transaction.setCategory(category);
 
@@ -76,6 +77,10 @@ public class TransactionServiceImpl implements TransactionService {
         if (transaction.getType() == com.seedCoin.seedCoin.model.TransactionType.INCOME) {
             account.setCurrentBalance(account.getCurrentBalance().add(transaction.getAmount()));
         } else {
+            if (account.getCurrentBalance().compareTo(transaction.getAmount()) < 0) {
+                throw new org.springframework.web.server.ResponseStatusException(
+                        org.springframework.http.HttpStatus.BAD_REQUEST, "Insufficient funds for this expense");
+            }
             account.setCurrentBalance(account.getCurrentBalance().subtract(transaction.getAmount()));
         }
         accountRepository.save(account);
@@ -86,7 +91,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO updateTransaction(Integer id, TransactionDTO transactionDTO) {
-        Transaction transaction = transactionRepository.findById(id)
+        Transaction transaction = transactionRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         Account account = transaction.getAccount();
@@ -123,7 +128,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(Integer id) {
-        Transaction transaction = transactionRepository.findById(id)
+        Transaction transaction = transactionRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         Account account = transaction.getAccount();
@@ -137,6 +142,14 @@ public class TransactionServiceImpl implements TransactionService {
         accountRepository.save(account);
 
         transactionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> getCommonTransactions(Integer userId, String type) {
+        com.seedCoin.seedCoin.model.TransactionType transactionType = com.seedCoin.seedCoin.model.TransactionType
+                .valueOf(type);
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 5);
+        return transactionRepository.findCommonTransactions(userId, transactionType, pageable);
     }
 
     private TransactionDTO convertToDTO(Transaction transaction) {

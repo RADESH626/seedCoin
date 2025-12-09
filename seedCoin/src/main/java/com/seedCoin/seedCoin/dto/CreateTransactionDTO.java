@@ -7,12 +7,25 @@ import java.time.LocalDateTime;
 
 @Data
 public class CreateTransactionDTO {
+    @jakarta.validation.constraints.NotNull(message = "User ID is required")
     private Integer userId;
+
+    @jakarta.validation.constraints.NotNull(message = "Account ID is required")
     private Integer accountId;
+
+    @jakarta.validation.constraints.NotNull(message = "Category ID is required")
     private Integer categoryId;
+
+    @jakarta.validation.constraints.NotNull(message = "Amount is required")
+    @jakarta.validation.constraints.Positive(message = "Amount must be positive")
     private BigDecimal amount;
+
+    @jakarta.validation.constraints.NotNull(message = "Type is required")
     private String type;
+
     private String description;
+
+    @jakarta.validation.constraints.NotNull(message = "Date is required")
     private LocalDateTime transactionDate;
 
     public Integer getUserId() {

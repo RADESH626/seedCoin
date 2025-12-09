@@ -25,6 +25,13 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
+    @GetMapping("/common")
+    public ResponseEntity<List<com.seedCoin.seedCoin.dto.CommonTransactionDTO>> getCommonTransactions(
+            @RequestParam Integer userId,
+            @RequestParam(defaultValue = "EXPENSE") String type) {
+        return ResponseEntity.ok(transactionService.getCommonTransactions(userId, type));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable Integer id) {
         return transactionService.getTransactionById(id)
@@ -33,7 +40,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody CreateTransactionDTO createTransactionDTO) {
+    public ResponseEntity<TransactionDTO> createTransaction(
+            @jakarta.validation.Valid @RequestBody CreateTransactionDTO createTransactionDTO) {
         return new ResponseEntity<>(transactionService.createTransaction(createTransactionDTO), HttpStatus.CREATED);
     }
 
