@@ -178,12 +178,12 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
                                     type="button"
                                     onClick={() => setAccountTypeId(type.id.toString())}
                                     className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all ${accountTypeId === type.id.toString()
-                                        ? 'border-primary bg-primary/5 text-primary'  /* Fixed Text Color */
+                                        ? 'border-white text-white'
                                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                                         }`}
                                 >
                                     <span className="text-2xl">{type.icon}</span>
-                                    <span className={`text-xs font-medium ${accountTypeId === type.id.toString() ? 'text-primary' : 'text-gray-500'}`}>
+                                    <span className={`text-xs font-medium ${accountTypeId === type.id.toString() ? 'text-white' : 'text-gray-500'}`}>
                                         {type.name}
                                     </span>
                                 </button>

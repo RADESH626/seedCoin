@@ -207,7 +207,7 @@ export default function Dashboard() {
                             <p className="text-gray-500 dark:text-gray-400 mb-4">No tienes cuentas registradas.</p>
                             <button
                                 onClick={() => setIsAccountModalOpen(true)}
-                                className="text-primary font-medium hover:underline"
+                                className="text-white font-medium hover:underline"
                             >
                                 Crear mi primera cuenta
                             </button>
