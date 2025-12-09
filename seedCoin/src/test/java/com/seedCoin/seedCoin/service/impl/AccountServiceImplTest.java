@@ -92,6 +92,7 @@ class AccountServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createAccount() {
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
@@ -105,6 +106,7 @@ class AccountServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateAccount() {
         AccountDTO updateDTO = new AccountDTO();
         updateDTO.setName("Updated Savings");
@@ -123,6 +125,7 @@ class AccountServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void deleteAccount() {
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
         when(accountRepository.save(any(Account.class))).thenReturn(account);
