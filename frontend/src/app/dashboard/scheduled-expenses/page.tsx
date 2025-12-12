@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Header from "@/components/Header";
 import { useAuth } from '@/context/AuthContext';
 import { ScheduledTransactionDTO, getScheduledTransactions } from '@/services/scheduledTransactionService';
-import ScheduledTransactionModal from "@/components/dashboard/ScheduledTransactionModal";
-import ScheduledTransactionsTable from "@/components/dashboard/ScheduledTransactionsTable";
+import ScheduledTransactionModal from "@/components/Dashboard/ScheduledTransactionModal";
+import ScheduledTransactionsTable from "@/components/Dashboard/ScheduledTransactionsTable";
 import { Plus } from 'lucide-react';
 
 export default function ScheduledExpensesPage() {
@@ -52,7 +51,7 @@ export default function ScheduledExpensesPage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
-            <Header />
+            {/* Header removed */}
 
             <main className="flex-1 w-full max-w-5xl mx-auto p-4 space-y-8 pb-20">
                 <div className="flex items-center justify-between">
