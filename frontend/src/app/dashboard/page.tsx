@@ -113,7 +113,7 @@ export default function Dashboard() {
     };
 
     if (isLoading || isLoadingData) {
-        return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
+        return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">Cargando...</div>;
     }
 
     if (!isAuthenticated) {
