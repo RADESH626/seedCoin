@@ -103,12 +103,12 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
 
     const handleDelete = async () => {
         if (!transactionToEdit || !transactionToEdit.id) return;
-        if (!confirm('¿Estás seguro de que deseas eliminar este gasto programado?')) return;
+        if (!confirm('¿Estás seguro de que deseas eliminar esta transacción programada?')) return;
 
         setIsLoading(true);
         try {
             await deleteScheduledTransaction(transactionToEdit.id);
-            toast.success('Gasto programado eliminado exitosamente');
+            toast.success('Transacción programada eliminada exitosamente');
             onSuccess();
             onClose();
         } catch (error) {
@@ -143,10 +143,10 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
         try {
             if (transactionToEdit && transactionToEdit.id) {
                 await updateScheduledTransaction(transactionToEdit.id, data);
-                toast.success("Gasto programado actualizado");
+                toast.success("Transacción programada actualizada");
             } else {
                 await createScheduledTransaction(data);
-                toast.success("Gasto programado creado exitosamente");
+                toast.success("Transacción programada creada exitosamente");
             }
             onSuccess();
             onClose();
@@ -314,7 +314,7 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
                         disabled={isLoading}
                         className="w-full py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-primary-hover hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                     >
-                        {isLoading ? 'Guardando...' : (transactionToEdit ? 'Guardar Cambios' : 'Crear Gasto Programado')}
+                        {isLoading ? 'Guardando...' : (transactionToEdit ? 'Guardar Cambios' : 'Crear Transacción Programada')}
                     </button>
 
                 </form>
