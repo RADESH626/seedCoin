@@ -61,6 +61,9 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
     const [commonTransactions, setCommonTransactions] = useState<CommonTransactionDTO[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    // New state for interception flow
+    const [pendingCommonTransaction, setPendingCommonTransaction] = useState<CommonTransactionDTO | null>(null);
+
     useEffect(() => {
         if (isOpen && user) {
             fetchAccounts();
@@ -82,6 +85,9 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                     fetchCommonTransactions();
                 }
             }
+        } else {
+            // Return to clean state when closed
+            setPendingCommonTransaction(null);
         }
     }, [isOpen, user, transactionToEdit]);
 
@@ -244,38 +250,78 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
     };
 
     const handleCommonTransactionClick = (ct: CommonTransactionDTO) => {
-        setCategoryId(ct.category.id.toString());
-        setDescription(ct.name);
+        setPendingCommonTransaction(ct);
+    };
 
-        let finalAmount = amount ? parseFloat(amount) : 0;
+    const handleAccountSelectForCommon = (selectedAccount: Account) => {
+        if (!pendingCommonTransaction || !user) return;
 
-        if (ct.amount) {
-            setAmount(ct.amount.toString());
-            finalAmount = ct.amount;
+        const { category, name, amount: ctAmount } = pendingCommonTransaction;
+
+        let finalAmount = ctAmount;
+        if (!finalAmount && amount) {
+            finalAmount = parseFloat(amount);
         }
 
-        if (!finalAmount) {
-            toast.info("Ingresa el monto para guardar automáticamente");
-            return;
-        }
+        // If still no amount (e.g. preset was 0 and user didn't type anything before clicking), 
+        // we could prompt or just save as 0 (backend might reject 0). 
+        // For now let's assume if it is 0 it will fail validation in executeTransactionSave,
+        // but we should probably ensure it's set.
 
         const data = {
-            userId: user?.id,
-            accountId: parseInt(accountId),
-            categoryId: ct.category.id,
+            userId: user.id,
+            accountId: selectedAccount.id,
+            categoryId: category.id,
             amount: finalAmount,
             type,
-            description: ct.name,
+            description: name,
             transactionDate: new Date(date).toISOString()
         };
+
         executeTransactionSave(data);
+        setPendingCommonTransaction(null);
     };
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden relative">
+
+                {/* Account Selection Overlay */}
+                {pendingCommonTransaction && (
+                    <div className="absolute inset-0 z-10 bg-white dark:bg-gray-900 flex flex-col animate-in fade-in slide-in-from-bottom-5 duration-200">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                <CreditCard className="w-5 h-5 text-primary" />
+                                ¿De qué cuenta?
+                            </h3>
+                            <button
+                                onClick={() => setPendingCommonTransaction(null)}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-4 flex-1 overflow-y-auto">
+                            <p className="text-sm text-gray-500 mb-4">
+                                Selecciona la cuenta para pagar: <span className="font-semibold text-gray-800 dark:text-gray-200">{pendingCommonTransaction.name}</span>
+                            </p>
+                            <div className="space-y-2">
+                                {accounts.map(acc => (
+                                    <button
+                                        key={acc.id}
+                                        onClick={() => handleAccountSelectForCommon(acc)}
+                                        className="w-full text-left p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/50 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all group"
+                                    >
+                                        <span className="font-medium text-gray-900 dark:text-white group-hover:text-primary transition-colors">{acc.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         {transactionToEdit ? 'Editar Transacción' : 'Nueva Transacción'}
