@@ -3,6 +3,7 @@ package com.seedCoin.seedCoin.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.seedCoin.seedCoin.dto.ScheduledTransactionDTO;
+import java.util.Objects;
 import com.seedCoin.seedCoin.model.Frequency;
 import com.seedCoin.seedCoin.model.TransactionType;
 import com.seedCoin.seedCoin.service.ScheduledTransactionService;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -64,8 +65,8 @@ class ScheduledTransactionControllerTest {
                 .thenReturn(dto);
 
         mockMvc.perform(post("/api/scheduled-transactions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(dto))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Netflix"));
     }

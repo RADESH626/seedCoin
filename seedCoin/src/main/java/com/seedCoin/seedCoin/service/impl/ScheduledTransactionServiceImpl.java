@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,17 +55,17 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
 
     @Override
     public ScheduledTransactionDTO updateScheduledTransaction(Integer id, ScheduledTransactionDTO dto) {
-        ScheduledTransaction entity = scheduledTransactionRepository.findById(id)
+        ScheduledTransaction entity = scheduledTransactionRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Scheduled Transaction not found"));
 
         updateEntityFromDto(entity, dto);
-        ScheduledTransaction saved = scheduledTransactionRepository.save(entity);
+        ScheduledTransaction saved = scheduledTransactionRepository.save(Objects.requireNonNull(entity));
         return mapToDto(saved);
     }
 
     @Override
     public void deleteScheduledTransaction(Integer id) {
-        ScheduledTransaction entity = scheduledTransactionRepository.findById(id)
+        ScheduledTransaction entity = scheduledTransactionRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Scheduled Transaction not found"));
         entity.setIsActive(false); // Soft delete
         scheduledTransactionRepository.save(entity);
@@ -126,17 +127,17 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
 
     private void updateEntityFromDto(ScheduledTransaction entity, ScheduledTransactionDTO dto) {
         if (dto.getUserId() != null) {
-            User user = userRepository.findById(dto.getUserId())
+            User user = userRepository.findById(Objects.requireNonNull(dto.getUserId()))
                     .orElseThrow(() -> new RuntimeException("User not found"));
             entity.setUser(user);
         }
         if (dto.getAccountId() != null) {
-            Account account = accountRepository.findById(dto.getAccountId())
+            Account account = accountRepository.findById(Objects.requireNonNull(dto.getAccountId()))
                     .orElseThrow(() -> new RuntimeException("Account not found"));
             entity.setAccount(account);
         }
         if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(dto.getCategoryId())
+            Category category = categoryRepository.findById(Objects.requireNonNull(dto.getCategoryId()))
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             entity.setCategory(category);
         }

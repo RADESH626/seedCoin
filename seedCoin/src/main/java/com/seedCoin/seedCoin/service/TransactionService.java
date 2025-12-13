@@ -20,5 +20,5 @@ public interface TransactionService {
 
     void deleteTransaction(Integer id);
 
-    List<com.seedCoin.seedCoin.dto.CommonTransactionDTO> getCommonTransactions(Integer userId, String type);
+    List<CommonTransactionDTO> getCommonTransactions(Integer userId, String type);
 }

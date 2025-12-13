@@ -134,8 +134,8 @@ class TransactionControllerTest {
         createTransactionDTO.setAmount(BigDecimal.valueOf(-100));
 
         mockMvc.perform(post("/api/transactions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createTransactionDTO)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(createTransactionDTO))))
                 .andExpect(status().isBadRequest());
     }
 }

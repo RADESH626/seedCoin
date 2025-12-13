@@ -177,6 +177,7 @@ class TransactionServiceImplTest {
      */
 
     @Test
+    @SuppressWarnings("null")
     void createTransaction_InsufficientFunds_ShouldThrowException() {
         createTransactionDTO.setType("EXPENSE");
         createTransactionDTO.setAmount(BigDecimal.valueOf(1000)); // Account has 100 probably? Need to check setup
