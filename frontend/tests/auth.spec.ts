@@ -72,4 +72,38 @@ test.describe('Authentication & Security', () => {
             await expect(page).toHaveURL(/\/iniciar-sesion/);
         });
     });
+
+    test.describe('Password Visibility', () => {
+        test('Should toggle password visibility in Login', async ({ page }) => {
+            await page.goto('/iniciar-sesion');
+
+            const passwordInput = page.locator('#password'); // Direct ID selector
+            await expect(passwordInput).toHaveAttribute('type', 'password');
+
+            // Click eye icon. Use adjacent sibling selector
+            await page.locator('#password + button').click();
+            await expect(passwordInput).toHaveAttribute('type', 'text');
+
+            await page.locator('#password + button').click();
+            await expect(passwordInput).toHaveAttribute('type', 'password');
+        });
+
+        test('Should toggle password visibility in Register', async ({ page }) => {
+            await page.goto('/registro');
+
+            const passwordInput = page.locator('#password');
+            const confirmInput = page.locator('#confirmPassword');
+
+            await expect(passwordInput).toHaveAttribute('type', 'password');
+            await expect(confirmInput).toHaveAttribute('type', 'password');
+
+            // Toggle Password
+            await page.locator('#password + button').click();
+            await expect(passwordInput).toHaveAttribute('type', 'text');
+
+            // Toggle Confirm Password
+            await page.locator('#confirmPassword + button').click();
+            await expect(confirmInput).toHaveAttribute('type', 'text');
+        });
+    });
 });
