@@ -29,6 +29,7 @@ export default function ScheduledTransactionsTable({ transactions, onEdit }: Sch
                     <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th className="px-6 py-3">Descripción</th>
+                            <th className="px-6 py-3">Cuenta</th>
                             <th className="px-6 py-3">Categoría</th>
                             <th className="px-6 py-3">Frecuencia</th>
                             <th className="px-6 py-3">Próximo Pago</th>
@@ -41,6 +42,9 @@ export default function ScheduledTransactionsTable({ transactions, onEdit }: Sch
                             <tr key={tx.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 group">
                                 <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                     {tx.description}
+                                </td>
+                                <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                    {tx.accountName}
                                 </td>
                                 <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                     {tx.categoryName}
