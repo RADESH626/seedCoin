@@ -1,7 +1,9 @@
+import Header from "@/components/Header";
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col font-[family-name:var(--font-geist-sans)]">
-      {/* Header removed as it is now in layout */}
+      <Header />
 
       <main className="flex-1 flex flex-col">
         {/* Hero Section */}
