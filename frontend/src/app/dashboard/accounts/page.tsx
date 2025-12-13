@@ -12,6 +12,7 @@ interface Account {
     name: string;
     currentBalance: number;
     accountType: string;
+    accountTypeId: number;
 }
 
 export default function AccountsPage() {
@@ -19,6 +20,7 @@ export default function AccountsPage() {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
     const fetchAccounts = async () => {
         if (!user) return;
@@ -43,6 +45,21 @@ export default function AccountsPage() {
         }
     }, [user]);
 
+    const handleEditAccount = (account: Account) => {
+        setSelectedAccount(account);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setTimeout(() => setSelectedAccount(null), 200);
+    };
+
+    const handleOpenCreateModal = () => {
+        setSelectedAccount(null);
+        setIsModalOpen(true);
+    };
+
     if (authLoading || (!user && isLoading)) {
         return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">Cargando...</div>;
     }
@@ -62,7 +79,7 @@ export default function AccountsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Add Account Card (using AddButton style but as a card) */}
                     <div className="md:col-span-3 lg:col-span-3">
-                        <AddButton onClick={() => setIsModalOpen(true)} label="Nueva Cuenta" />
+                        <AddButton onClick={handleOpenCreateModal} label="Nueva Cuenta" />
                     </div>
 
                     {accounts.map((account) => (
@@ -71,6 +88,7 @@ export default function AccountsPage() {
                             title={account.name}
                             amount={account.currentBalance}
                             isDark
+                            onEdit={() => handleEditAccount(account)}
                         />
                     ))}
 
@@ -84,8 +102,9 @@ export default function AccountsPage() {
 
             <AccountModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={handleCloseModal}
                 onSuccess={fetchAccounts}
+                accountToEdit={selectedAccount}
             />
         </div>
     );
