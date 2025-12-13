@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
@@ -96,6 +96,14 @@ export default function Header() {
                                         <LogOut className="w-4 h-4" />
                                         Cerrar Sesión
                                     </button>
+                                    <Link
+                                        href="/profile/settings"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors border-t border-gray-100 dark:border-gray-700"
+                                    >
+                                        <Settings className="w-4 h-4" />
+                                        Configuración
+                                    </Link>
                                 </div>
                             </>
                         )}
