@@ -28,12 +28,16 @@ interface TransactionDTO {
 }
 
 interface CommonTransactionDTO {
-    categoryId: number;
-    categoryName: string;
-    categoryIcon: string;
-    description: string;
-    usageCount: number;
-    amount?: number;
+    id: number;
+    name: string; // "name" from backend maps to "description" for us
+    amount: number;
+    type: string;
+    category: {
+        id: number;
+        name: string;
+        icon: string;
+        change_type?: string;
+    }
 }
 
 interface TransactionModalProps {
@@ -60,40 +64,30 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
     useEffect(() => {
         if (isOpen && user) {
             fetchAccounts();
-            fetchCategories(type); // Fetch based on current type (initially EXPENSE or from edit)
+            fetchCategories(type);
 
             if (transactionToEdit) {
-                // Populate form for editing
                 setType(transactionToEdit.type as 'INCOME' | 'EXPENSE');
                 setAmount(transactionToEdit.amount.toString());
                 setDescription(transactionToEdit.description);
-                setDate(transactionToEdit.transactionDate); // Assuming YYYY-MM-DD
+                setDate(transactionToEdit.transactionDate);
                 setAccountId(transactionToEdit.accountId.toString());
                 setCategoryId(transactionToEdit.categoryId.toString());
-
-                // We need to fetch categories for the transaction type immediately
                 fetchCategories(transactionToEdit.type as 'INCOME' | 'EXPENSE');
             } else {
-                // Reset for new transaction
                 setAmount('');
                 setDescription('');
                 setDate(new Date().toISOString().split('T')[0]);
-                // Keep accountId if already loaded? Maybe reset.
-                // setAccountId(''); 
-                // Don't reset Account too aggressively if user has only one.
-
                 if (!transactionToEdit) {
                     fetchCommonTransactions();
                 }
             }
         }
-    }, [isOpen, user, transactionToEdit]); // Removed type dependency from main effect to avoid loops, explicit calls instead
+    }, [isOpen, user, transactionToEdit]);
 
-    // Handle type change separately to refetch categories
     const handleTypeChange = (newType: 'INCOME' | 'EXPENSE') => {
         setType(newType);
         fetchCategories(newType);
-        // Maybe clear categoryId as it might not be valid for new type
         setCategoryId('');
 
         if (!transactionToEdit) {
@@ -109,7 +103,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
             if (res.ok) {
                 const data = await res.json();
                 setAccounts(data);
-                // If not editing and we have accounts, default to first
                 if (data.length > 0 && !accountId && !transactionToEdit) {
                     setAccountId(data[0].id.toString());
                 }
@@ -122,10 +115,11 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const fetchCommonTransactions = async (currentType: string = type) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/transactions/common?userId=${user?.id}&type=${currentType}`);
+            const res = await fetch(`http://localhost:8080/api/transactions/common-presets?userId=${user?.id}`);
             if (res.ok) {
-                const data = await res.json();
-                setCommonTransactions(data);
+                const data: CommonTransactionDTO[] = await res.json();
+                const filtered = data.filter(item => item.type === currentType);
+                setCommonTransactions(filtered);
             }
         } catch (error) {
             console.error("Error fetching common transactions:", error);
@@ -134,18 +128,13 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const fetchCategories = async (transactionType: string) => {
         try {
-            // Fetch ALL and filter, or fetch by group if API supported param
             const res = await fetch(`http://localhost:8080/api/categories?group=TRANSACTION`);
             if (res.ok) {
                 const data: (Category & { type: string })[] = await res.json();
                 const filtered = data.filter(c => c.type === transactionType);
                 setCategories(filtered);
 
-                // If editing, categoryId is already set. If new, default to first?
-                // Logic: IF we are editing, we setCategoryId above.
-                // IF we are just switching type, we might want to default to first.
                 if (!transactionToEdit && filtered.length > 0 && !categoryId) {
-                    // Maybe don't auto-select to force user choice? Or auto-select first.
                     setCategoryId(filtered[0].id.toString());
                 }
             }
@@ -206,20 +195,16 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 toast.success(transactionToEdit ? "Transacción actualizada" : "Transacción creada exitosamente");
                 onSuccess();
                 onClose();
-                // Reset form
                 setAmount('');
                 setDescription('');
             } else {
                 let errorMessage = 'Ha ocurrido un error inesperado';
                 try {
-                    // Clone response to try reading as text if JSON fails, or just read text and parse
                     const errorText = await response.text();
                     try {
                         const errorJson = JSON.parse(errorText);
-                        // Spring Boot default error structure usually has 'message' or 'error'
                         errorMessage = errorJson.message || errorJson.error || errorMessage;
                     } catch {
-                        // Not JSON, use text if not empty
                         if (errorText && errorText.trim().length > 0) {
                             errorMessage = errorText;
                         }
@@ -228,7 +213,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                     console.error("Error parsing error response:", e);
                 }
 
-                // Translate specific backend messages to Spanish if needed
                 if (errorMessage.includes("Insufficient funds")) {
                     errorMessage = "No tienes fondos suficientes para este gasto 💸";
                 } else if (errorMessage.includes("Amount must be positive")) {
@@ -260,9 +244,8 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
     };
 
     const handleCommonTransactionClick = (ct: CommonTransactionDTO) => {
-        // Update state for UI feedback
-        setCategoryId(ct.categoryId.toString());
-        setDescription(ct.description);
+        setCategoryId(ct.category.id.toString());
+        setDescription(ct.name);
 
         let finalAmount = amount ? parseFloat(amount) : 0;
 
@@ -273,20 +256,16 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
         if (!finalAmount) {
             toast.info("Ingresa el monto para guardar automáticamente");
-            // We focus the amount input if possible, but for now just setting state is enough
-            // The user will have to click save manually or type amount and click again (which is weird)
-            // But if they typed amount first, this works.
             return;
         }
 
-        // Auto-save
         const data = {
             userId: user?.id,
             accountId: parseInt(accountId),
-            categoryId: ct.categoryId,
-            amount: finalAmount, // Use the calculated amount
+            categoryId: ct.category.id,
+            amount: finalAmount,
             type,
-            description: ct.description,
+            description: ct.name,
             transactionDate: new Date(date).toISOString()
         };
         executeTransactionSave(data);
@@ -297,8 +276,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-
-                {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         {transactionToEdit ? 'Editar Transacción' : 'Nueva Transacción'}
@@ -320,8 +297,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-4 space-y-4">
-
-                    {/* Type Selector */}
                     <div className="grid grid-cols-2 gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
                         <button
                             type="button"
@@ -345,7 +320,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </button>
                     </div>
 
-                    {/* Suggestions */}
                     {!transactionToEdit && commonTransactions.length > 0 && (
                         <div className="space-y-1">
                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Más comunes</label>
@@ -357,15 +331,14 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                                         onClick={() => handleCommonTransactionClick(ct)}
                                         className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm"
                                     >
-                                        <span>{ct.categoryIcon}</span>
-                                        <span className="text-gray-700 dark:text-gray-300">{ct.description}</span>
+                                        <span>{ct.category.icon}</span>
+                                        <span className="text-gray-700 dark:text-gray-300">{ct.name}</span>
                                     </button>
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    {/* Amount */}
                     <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Monto</label>
                         <div className="relative">
@@ -381,7 +354,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </div>
                     </div>
 
-                    {/* Description */}
                     <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Descripción</label>
                         <div className="relative">
@@ -396,7 +368,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </div>
                     </div>
 
-                    {/* Account */}
                     <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Cuenta</label>
                         <div className="relative">
@@ -414,7 +385,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </div>
                     </div>
 
-                    {/* Category */}
                     <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Categoría</label>
                         <div className="relative">
@@ -432,7 +402,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </div>
                     </div>
 
-                    {/* Date */}
                     <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Fecha</label>
                         <div className="relative">
@@ -446,7 +415,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                         </div>
                     </div>
 
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={isLoading}
