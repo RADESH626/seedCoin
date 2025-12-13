@@ -105,6 +105,7 @@ Si realizas transacciones repetitivas manualmente (ej. "Comprar pan" o "Café de
 ### Transacciones Programadas
 Ideal para gastos fijos mensuales (ej. Renta, Netflix, Internet).
 
+### Creación de Transacciones Programadas   
 1. Dirígete al botón de **Programación**.
 2. Haz clic en el botón **Nuevo +**.
 3. Define si es un gasto o un ingreso.
@@ -115,6 +116,33 @@ Ideal para gastos fijos mensuales (ej. Renta, Netflix, Internet).
 8. Define la frecuencia.
 9. Define la fecha de inicio.
 10. Da clic en **Crear Transacción Programada**.
+
+### Visualización de Transacciones Programadas
+En la tabla de transacciones programadas podrás ver:
+*   **Descripción:** Nombre o detalle de la transacción.
+*   **Cuenta:** La cuenta de origen o destino de los fondos.
+*   **Categoría:** La clasificación del gasto o ingreso.
+*   **Frecuencia:** Cada cuánto se repite (Semanal, Mensual, etc.).
+*   **Próximo Pago:** Fecha de la siguiente ejecución.
+*   **Monto:** Valor de la transacción.
+
+### Edición de Transacciones Programadas
+1. Dirígete al botón de **Programación**.
+2. Haz clic en el botón que tiene un icono de lápiz para editar la transacción programada.
+3. Define si es un gasto o un ingreso.
+4. Elige el monto.
+5. Agrega una descripción.
+6. Elige la cuenta.
+7. Elige la categoría.
+8. Define la frecuencia.
+9. Define la fecha de inicio.
+10. Da clic en **Editar Transacción Programada**.
+
+### Eliminación de Transacciones Programadas
+1. Dirígete al botón de **Programación**.
+2. Haz clic en el botón que tiene un icono de lápiz (verás que se abre un menú).
+3. Da clic en el botón que tiene el icono de papelera.  
+
 
 ## 10. Perfil y Configuración
 
