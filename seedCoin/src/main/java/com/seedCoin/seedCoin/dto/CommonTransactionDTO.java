@@ -14,9 +14,6 @@ public class CommonTransactionDTO {
     private Long usageCount;
     private java.math.BigDecimal amount;
 
-    public CommonTransactionDTO() {
-    }
-
     public CommonTransactionDTO(Number categoryId, String categoryName, String categoryIcon, String description,
             Number usageCount, Number amount) {
         this.categoryId = categoryId != null ? categoryId.intValue() : null;
