@@ -73,4 +73,12 @@ public class CommonTransactionDTO {
         return usageCount;
     }
 
+    public java.math.BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(java.math.BigDecimal amount) {
+        this.amount = amount;
+    }
+
 }
