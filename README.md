@@ -39,7 +39,7 @@ Antes de comenzar, asegúrate de tener instalado:
 
 1.  **Clonar el repositorio**
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/RADESH626/seedCoin.git
     cd seedCoin
     ```
 
