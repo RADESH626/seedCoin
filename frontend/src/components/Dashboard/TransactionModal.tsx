@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, DollarSign, Calendar, AlignLeft, CreditCard, Tag, Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import { API_URL } from '@/config';
 
 interface Account {
     id: number;
@@ -20,7 +21,8 @@ interface Category {
 interface TransactionDTO {
     id: number;
     accountId: number;
-    categoryId: number;
+    category?: string;
+    categoryId?: number;
     amount: number;
     type: string;
     description: string;
@@ -75,7 +77,9 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
                 setDescription(transactionToEdit.description);
                 setDate(transactionToEdit.transactionDate);
                 setAccountId(transactionToEdit.accountId.toString());
-                setCategoryId(transactionToEdit.categoryId.toString());
+                if (transactionToEdit.categoryId) {
+                    setCategoryId(transactionToEdit.categoryId.toString());
+                }
                 fetchCategories(transactionToEdit.type as 'INCOME' | 'EXPENSE');
             } else {
                 setAmount('');
@@ -105,7 +109,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const fetchAccounts = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/accounts?userId=${user?.id}`);
+            const res = await fetch(`${API_URL}/accounts?userId=${user?.id}`);
             if (res.ok) {
                 const data = await res.json();
                 setAccounts(data);
@@ -121,7 +125,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const fetchCommonTransactions = async (currentType: string = type) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/transactions/common-presets?userId=${user?.id}`);
+            const res = await fetch(`${API_URL}/transactions/common-presets?userId=${user?.id}`);
             if (res.ok) {
                 const data: CommonTransactionDTO[] = await res.json();
                 const filtered = data.filter(item => item.type === currentType);
@@ -134,7 +138,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
     const fetchCategories = async (transactionType: string) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/categories?group=TRANSACTION`);
+            const res = await fetch(`${API_URL}/categories?group=TRANSACTION`);
             if (res.ok) {
                 const data: (Category & { type: string })[] = await res.json();
                 const filtered = data.filter(c => c.type === transactionType);
@@ -156,7 +160,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
 
         setIsLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/transactions/${transactionToEdit.id}`, {
+            const response = await fetch(`${API_URL}/transactions/${transactionToEdit.id}`, {
                 method: 'DELETE',
             });
 
@@ -184,8 +188,8 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, transacti
         setIsLoading(true);
         try {
             const url = transactionToEdit
-                ? `http://localhost:8080/api/transactions/${transactionToEdit.id}`
-                : 'http://localhost:8080/api/transactions';
+                ? `${API_URL}/transactions/${transactionToEdit.id}`
+                : `${API_URL}/transactions`;
 
             const method = transactionToEdit ? 'PUT' : 'POST';
 

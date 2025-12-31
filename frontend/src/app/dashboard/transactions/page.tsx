@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowUpRight, ArrowDownLeft, Search, Pencil } from 'lucide-react';
 import TransactionModal from '@/components/Dashboard/TransactionModal';
+import { API_URL } from '@/config';
 
 interface TransactionDTO {
     id: number;
     accountId: number;
-    categoryId: number;
-    categoryName: string;
+    category: string;
     description: string;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
@@ -41,7 +41,7 @@ export default function TransactionsPage() {
     const fetchTransactions = async () => {
         try {
             setIsLoadingData(true);
-            const res = await fetch(`http://localhost:8080/api/transactions?userId=${user?.id}`);
+            const res = await fetch(`${API_URL}/transactions?userId=${user?.id}`);
             if (res.ok) {
                 setTransactions(await res.json());
             }
@@ -74,7 +74,7 @@ export default function TransactionsPage() {
 
     const filteredTransactions = transactions.filter(t =>
         t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+        t.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -130,7 +130,7 @@ export default function TransactionsPage() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">
-                                                {transaction.categoryName}
+                                                {transaction.category}
                                             </td>
                                             <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                                 {transaction.description}

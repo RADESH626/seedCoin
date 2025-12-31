@@ -11,6 +11,7 @@ import MovementsList from "@/components/Dashboard/MovementsList";
 import TransactionModal from "@/components/Dashboard/TransactionModal";
 import AccountModal from "@/components/Dashboard/AccountModal";
 import { Plus } from 'lucide-react';
+import { API_URL } from '@/config';
 
 // Interfaces
 interface AccountDTO {
@@ -24,8 +25,7 @@ interface AccountDTO {
 interface TransactionDTO {
     id: number;
     accountId: number;
-    categoryId: number;
-    categoryName: string;
+    category: string;
     description: string;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
@@ -71,15 +71,15 @@ export default function Dashboard() {
             const userId = user!.id;
 
             // Fetch Summary
-            const summaryRes = await fetch(`http://localhost:8080/api/dashboard/summary?userId=${userId}`);
+            const summaryRes = await fetch(`${API_URL}/dashboard/summary?userId=${userId}`);
             if (summaryRes.ok) setDashboardSummary(await summaryRes.json());
 
             // Fetch Accounts
-            const accountsRes = await fetch(`http://localhost:8080/api/accounts?userId=${userId}`);
+            const accountsRes = await fetch(`${API_URL}/accounts?userId=${userId}`);
             if (accountsRes.ok) setAccounts(await accountsRes.json());
 
             // Fetch Transactions
-            const transactionsRes = await fetch(`http://localhost:8080/api/transactions?userId=${userId}`);
+            const transactionsRes = await fetch(`${API_URL}/transactions?userId=${userId}`);
             if (transactionsRes.ok) setTransactions(await transactionsRes.json());
 
         } catch (error) {
@@ -129,7 +129,7 @@ export default function Dashboard() {
         .slice(0, 5)
         .map(t => ({
             id: t.id.toString(),
-            category: t.categoryName,
+            category: t.category,
             name: t.description,
             cost: t.amount
         }));
@@ -147,7 +147,7 @@ export default function Dashboard() {
     // Calculate Chart Data (Expenses by Category)
     const expenseByCategory: Record<string, number> = {};
     transactions.filter(t => t.type === 'EXPENSE').forEach(t => {
-        expenseByCategory[t.categoryName] = (expenseByCategory[t.categoryName] || 0) + t.amount;
+        expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount;
     });
 
     const chartData = Object.keys(expenseByCategory).map((category, index) => ({

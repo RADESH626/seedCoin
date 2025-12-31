@@ -3,13 +3,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { API_URL } from '@/config';
 
 interface User {
     id: number;
     name: string;
     lastName: string;
     email: string;
-    roleName?: string;
 }
 
 interface AuthContextType {
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = async (email: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

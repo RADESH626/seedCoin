@@ -6,6 +6,7 @@ import BalanceCard from "@/components/Dashboard/BalanceCard";
 import AddButton from "@/components/Dashboard/AddButton";
 import AccountModal from "@/components/Dashboard/AccountModal";
 import { toast } from 'sonner';
+import { API_URL } from '@/config';
 
 interface Account {
     id: number;
@@ -26,7 +27,7 @@ export default function AccountsPage() {
         if (!user) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/accounts?userId=${user.id}`);
+            const response = await fetch(`${API_URL}/accounts?userId=${user.id}`);
             if (response.ok) {
                 const data = await response.json();
                 setAccounts(data);

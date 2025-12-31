@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Eye, EyeOff } from 'lucide-react';
+import { API_URL } from '@/config';
 
 
 
@@ -38,7 +39,7 @@ export default function RegistroPage() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/users', {
+            const response = await fetch(`${API_URL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

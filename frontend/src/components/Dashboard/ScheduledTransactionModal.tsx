@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, DollarSign, Calendar, AlignLeft, CreditCard, Tag, Trash2, Repeat } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import { API_URL } from '@/config';
 import { ScheduledTransactionDTO, createScheduledTransaction, updateScheduledTransaction, deleteScheduledTransaction } from '@/services/scheduledTransactionService';
 
 interface Account {
@@ -70,7 +71,7 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
 
     const fetchAccounts = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/accounts?userId=${user?.id}`);
+            const res = await fetch(`${API_URL}/accounts?userId=${user?.id}`);
             if (res.ok) {
                 const data = await res.json();
                 setAccounts(data);
@@ -86,7 +87,7 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
 
     const fetchCategories = async (transactionType: string) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/categories?group=TRANSACTION`);
+            const res = await fetch(`${API_URL}/categories?group=TRANSACTION`);
             if (res.ok) {
                 const data: (Category & { type: string })[] = await res.json();
                 const filtered = data.filter(c => c.type === transactionType);

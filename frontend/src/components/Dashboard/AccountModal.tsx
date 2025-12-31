@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
+import { API_URL } from '@/config';
 
 interface Category {
     id: number;
@@ -50,7 +51,7 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
 
     const fetchAccountTypes = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/categories?group=ACCOUNT_TYPE');
+            const response = await fetch(`${API_URL}/categories?group=ACCOUNT_TYPE`);
             if (response.ok) {
                 const data = await response.json();
                 setAccountTypes(data);
@@ -67,7 +68,7 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
 
         setIsLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/accounts/${accountToEdit.id}`, {
+            const response = await fetch(`${API_URL}/accounts/${accountToEdit.id}`, {
                 method: 'DELETE',
             });
 
@@ -99,8 +100,8 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
 
         try {
             const url = accountToEdit
-                ? `http://localhost:8080/api/accounts/${accountToEdit.id}`
-                : 'http://localhost:8080/api/accounts';
+                ? `${API_URL}/accounts/${accountToEdit.id}`
+                : `${API_URL}/accounts`;
 
             const method = accountToEdit ? 'PUT' : 'POST';
 
