@@ -1,10 +1,7 @@
 package com.seedCoin.seedCoin.service;
 
-import com.seedCoin.seedCoin.dto.CreateTransactionDTO;
 import com.seedCoin.seedCoin.dto.TransactionDTO;
-import com.seedCoin.seedCoin.dto.CommonTransactionResponseDTO;
-import com.seedCoin.seedCoin.dto.CreateCommonTransactionDTO;
-import com.seedCoin.seedCoin.dto.CommonTransactionDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateTransactionDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,18 +19,4 @@ public interface TransactionService {
 
         void deleteTransaction(Integer id);
 
-        List<CommonTransactionDTO> getCommonTransactions(Integer userId, String type);
-
-        // Common Transaction Templates (Presets)
-        List<CommonTransactionResponseDTO> getAllCommonTransactions(Integer userId);
-
-        CommonTransactionResponseDTO createCommonTransaction(
-                        CreateCommonTransactionDTO createCommonTransactionDTO);
-
-        CommonTransactionResponseDTO updateCommonTransaction(Integer id,
-                        CreateCommonTransactionDTO createCommonTransactionDTO);
-
-        void deleteCommonTransaction(Integer id);
-
-        TransactionDTO createTransactionFromCommon(Integer commonId, Integer accountId, java.time.LocalDateTime date);
 }
