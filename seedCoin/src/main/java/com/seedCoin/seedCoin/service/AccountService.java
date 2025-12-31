@@ -1,7 +1,7 @@
 package com.seedCoin.seedCoin.service;
 
 import com.seedCoin.seedCoin.dto.AccountDTO;
-import com.seedCoin.seedCoin.dto.CreateAccountDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateAccountDTO;
 
 import java.util.List;
 import java.util.Optional;
