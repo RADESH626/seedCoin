@@ -25,12 +25,12 @@ public interface TransactionService {
         List<CommonTransactionDTO> getCommonTransactions(Integer userId, String type);
 
         // Common Transaction Templates (Presets)
-        List<com.seedCoin.seedCoin.dto.CommonTransactionResponseDTO> getAllCommonTransactions(Integer userId);
+        List<CommonTransactionResponseDTO> getAllCommonTransactions(Integer userId);
 
-        com.seedCoin.seedCoin.dto.CommonTransactionResponseDTO createCommonTransaction(
+        CommonTransactionResponseDTO createCommonTransaction(
                         CreateCommonTransactionDTO createCommonTransactionDTO);
 
-        com.seedCoin.seedCoin.dto.CommonTransactionResponseDTO updateCommonTransaction(Integer id,
+        CommonTransactionResponseDTO updateCommonTransaction(Integer id,
                         CreateCommonTransactionDTO createCommonTransactionDTO);
 
         void deleteCommonTransaction(Integer id);

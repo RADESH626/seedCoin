@@ -1,11 +1,12 @@
 package com.seedCoin.seedCoin.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class CommonTransactionDTO {
+    public CommonTransactionDTO() {
+    }
+
     private Integer categoryId;
     private String categoryName;
     private String categoryIcon;
