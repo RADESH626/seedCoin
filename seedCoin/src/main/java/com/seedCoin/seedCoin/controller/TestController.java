@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/test")
 public class TestController {
 
     @org.springframework.beans.factory.annotation.Autowired
     private javax.sql.DataSource dataSource;
 
-    @GetMapping("/test")
+    @GetMapping
     public Map<String, String> test() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Backend is connected!");
