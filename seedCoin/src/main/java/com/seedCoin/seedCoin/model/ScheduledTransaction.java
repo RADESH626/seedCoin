@@ -28,8 +28,7 @@ public class ScheduledTransaction {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @Column(name = "category", nullable = false)
     private String category;
 
     @Column(nullable = false, precision = 15, scale = 2)

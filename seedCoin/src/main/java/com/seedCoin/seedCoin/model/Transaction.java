@@ -28,8 +28,7 @@ public class Transaction {
     private Account account;
 
     // indica si es salario, gasto, etc
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @Column(name = "category", nullable = false)
     private String category;
 
     @Column(nullable = false, precision = 15, scale = 2)

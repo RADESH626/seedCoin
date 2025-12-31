@@ -22,8 +22,8 @@ public class Account {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "account_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
     private AccountTypes accountType;
 
     @Column(name = "current_balance", precision = 15, scale = 2)
