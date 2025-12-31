@@ -2,17 +2,16 @@ package com.seedCoin.seedCoin.service.impl;
 
 import com.seedCoin.seedCoin.service.UserService;
 import com.seedCoin.seedCoin.model.User;
-
-import com.seedCoin.seedCoin.dto.CreateUserDTO;
+import com.seedCoin.seedCoin.dto.LoginRequest;
 import com.seedCoin.seedCoin.dto.UserDTO;
-
+import com.seedCoin.seedCoin.dto.createDTO.CreateUserDTO;
 import com.seedCoin.seedCoin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,9 +36,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(Objects.requireNonNull(id)).map(this::convertToDTO);
     }
 
-    @Autowired
-    private com.seedCoin.seedCoin.repository.RoleRepository roleRepository;
-
     @Override
     public UserDTO createUser(CreateUserDTO createUserDTO) {
         User user = new User();
@@ -47,11 +43,6 @@ public class UserServiceImpl implements UserService {
         user.setLastName(createUserDTO.getLastName());
         user.setEmail(createUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
-
-        com.seedCoin.seedCoin.model.Role role = roleRepository.findByName("CUSTOMER")
-                .orElseThrow(() -> new RuntimeException("Default role CUSTOMER not found"));
-        user.setRole(role);
-
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
@@ -64,9 +55,6 @@ public class UserServiceImpl implements UserService {
         user.setName(userDTO.getName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-
-        // We don't update password or identification type here for simplicity,
-        // typically that would be a separate endpoint or handled carefully.
 
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);
@@ -81,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO login(com.seedCoin.seedCoin.dto.LoginRequest loginRequest) {
+    public UserDTO login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -102,10 +90,6 @@ public class UserServiceImpl implements UserService {
         dto.setName(user.getName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-
-        if (user.getRole() != null) {
-            dto.setRoleName(user.getRole().getName());
-        }
         dto.setIsActive(user.getIsActive());
         return dto;
     }

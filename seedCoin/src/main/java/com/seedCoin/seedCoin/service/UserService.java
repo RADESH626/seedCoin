@@ -1,7 +1,8 @@
 package com.seedCoin.seedCoin.service;
 
-import com.seedCoin.seedCoin.dto.CreateUserDTO;
+import com.seedCoin.seedCoin.dto.LoginRequest;
 import com.seedCoin.seedCoin.dto.UserDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateUserDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +18,5 @@ public interface UserService {
 
     void deleteUser(Integer id);
 
-    UserDTO login(com.seedCoin.seedCoin.dto.LoginRequest loginRequest);
+    UserDTO login(LoginRequest loginRequest);
 }

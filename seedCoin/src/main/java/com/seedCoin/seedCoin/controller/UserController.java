@@ -1,7 +1,7 @@
 package com.seedCoin.seedCoin.controller;
 
-import com.seedCoin.seedCoin.dto.CreateUserDTO;
 import com.seedCoin.seedCoin.dto.UserDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateUserDTO;
 import com.seedCoin.seedCoin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
