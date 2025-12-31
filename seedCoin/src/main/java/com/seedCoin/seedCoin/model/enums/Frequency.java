@@ -1,4 +1,4 @@
-package com.seedCoin.seedCoin.model;
+package com.seedCoin.seedCoin.model.enums;
 
 public enum Frequency {
     ONCE,
