@@ -1,6 +1,8 @@
 package com.seedCoin.seedCoin.repository;
 
 import com.seedCoin.seedCoin.model.Transaction;
+import com.seedCoin.seedCoin.model.enums.TransactionType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,18 +19,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
         @org.springframework.data.jpa.repository.Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.user.id = :userId AND t.type = :type AND t.transactionDate BETWEEN :startDate AND :endDate")
         java.math.BigDecimal sumAmountByUserIdAndTypeAndDateBetween(
                         @org.springframework.data.repository.query.Param("userId") Integer userId,
-                        @org.springframework.data.repository.query.Param("type") com.seedCoin.seedCoin.model.TransactionType type,
+                        @org.springframework.data.repository.query.Param("type") TransactionType type,
                         @org.springframework.data.repository.query.Param("startDate") java.time.LocalDateTime startDate,
                         @org.springframework.data.repository.query.Param("endDate") java.time.LocalDateTime endDate);
 
-        @org.springframework.data.jpa.repository.Query("SELECT t.category.id, MIN(t.category.name), MIN(t.category.icon), t.description, COUNT(t), t.amount "
-                        +
-                        "FROM Transaction t " +
-                        "WHERE t.user.id = :userId AND t.type = :type " +
-                        "GROUP BY t.category.id, t.description, t.amount " +
-                        "ORDER BY COUNT(t) DESC")
-        List<Object[]> findCommonTransactions(
-                        @org.springframework.data.repository.query.Param("userId") Integer userId,
-                        @org.springframework.data.repository.query.Param("type") com.seedCoin.seedCoin.model.TransactionType type,
-                        org.springframework.data.domain.Pageable pageable);
 }

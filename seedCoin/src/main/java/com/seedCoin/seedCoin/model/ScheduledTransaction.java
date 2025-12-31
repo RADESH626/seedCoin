@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.seedCoin.seedCoin.model.enums.Frequency;
+import com.seedCoin.seedCoin.model.enums.TransactionType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -27,7 +30,7 @@ public class ScheduledTransaction {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private String category;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
@@ -53,92 +56,4 @@ public class ScheduledTransaction {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // Explicit getters/setters just in case
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getNextExecutionDate() {
-        return nextExecutionDate;
-    }
-
-    public void setNextExecutionDate(LocalDateTime nextExecutionDate) {
-        this.nextExecutionDate = nextExecutionDate;
-    }
-
-    public Frequency getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(Frequency frequency) {
-        this.frequency = frequency;
-    }
-
-    public TransactionType getType() {
-        return type;
-    }
-
-    public void setType(TransactionType type) {
-        this.type = type;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

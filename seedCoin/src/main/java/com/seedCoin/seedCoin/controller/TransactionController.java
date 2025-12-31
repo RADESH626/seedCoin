@@ -1,9 +1,7 @@
 package com.seedCoin.seedCoin.controller;
 
-import com.seedCoin.seedCoin.dto.CreateTransactionDTO;
 import com.seedCoin.seedCoin.dto.TransactionDTO;
-import com.seedCoin.seedCoin.dto.CommonTransactionResponseDTO;
-import com.seedCoin.seedCoin.dto.CreateCommonTransactionDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateTransactionDTO;
 import com.seedCoin.seedCoin.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +23,6 @@ public class TransactionController {
             return ResponseEntity.ok(transactionService.getTransactionsByUserId(userId));
         }
         return ResponseEntity.ok(transactionService.getAllTransactions());
-    }
-
-    @GetMapping("/common")
-    public ResponseEntity<?> getCommonTransactions(
-            @RequestParam Integer userId,
-            @RequestParam(defaultValue = "EXPENSE") String type) {
-        return ResponseEntity.ok(transactionService.getCommonTransactions(userId, type));
     }
 
     @GetMapping("/{id}")
@@ -65,41 +56,5 @@ public class TransactionController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    // --- Common Transaction Presets ---
-
-    @GetMapping("/common-presets")
-    public ResponseEntity<List<CommonTransactionResponseDTO>> getAllCommonTransactions(
-            @RequestParam Integer userId) {
-        return ResponseEntity.ok(transactionService.getAllCommonTransactions(userId));
-    }
-
-    @PostMapping("/common-presets")
-    public ResponseEntity<CommonTransactionResponseDTO> createCommonTransaction(
-            @RequestBody CreateCommonTransactionDTO createCommonTransactionDTO) {
-        return ResponseEntity.ok(transactionService.createCommonTransaction(createCommonTransactionDTO));
-    }
-
-    @PutMapping("/common-presets/{id}")
-    public ResponseEntity<CommonTransactionResponseDTO> updateCommonTransaction(
-            @PathVariable Integer id,
-            @RequestBody CreateCommonTransactionDTO createCommonTransactionDTO) {
-        return ResponseEntity.ok(transactionService.updateCommonTransaction(id, createCommonTransactionDTO));
-    }
-
-    @DeleteMapping("/common-presets/{id}")
-    public ResponseEntity<Void> deleteCommonTransaction(@PathVariable Integer id) {
-        transactionService.deleteCommonTransaction(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/from-common")
-    public ResponseEntity<TransactionDTO> createTransactionFromCommon(
-            @RequestBody com.seedCoin.seedCoin.dto.SeedTransactionDTO seedDto) {
-        return ResponseEntity.ok(transactionService.createTransactionFromCommon(
-                seedDto.getCommonId(),
-                seedDto.getAccountId(),
-                java.time.LocalDateTime.parse(seedDto.getTransactionDate())));
     }
 }

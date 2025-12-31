@@ -1,12 +1,10 @@
 package com.seedCoin.seedCoin.service.impl;
 
-import com.seedCoin.seedCoin.dto.CreateTransactionDTO;
 import com.seedCoin.seedCoin.dto.ScheduledTransactionDTO;
+import com.seedCoin.seedCoin.dto.createDTO.CreateTransactionDTO;
 import com.seedCoin.seedCoin.model.*;
-import com.seedCoin.seedCoin.repository.AccountRepository;
-import com.seedCoin.seedCoin.repository.CategoryRepository;
 import com.seedCoin.seedCoin.repository.ScheduledTransactionRepository;
-import com.seedCoin.seedCoin.repository.UserRepository;
+
 import com.seedCoin.seedCoin.service.ScheduledTransactionService;
 import com.seedCoin.seedCoin.service.TransactionService;
 import jakarta.transaction.Transactional;
@@ -26,22 +24,12 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
     private ScheduledTransactionRepository scheduledTransactionRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
     private TransactionService transactionService;
 
     @Override
     public ScheduledTransactionDTO createScheduledTransaction(ScheduledTransactionDTO dto) {
-        ScheduledTransaction entity = new ScheduledTransaction();
-        updateEntityFromDto(entity, dto);
-        ScheduledTransaction saved = scheduledTransactionRepository.save(entity);
+        ScheduledTransaction scheduleTransaction = new ScheduledTransaction();
+        ScheduledTransaction saved = scheduledTransactionRepository.save(scheduleTransaction);
         return mapToDto(saved);
     }
 
@@ -54,12 +42,12 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
     }
 
     @Override
+    @SuppressWarnings("null")
     public ScheduledTransactionDTO updateScheduledTransaction(Integer id, ScheduledTransactionDTO dto) {
-        ScheduledTransaction entity = scheduledTransactionRepository.findById(Objects.requireNonNull(id))
+        ScheduledTransaction scheduleTransaction = scheduledTransactionRepository.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new RuntimeException("Scheduled Transaction not found"));
 
-        updateEntityFromDto(entity, dto);
-        ScheduledTransaction saved = scheduledTransactionRepository.save(Objects.requireNonNull(entity));
+        ScheduledTransaction saved = scheduledTransactionRepository.save(scheduleTransaction);
         return mapToDto(saved);
     }
 
@@ -75,79 +63,90 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
     @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
     @Transactional
     public void processDueTransactions() {
+
+        // obtenemos la fecha actual
         LocalDateTime now = LocalDateTime.now();
+
+        // obtenemos las transacciones programadas que esten activas y que esten por
+        // vencer
         List<ScheduledTransaction> dueTransactions = scheduledTransactionRepository
                 .findByNextExecutionDateBeforeAndIsActiveTrue(now);
 
-        for (ScheduledTransaction st : dueTransactions) {
+        // por cada transaccion programada actualizamos la fecha en la que se va a
+        // ejecturar conservando los datos de la transaccion programada
+        for (ScheduledTransaction scheduleTransaction : dueTransactions) {
+
             try {
+
+                // creamos la transaccion a partir de la transaccion programada sin asignarle un
+                // momento de repeticion
                 CreateTransactionDTO transactionDTO = new CreateTransactionDTO();
-                transactionDTO.setUserId(st.getUser().getId());
-                transactionDTO.setAccountId(st.getAccount().getId());
-                transactionDTO.setCategoryId(st.getCategory().getId());
-                transactionDTO.setAmount(st.getAmount());
-                transactionDTO.setDescription(st.getDescription());
-                transactionDTO.setType(st.getType().toString());
-                transactionDTO.setTransactionDate(st.getNextExecutionDate());
+                transactionDTO.setUserId(scheduleTransaction.getUser().getId());
+                transactionDTO.setAccountId(scheduleTransaction.getAccount().getId());
+                transactionDTO.setCategory(scheduleTransaction.getCategory());
+                transactionDTO.setAmount(scheduleTransaction.getAmount());
+                transactionDTO.setDescription(scheduleTransaction.getDescription());
+                transactionDTO.setType(scheduleTransaction.getType());
+
+                // asignamos la fecha de la transaccion programada usando la siguiente fecha de
+                // ejecucion
+                // (ejemplo la transaccion 1 se ejecuta el 1 de enero, entoces toca calcular la
+                // siguiente fecha de ejecucion,
+                // esto se hace con el metodo update Schedule)
+                transactionDTO.setTransactionDate(scheduleTransaction.getNextExecutionDate());
 
                 transactionService.createTransaction(transactionDTO);
 
-                updateSchedule(st);
+                // actualizamos la transaccion programada que teniamos antes
+
+                updateSchedule(scheduleTransaction);
+
             } catch (Exception e) {
                 System.err.println(
-                        "Failed to process scheduled transaction ID: " + st.getId() + " Error: " + e.getMessage());
+                        "Failed to process scheduled transaction ID: " + scheduleTransaction.getId() + " Error: "
+                                + e.getMessage());
             }
         }
     }
 
-    private void updateSchedule(ScheduledTransaction st) {
-        if (st.getFrequency() == null)
+    private void updateSchedule(ScheduledTransaction scheduleTransaction) {
+
+        // verificamos que la transaccion programada tenga una frecuencia
+        if (scheduleTransaction.getFrequency() == null)
             return;
 
-        LocalDateTime next = st.getNextExecutionDate();
-        switch (st.getFrequency()) {
+        // obtenemos la fecha actual y la asignamos a el atributo que indica la
+        // siguiente fecha de ejecucion
+
+        LocalDateTime next = scheduleTransaction.getNextExecutionDate();
+
+        // aqui determinamos cuanto se le sumara a la fecha actual
+        switch (scheduleTransaction.getFrequency()) {
+
+            // aqui desactivamos la transaccion programada por que solo se debe ejecutar una
+            // vez, cuando ya se ejecute no debe estar activa (borrado logico)
             case ONCE:
-                st.setIsActive(false);
+                scheduleTransaction.setIsActive(false);
                 break;
+
+            // de aqui en adelante se le suma la frecuencia a la fecha actual
             case WEEKLY:
                 next = next.plusWeeks(1);
-                st.setNextExecutionDate(next);
+                scheduleTransaction.setNextExecutionDate(next);
                 break;
             case MONTHLY:
                 next = next.plusMonths(1);
-                st.setNextExecutionDate(next);
+                scheduleTransaction.setNextExecutionDate(next);
                 break;
             case YEARLY:
                 next = next.plusYears(1);
-                st.setNextExecutionDate(next);
+                scheduleTransaction.setNextExecutionDate(next);
                 break;
         }
-        scheduledTransactionRepository.save(st);
-    }
 
-    private void updateEntityFromDto(ScheduledTransaction entity, ScheduledTransactionDTO dto) {
-        if (dto.getUserId() != null) {
-            User user = userRepository.findById(Objects.requireNonNull(dto.getUserId()))
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            entity.setUser(user);
-        }
-        if (dto.getAccountId() != null) {
-            Account account = accountRepository.findById(Objects.requireNonNull(dto.getAccountId()))
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-            entity.setAccount(account);
-        }
-        if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(Objects.requireNonNull(dto.getCategoryId()))
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
-            entity.setCategory(category);
-        }
-        entity.setAmount(dto.getAmount());
-        entity.setDescription(dto.getDescription());
-        entity.setNextExecutionDate(dto.getNextExecutionDate());
-        entity.setFrequency(dto.getFrequency());
-        entity.setType(dto.getType());
-        if (dto.getIsActive() != null)
-            entity.setIsActive(dto.getIsActive());
+        // ya con el tiempo de ejecucion establecido, al igual que la siguiente fecha de
+        // ejecucion, se puede guardar la transaccion programada
+        scheduledTransactionRepository.save(scheduleTransaction);
     }
 
     private ScheduledTransactionDTO mapToDto(ScheduledTransaction entity) {
@@ -156,8 +155,7 @@ public class ScheduledTransactionServiceImpl implements ScheduledTransactionServ
         dto.setUserId(entity.getUser().getId());
         dto.setAccountId(entity.getAccount().getId());
         dto.setAccountName(entity.getAccount().getName());
-        dto.setCategoryId(entity.getCategory().getId());
-        dto.setCategoryName(entity.getCategory().getName());
+        dto.setCategory(entity.getCategory());
         dto.setAmount(entity.getAmount());
         dto.setDescription(entity.getDescription());
         dto.setNextExecutionDate(entity.getNextExecutionDate());
