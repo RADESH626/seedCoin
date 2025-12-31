@@ -3,6 +3,7 @@ package com.seedCoin.seedCoin.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
+import com.seedCoin.seedCoin.model.enums.TransactionType;
 
 @Data
 @Entity
@@ -19,7 +20,7 @@ public class CommonTransaction {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private String Category;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
@@ -31,51 +32,51 @@ public class CommonTransaction {
     @Column(nullable = false, length = 20)
     private TransactionType type;
 
-    public Integer getId() {
-        return id;
-    }
+    // public Integer getId() {
+    // return id;
+    // }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    // public void setId(Integer id) {
+    // this.id = id;
+    // }
 
-    public User getUser() {
-        return user;
-    }
+    // public User getUser() {
+    // return user;
+    // }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // public void setUser(User user) {
+    // this.user = user;
+    // }
 
-    public Category getCategory() {
-        return category;
-    }
+    // public Category getCategory() {
+    // return category;
+    // }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+    // public void setCategory(Category category) {
+    // this.category = category;
+    // }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+    // public BigDecimal getAmount() {
+    // return amount;
+    // }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+    // public void setAmount(BigDecimal amount) {
+    // this.amount = amount;
+    // }
 
-    public String getName() {
-        return name;
-    }
+    // public String getName() {
+    // return name;
+    // }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public void setName(String name) {
+    // this.name = name;
+    // }
 
-    public TransactionType getType() {
-        return type;
-    }
+    // public TransactionType getType() {
+    // return type;
+    // }
 
-    public void setType(TransactionType type) {
-        this.type = type;
-    }
+    // public void setType(TransactionType type) {
+    // this.type = type;
+    // }
 }
