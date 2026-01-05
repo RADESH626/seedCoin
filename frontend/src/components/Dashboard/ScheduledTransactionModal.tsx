@@ -6,6 +6,10 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { API_URL } from '@/config';
 import { ScheduledTransactionDTO, createScheduledTransaction, updateScheduledTransaction, deleteScheduledTransaction } from '@/services/scheduledTransactionService';
+import Modal from '@/components/ui/Modal';
+import FormInput from '@/components/ui/FormInput';
+import FormSelect from '@/components/ui/FormSelect';
+import TypeSelector from '@/components/ui/TypeSelector';
 
 interface Account {
     id: number;
@@ -159,167 +163,94 @@ export default function ScheduledTransactionModal({ isOpen, onClose, onSuccess, 
         }
     };
 
+    const modalActions = transactionToEdit ? (
+        <button
+            onClick={handleDelete}
+            className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors"
+            title="Eliminar"
+        >
+            <Trash2 className="w-5 h-5" />
+        </button>
+    ) : null;
+
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={transactionToEdit ? 'Editar Programación' : 'Nueva Programación'}
+            actions={modalActions}
+        >
+            <form onSubmit={handleSubmit} className="p-4 space-y-4">
+                <TypeSelector type={type} onChange={handleTypeChange} />
 
-                <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                        {transactionToEdit ? 'Editar Programación' : 'Nueva Programación'}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                        {transactionToEdit && (
-                            <button
-                                onClick={handleDelete}
-                                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors"
-                                title="Eliminar"
-                            >
-                                <Trash2 className="w-5 h-5" />
-                            </button>
-                        )}
-                        <button onClick={onClose} aria-label="Cerrar" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500">
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
+                <FormInput
+                    label="Monto"
+                    icon={DollarSign}
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0.00"
+                    autoFocus
+                />
 
-                <form onSubmit={handleSubmit} className="p-4 space-y-4">
+                <FormInput
+                    label="Descripción"
+                    icon={AlignLeft}
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Ej. Suscripción Netflix..."
+                />
 
-                    {/* Type Selector */}
-                    <div className="grid grid-cols-2 gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
-                        <button
-                            type="button"
-                            onClick={() => handleTypeChange('INCOME')}
-                            className={`py-2 text-sm font-medium rounded-lg transition-all ${type === 'INCOME'
-                                ? 'bg-green-500 text-white shadow-sm'
-                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                                }`}
-                        >
-                            Ingreso
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => handleTypeChange('EXPENSE')}
-                            className={`py-2 text-sm font-medium rounded-lg transition-all ${type === 'EXPENSE'
-                                ? 'bg-red-500 text-white shadow-sm'
-                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                                }`}
-                        >
-                            Gasto
-                        </button>
-                    </div>
+                <FormSelect
+                    label="Cuenta"
+                    icon={CreditCard}
+                    value={accountId}
+                    onChange={(e) => setAccountId(e.target.value)}
+                    options={accounts.map(acc => ({ value: acc.id, label: acc.name }))}
+                    placeholder="Selecciona una cuenta"
+                />
 
-                    {/* Amount */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Monto</label>
-                        <div className="relative">
-                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                placeholder="0.00"
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                                autoFocus
-                            />
-                        </div>
-                    </div>
+                <FormSelect
+                    label="Categoría"
+                    icon={Tag}
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                    options={categories.map(cat => ({ value: cat.id, label: <>{cat.icon} {cat.name}</> }))}
+                    placeholder="Selecciona una categoría"
+                />
 
-                    {/* Description */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Descripción</label>
-                        <div className="relative">
-                            <AlignLeft className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Ej. Suscripción Netflix..."
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                            />
-                        </div>
-                    </div>
+                <FormSelect
+                    label="Frecuencia"
+                    icon={Repeat}
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.value as any)}
+                    options={[
+                        { value: 'ONCE', label: 'Una vez' },
+                        { value: 'WEEKLY', label: 'Semanal' },
+                        { value: 'MONTHLY', label: 'Mensual' },
+                        { value: 'YEARLY', label: 'Anual' }
+                    ]}
+                />
 
-                    {/* Account */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Cuenta</label>
-                        <div className="relative">
-                            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <select
-                                value={accountId}
-                                onChange={(e) => setAccountId(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none"
-                            >
-                                <option value="" disabled>Selecciona una cuenta</option>
-                                {accounts.map(acc => (
-                                    <option key={acc.id} value={acc.id}>{acc.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+                <FormInput
+                    label="Próxima Ejecución"
+                    icon={Calendar}
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
 
-                    {/* Category */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Categoría</label>
-                        <div className="relative">
-                            <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <select
-                                value={categoryId}
-                                onChange={(e) => setCategoryId(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none"
-                            >
-                                <option value="" disabled>Selecciona una categoría</option>
-                                {categories.map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.icon} {cat.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Frequency */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Frecuencia</label>
-                        <div className="relative">
-                            <Repeat className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <select
-                                value={frequency}
-                                onChange={(e) => setFrequency(e.target.value as any)}
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none"
-                            >
-                                <option value="ONCE">Una vez</option>
-                                <option value="WEEKLY">Semanal</option>
-                                <option value="MONTHLY">Mensual</option>
-                                <option value="YEARLY">Anual</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Date */}
-                    <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Próxima Ejecución</label>
-                        <div className="relative">
-                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                            />
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-primary-hover hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-                    >
-                        {isLoading ? 'Guardando...' : (transactionToEdit ? 'Guardar Cambios' : 'Crear Transacción Programada')}
-                    </button>
-
-                </form>
-            </div>
-        </div>
+                <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-primary-hover hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                >
+                    {isLoading ? 'Guardando...' : (transactionToEdit ? 'Guardar Cambios' : 'Crear Transacción Programada')}
+                </button>
+            </form>
+        </Modal>
     );
 }

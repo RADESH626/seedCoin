@@ -1,22 +1,17 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { X, Trash2 } from 'lucide-react';
+import { X, Trash2, Wallet, Landmark, CreditCard, PiggyBank, TrendingUp, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { API_URL } from '@/config';
-
-interface Category {
-    id: number;
-    name: string;
-    icon: string;
-}
+import { ACCOUNT_TYPES, ACCOUNT_TYPE_LABELS, AccountType } from '@/constants/accountTypes';
 
 interface AccountDTO {
     id: number;
     name: string;
     currentBalance: number;
-    accountTypeId: number;
+    accountType?: AccountType;
 }
 
 interface AccountModalProps {
@@ -26,41 +21,36 @@ interface AccountModalProps {
     accountToEdit?: AccountDTO | null;
 }
 
+const ACCOUNT_ICONS: Record<AccountType, React.ElementType> = {
+    [ACCOUNT_TYPES.CASH]: Wallet,
+    [ACCOUNT_TYPES.BANK_ACCOUNT]: Landmark,
+    [ACCOUNT_TYPES.CREDIT_CARD]: CreditCard,
+    [ACCOUNT_TYPES.DEBIT_CARD]: CreditCard,
+    [ACCOUNT_TYPES.SAVINGS]: PiggyBank,
+    [ACCOUNT_TYPES.INVESTMENT]: TrendingUp,
+    [ACCOUNT_TYPES.DIGITAL_WALLET]: Smartphone,
+};
+
 export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit }: AccountModalProps) {
     const { user } = useAuth();
     const [name, setName] = useState('');
     const [initialBalance, setInitialBalance] = useState('');
-    const [accountTypeId, setAccountTypeId] = useState<string>('');
-    const [accountTypes, setAccountTypes] = useState<Category[]>([]);
+    const [accountType, setAccountType] = useState<AccountType | ''>('');
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
-            fetchAccountTypes();
             if (accountToEdit) {
                 setName(accountToEdit.name);
                 setInitialBalance(accountToEdit.currentBalance.toString());
-                setAccountTypeId(accountToEdit.accountTypeId.toString());
+                setAccountType(accountToEdit.accountType as AccountType || '');
             } else {
                 setName('');
                 setInitialBalance('');
-                setAccountTypeId('');
+                setAccountType('');
             }
         }
     }, [isOpen, accountToEdit]);
-
-    const fetchAccountTypes = async () => {
-        try {
-            const response = await fetch(`${API_URL}/categories?group=ACCOUNT_TYPE`);
-            if (response.ok) {
-                const data = await response.json();
-                setAccountTypes(data);
-            }
-        } catch (error) {
-            console.error('Error fetching account types:', error);
-            toast.error('Error al cargar tipos de cuenta');
-        }
-    };
 
     const handleDelete = async () => {
         if (!accountToEdit) return;
@@ -91,7 +81,7 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
         e.preventDefault();
 
         if (!user) return;
-        if (!name || !initialBalance || !accountTypeId) {
+        if (!name || !initialBalance || !accountType) {
             toast.error('Por favor completa todos los campos');
             return;
         }
@@ -109,12 +99,12 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
                 id: accountToEdit.id,
                 userId: user.id,
                 name,
-                currentBalance: parseFloat(initialBalance), // Updating balance
-                accountTypeId: parseInt(accountTypeId),
+                currentBalance: parseFloat(initialBalance),
+                accountType: accountType,
                 isActive: true
             } : {
                 userId: user.id,
-                accountTypeId: parseInt(accountTypeId),
+                accountType: accountType,
                 name,
                 initialBalance: parseFloat(initialBalance),
             };
@@ -132,7 +122,15 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
                 onSuccess();
                 onClose();
             } else {
-                toast.error(accountToEdit ? 'Error al actualizar' : 'Error al crear la cuenta');
+                let errorMessage = accountToEdit ? 'Error al actualizar' : 'Error al crear la cuenta';
+                try {
+                    const errorData = await response.json();
+                    if (errorData.message) errorMessage = errorData.message;
+                    if (errorData.error) errorMessage += ` (${errorData.error})`;
+                } catch (e) {
+                    console.error('Error parsing error response:', e);
+                }
+                toast.error(errorMessage);
             }
         } catch (error) {
             console.error('Error saving account:', error);
@@ -173,22 +171,25 @@ export default function AccountModal({ isOpen, onClose, onSuccess, accountToEdit
                             Tipo de Cuenta
                         </label>
                         <div className="grid grid-cols-2 gap-2">
-                            {accountTypes.map((type) => (
-                                <button
-                                    key={type.id}
-                                    type="button"
-                                    onClick={() => setAccountTypeId(type.id.toString())}
-                                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all ${accountTypeId === type.id.toString()
-                                        ? 'border-white text-white'
-                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                                        }`}
-                                >
-                                    <span className="text-2xl">{type.icon}</span>
-                                    <span className={`text-xs font-medium ${accountTypeId === type.id.toString() ? 'text-white' : 'text-gray-500'}`}>
-                                        {type.name}
-                                    </span>
-                                </button>
-                            ))}
+                            {(Object.keys(ACCOUNT_TYPES) as AccountType[]).map((type) => {
+                                const Icon = ACCOUNT_ICONS[type];
+                                return (
+                                    <button
+                                        key={type}
+                                        type="button"
+                                        onClick={() => setAccountType(type)}
+                                        className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all ${accountType === type
+                                            ? 'border-white text-white bg-primary' /* Keeping primary color for active state */
+                                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                            } ${accountType === type ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-800' : ''}`}
+                                    >
+                                        <Icon className={`w-8 h-8 ${accountType === type ? 'text-white' : 'text-gray-500'}`} />
+                                        <span className={`text-xs font-medium ${accountType === type ? 'text-white' : 'text-gray-500'}`}>
+                                            {ACCOUNT_TYPE_LABELS[type]}
+                                        </span>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 
