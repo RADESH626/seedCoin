@@ -18,8 +18,8 @@ public class CommonTransaction {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "category_id", nullable = false)
-    private Integer categoryId;
+    @Column(name = "category", nullable = false)
+    private Integer category;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;

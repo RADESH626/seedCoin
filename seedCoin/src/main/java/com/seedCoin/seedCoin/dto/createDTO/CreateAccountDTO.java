@@ -8,6 +8,7 @@ import com.seedCoin.seedCoin.model.enums.AccountTypes;
 
 @Data
 public class CreateAccountDTO {
+
     private Integer userId;
     private String name;
     private AccountTypes accountType;

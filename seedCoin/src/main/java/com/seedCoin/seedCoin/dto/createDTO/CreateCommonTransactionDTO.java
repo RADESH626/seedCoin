@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class CreateCommonTransactionDTO {
 
     private Integer userId;
-    private Integer categoryId;
+    private Integer category;
     private String name;
     private BigDecimal amount;
     private String transactionType;

@@ -52,8 +52,8 @@ public class CommonTransactionServiceImpl implements CommonTransactionService {
             entity.setType(TransactionType.valueOf(createDto.getTransactionType()));
         }
 
-        if (createDto.getCategoryId() != null) {
-            entity.setCategoryId(createDto.getCategoryId());
+        if (createDto.getCategory() != null) {
+            entity.setCategory(createDto.getCategory());
         }
 
         if (createDto.getUserId() != null) {
@@ -76,8 +76,8 @@ public class CommonTransactionServiceImpl implements CommonTransactionService {
         if (createDto.getTransactionType() != null) {
             entity.setType(TransactionType.valueOf(createDto.getTransactionType()));
         }
-        if (createDto.getCategoryId() != null) {
-            entity.setCategoryId(createDto.getCategoryId());
+        if (createDto.getCategory() != null) {
+            entity.setCategory(createDto.getCategory());
         }
 
         CommonTransaction updated = commonTransactionRepository.save(entity);
@@ -101,9 +101,9 @@ public class CommonTransactionServiceImpl implements CommonTransactionService {
         // Since we only have ID, we populate ID. Name/Icon/Color would normally come
         // from a lookup or DB join.
         // For now, valid JSON requires us to populate what we can.
-        if (entity.getCategoryId() != null) {
-            catDto.setId(entity.getCategoryId());
-            catDto.setName("Category " + entity.getCategoryId()); // Fallback name
+        if (entity.getCategory() != null) {
+            catDto.setId(entity.getCategory());
+            catDto.setName("Category " + entity.getCategory()); // Fallback name
         }
         catDto.setColor("#000000"); // Default
         catDto.setIcon("help"); // Default

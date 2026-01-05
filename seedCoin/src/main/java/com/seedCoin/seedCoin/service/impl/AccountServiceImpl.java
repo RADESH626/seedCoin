@@ -26,8 +26,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-
     @Override
     public List<AccountDTO> getAllAccounts() {
         return accountRepository.findAll().stream()
