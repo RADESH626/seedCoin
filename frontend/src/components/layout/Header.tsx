@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import Logo from './layout/Logo';
-import NavLinks from './layout/NavLinks';
-import UserMenu from './layout/UserMenu';
+import Logo from './Logo';
+import NavLinks from './NavLinks';
+import UserMenu from './UserMenu';
 
 export default function Header() {
     const { user, isAuthenticated, logout } = useAuth();
