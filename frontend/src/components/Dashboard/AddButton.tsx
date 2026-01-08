@@ -2,10 +2,10 @@ import { Plus } from 'lucide-react';
 
 interface AddButtonProps {
     onClick?: () => void;
-    label?: string;
+    label: string;
 }
 
-export default function AddButton({ onClick, label = "Agregar Transacción" }: AddButtonProps) {
+export default function AddButton({ onClick, label }: AddButtonProps) {
     return (
         <button
             onClick={onClick}

@@ -162,7 +162,7 @@ export default function Dashboard() {
             <main className="flex-1 w-full max-w-5xl mx-auto p-4 space-y-8 pb-20">
                 {/* Add Button */}
                 <section>
-                    <AddButton onClick={() => setIsTransactionModalOpen(true)} />
+                    <AddButton label="Agregar Transacción" onClick={() => setIsTransactionModalOpen(true)} />
                 </section>
 
                 {/* Total Balance */}
