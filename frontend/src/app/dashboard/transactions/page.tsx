@@ -84,6 +84,10 @@ export default function TransactionsPage() {
                     </div>
                 </div>
 
+                <div className="flex flex-col gap-4 mb-4 justify-center items-center">
+                    <AddButton label="Agregar Transacción" />
+                </div>
+
                 <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
