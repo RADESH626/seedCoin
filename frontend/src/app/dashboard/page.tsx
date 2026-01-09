@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import AddButton from "@/components/Dashboard/AddButton";
+import AddButton from "@/components/ui/AddButton";
 import BalanceCard from "@/components/Dashboard/BalanceCard";
 import ExpensesTable from "@/components/Dashboard/ExpensesTable";
 import SummaryChart from "@/components/Dashboard/SummaryChart";
 import MovementsList from "@/components/Dashboard/MovementsList";
-import TransactionModal from "@/components/Dashboard/TransactionModal";
-import AccountModal from "@/components/Dashboard/AccountModal";
+import TransactionModal from "@/components/Dashboard/transactions/TransactionModal";
+import AccountModal from "@/components/Dashboard/account/AccountModal";
 import { Plus } from 'lucide-react';
 import { API_URL } from '@/config';
 

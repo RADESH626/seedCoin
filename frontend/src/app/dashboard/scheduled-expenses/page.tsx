@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { ScheduledTransactionDTO, getScheduledTransactions } from '@/services/scheduledTransactionService';
-import ScheduledTransactionModal from "@/components/Dashboard/ScheduledTransactionModal";
-import ScheduledTransactionsTable from "@/components/Dashboard/ScheduledTransactionsTable";
+import ScheduledTransactionModal from "@/components/Dashboard/transactions/ScheduledTransactionModal";
+import ScheduledTransactionsTable from "@/components/Dashboard/transactions/ScheduledTransactionsTable";
 import { Plus } from 'lucide-react';
 
 export default function ScheduledExpensesPage() {

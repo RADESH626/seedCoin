@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import BalanceCard from "@/components/Dashboard/BalanceCard";
-import AddButton from "@/components/Dashboard/AddButton";
-import AccountModal from "@/components/Dashboard/AccountModal";
+import AddButton from "@/components/ui/AddButton";
+import AccountModal from "@/components/Dashboard/account/AccountModal";
 import { toast } from 'sonner';
 import { API_URL } from '@/config';
 

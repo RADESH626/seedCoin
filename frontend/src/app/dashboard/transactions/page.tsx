@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowUpRight, ArrowDownLeft, Search, Pencil } from 'lucide-react';
-import TransactionModal from '@/components/Dashboard/TransactionModal';
+import TransactionModal from '@/components/Dashboard/transactions/TransactionModal';
 import { API_URL } from '@/config';
 
 interface TransactionDTO {
