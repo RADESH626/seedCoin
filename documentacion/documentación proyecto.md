@@ -20,17 +20,26 @@
 
 - ### **selector de fechas:** el usuario debe poder agregar los gastos o ingresos de fechas anteriores  de ser necesario
 
-## 
+## CATEGORÍAS DE TRANSACCIONES (MVP)
 
-## 
+Para mantener la simplicidad del MVP, se manejarán como texto simple (strings) seleccionables desde una lista predefinida:
 
-## 
+### **Ingresos:**
+* Salario
+* Negocio / Ventas
+* Regalos
+* Otros Ingresos
 
-## 
-
-## 
-
-## 
+### **Gastos:**
+* Alimentación (Mercado, Restaurantes)
+* Vivienda (Arriendo, Hipoteca)
+* Transporte (Gasolina, Transporte Público)
+* Servicios (Agua, Luz, Internet, Telefonía)
+* Entretenimiento y Ocio
+* Salud y Cuidado Personal
+* Educación
+* Pago de Deudas (Utilizado para conectar transacciones con la tabla DEBT)
+* Otros Gastos
 
 ## HISTORIAL
 

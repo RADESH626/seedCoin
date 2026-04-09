@@ -1,0 +1,9 @@
+TODO:
+
+- actualizar el agent.md
+- el onboarding view debe estar en la carpeta app
+- el dashboard screen debe estar en la carpeta app
+- el boton para agregar cuentas debe ser un componente separado de quick account
+- actualizar el readme del proyecto
+- actualizar el diagrama de entidades y relaciones
+- actualizar el archivo "documentacion del proyecto.md"

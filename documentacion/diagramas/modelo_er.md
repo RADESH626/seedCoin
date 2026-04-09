@@ -3,9 +3,10 @@
 ```mermaid
 erDiagram
     ACCOUNT ||--o{ TRANSACTION : "registra"
-    ACCOUNT ||--o{ SCHEDULED_TRANSACTION : "ejecuta"
-    DEBT ||--o{ DEBT_PAYMENT : "recibe"
-    ACCOUNT ||--o{ DEBT_PAYMENT : "financia"
+    DEBT ||--o{ TRANSACTION : "se paga con"
+    CATEGORY ||--o{ TRANSACTION : "clasifica"
+    CATEGORY ||--o{ BUDGET : "asigna límite a"
+    TRANSACTION ||--o| TRANSACTION : "transferencia_emparejada"
 
     ACCOUNT {
         int account_id PK
@@ -19,36 +20,31 @@ erDiagram
     TRANSACTION {
         int transaction_id PK
         int account_id FK
-        string type "INGRESO o GASTO"
+        int debt_id FK "Opcional. NULL si es gasto común"
+        int transfer_transaction_id FK "Para emparejar salidas y entradas"
+        boolean is_income "true si es ingreso, false si es gasto"
         decimal amount
-        string category
+        int category_id FK "Define si es comida, transporte, etc."
         string description
         datetime transaction_date
+        string status "Ej: COMPLETED, PENDING"
+        string recurrence_frequency "NULL, Mensual, Semanal, etc."
+        boolean is_active
     }
 
-    COMMON_TRANSACTION {
-        int preset_id PK
-        string title "Ej: Comprar pan"
-        string type "INGRESO o GASTO"
-        decimal amount
-        string category
-    }
 
-    SCHEDULED_TRANSACTION {
-        int scheduled_id PK
-        int account_id FK
-        string type "INGRESO o GASTO"
-        decimal amount
-        string category
-        string description
-        string frequency "Diario, Semanal, Mensual"
-        datetime start_date
-        datetime next_execution
+    CATEGORY {
+        int category_id PK
+        string name "Ej: Transporte, Alimentación"
+        boolean is_income "true si es ingreso, false si es gasto"
+        string icon "Icono referencial"
+        string color "Color hex (#ff0000)"
+        boolean is_default "Si es original del sistema o creada por el usuario"
     }
 
     BUDGET {
         int budget_id PK
-        string category "Categoría a limitar"
+        int category_id FK "Categoría a limitar"
         string period "Mensual, Semanal"
         decimal limit_amount "Monto o porcentaje límite"
         boolean alerts_enabled
@@ -62,12 +58,9 @@ erDiagram
         decimal remaining_amount
         datetime due_date "Fecha de vencimiento"
     }
-
-    DEBT_PAYMENT {
-        int payment_id PK
-        int debt_id FK
-        int account_id FK "Cuenta de donde salió el dinero"
-        decimal amount
-        datetime payment_date
-    }
 ```
+
+### Notas Arquitectónicas (SQLite Offline)
+
+*   **Transferencias Emparejadas:** Usando `transfer_transaction_id`, una transferencia entre cuentas genera dos registros en `TRANSACTION` (uno de salida en la Cuenta A, y uno de entrada en la Cuenta B) enlazados entre sí. Editar o borrar uno, debe afectar a su contraparte.
+*   **Actualización de Saldos (Patrón Libro Mayor):** Para garantizar que `current_balance` (en `ACCOUNT`) y `remaining_amount` (en `DEBT`) nunca se descuadren por un bug en el código de la app, **se utilizarán Triggers de SQLite**. Esto significa que al insertar, editar o borrar una `TRANSACTION`, la base de datos se encargará automáticamente por debajo de sumar o restar el monto a las cuentas y deudas asociadas de manera atómica.
