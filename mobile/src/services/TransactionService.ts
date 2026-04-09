@@ -1,74 +1,49 @@
 import * as SQLite from 'expo-sqlite';
-
-export interface Transaction {
-  transaction_id: number;
-  account_id: number;
-  type: 'INGRESO' | 'GASTO';
-  amount: number;
-  category: string;
-  description: string;
-  transaction_date: string;
-}
-
-const DB_NAME = 'seedcoin.db';
+import { QUERIES_TRANSACTION } from '../database/queries';
+import { Transaction } from '../database/types';
+import { getDBConnection } from '../database/connection';
 
 export const getTransactionsByAccount = async (accountId: number): Promise<Transaction[]> => {
-  const db = await SQLite.openDatabaseAsync(DB_NAME);
-  const statement = await db.prepareAsync(
-    'SELECT * FROM transactions WHERE account_id = $accountId ORDER BY transaction_date DESC'
-  );
-  try {
-    const result = await statement.executeForRawResultAsync({ $accountId: accountId });
-    const allRows = await result.getAllAsync();
-    return allRows as unknown as Transaction[];
-  } finally {
-    await statement.finalizeAsync();
-  }
+  const db = await getDBConnection();
+  return await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_BY_ACCOUNT, [accountId]);
 };
 
 export const getRecentTransactions = async (limit: number = 10): Promise<Transaction[]> => {
-    const db = await SQLite.openDatabaseAsync(DB_NAME);
-    const result = await db.getAllAsync<Transaction>(
-        'SELECT * FROM transactions ORDER BY transaction_date DESC LIMIT ?', limit
-    );
-    return result;
+    const db = await getDBConnection();
+    return await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_RECENT, [limit]);
 }
 
 export const createTransaction = async (
   account_id: number,
-  type: 'INGRESO' | 'GASTO',
+  is_income: boolean,
   amount: number,
-  category: string,
-  description: string = ''
+  category_id: number,
+  description: string = '',
+  status: string = 'COMPLETED',
+  transaction_date: string = new Date().toISOString()
 ) => {
-  const db = await SQLite.openDatabaseAsync(DB_NAME);
+  const db = await getDBConnection();
   
-  // Usar transacción para asegurar atomicidad (actualizar la transacción y el balance de la cuenta al mismo tiempo)
-  await db.withTransactionAsync(async () => {
-    const stmt = await db.prepareAsync(
-      `INSERT INTO transactions (account_id, type, amount, category, description) 
-       VALUES ($account_id, $type, $amount, $category, $description)`
-    );
-    
-    try {
-      await stmt.executeAsync({
-        $account_id: account_id,
-        $type: type,
-        $amount: amount,
-        $category: category,
-        $description: description
-      });
-
-      // Actualizar el saldo de la cuenta
-      if (type === 'INGRESO') {
-        await db.runAsync('UPDATE accounts SET current_balance = current_balance + ? WHERE account_id = ?', amount, account_id);
-      } else {
-        await db.runAsync('UPDATE accounts SET current_balance = current_balance - ? WHERE account_id = ?', amount, account_id);
-      }
-    } finally {
-      await stmt.finalizeAsync();
-    }
-  });
-
-  return true;
+  // Note: En tu schema.ts, ya existe un Trigger 'update_account_balance_after_insert'
+  // que automáticamente suma/resta el current_balance de la cuenta cuando insertas. 
+  // Por ende, ya no necesitamos hacerlo manualmente con "db.runAsync UPDATE ACCOUNT" como estaba antes!
+  // El trigger de SQLite hace el trabajo automáticamente.
+  
+  const statement = await db.prepareAsync(QUERIES_TRANSACTION.INSERT_NAMED);
+  
+  try {
+    const isIncomeInt = is_income ? 1 : 0;
+    await statement.executeAsync({
+      $account_id: account_id,
+      $is_income: isIncomeInt,
+      $amount: amount,
+      $category_id: category_id,
+      $description: description,
+      $transaction_date: transaction_date,
+      $status: status
+    });
+    return true;
+  } finally {
+    await statement.finalizeAsync();
+  }
 };
