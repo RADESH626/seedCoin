@@ -58,6 +58,11 @@ erDiagram
         decimal remaining_amount
         datetime due_date "Fecha de vencimiento"
     }
+
+    PREFERENCES {
+        string preference_key PK "Ej: user_name, theme"
+        string preference_value
+    }
 ```
 
 ### Notas Arquitectónicas (SQLite Offline)

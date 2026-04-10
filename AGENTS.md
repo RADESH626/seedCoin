@@ -19,11 +19,13 @@ General technical skills required for the SeedCoin technology stack.
 | `java-17` | Main Backend language | [Java 17 Docs](https://docs.oracle.com/en/java/javase/17/) |
 | `spring-boot-3` | Backend Framework | [Spring Boot Docs](https://spring.io/projects/spring-boot) |
 | `mysql` | Relational Database | [MySQL Docs](https://dev.mysql.com/doc/) |
-| `nextjs-16` | Frontend Framework (App Router) | [Next.js Docs](https://nextjs.org/docs) |
-| `react-18` | UI Library | [React Docs](https://react.dev/) |
-| `typescript` | Frontend Language | [TypeScript Docs](https://www.typescriptlang.org/) |
-| `tailwindcss-4` | CSS Styling Framework | [Tailwind CSS Docs](https://tailwindcss.com/) |
-| `playwright` | E2E Testing Framework | [Playwright Docs](https://playwright.dev/) |
+| `react-native` | Mobile Framework | [React Native Docs](https://reactnative.dev/docs/getting-started) (v0.81.5) |
+| `expo` | App Router & Build | [Expo Docs](https://docs.expo.dev/) (SDK 54) |
+| `expo-router` | Enrutamiento | [Expo Router](https://docs.expo.dev/router/introduction/) (v6) |
+| `react` | UI Library | [React Docs](https://react.dev/) (v19) |
+| `typescript` | Frontend Language | [TypeScript Docs](https://www.typescriptlang.org/) (v5.9) |
+| `nativewind` | CSS/NativeWind | [NativeWind Docs](https://www.nativewind.dev/) (v4.2 con Tailwind 3.4) |
+| `sqlite` | Local Database | [Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/) (v16) |
 
 ### SeedCoin-Specific Skills
 Project-specific domain knowledge.
@@ -56,7 +58,7 @@ Mapping of developer intents to specific Agent Skills.
 | Component | Path | Description |
 | :--- | :--- | :--- |
 | **Backend API** | `seedCoin/` | **Spring Boot** application exposing the REST API. Contains business logic, data access (JPA), and security. |
-| **Frontend App** | `frontend/` | **Next.js** application consuming the API. Handles the user interface, global state, and navigation. |
+| **Mobile App** | `mobile/` | **React Native / Expo** application. Maneja la interfaz de usuario, estado global, y base de datos local SQLite. |
 | **Documentation** | `documentacion/` | User manuals, diagrams, and additional technical guides. |
 
 ## 4. Development
@@ -71,12 +73,12 @@ cd seedCoin
 # Server runs on: http://localhost:8080
 ```
 
-**Frontend (Next.js):**
+**Mobile (Expo):**
 ```bash
-cd frontend
+cd mobile
 npm install
-npm run dev
-# App runs on: http://localhost:3000
+npm start
+# Úsalo via Expo Go o en la web.
 ```
 
 ### Quick Script (Windows)

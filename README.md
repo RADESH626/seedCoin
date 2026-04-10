@@ -21,12 +21,12 @@
 *   **Seguridad**: Spring Security
 *   **Herramientas**: Maven, Lombok
 
-### Frontend ⚛️
-*   **Framework**: Next.js 16
+### Aplicación Móvil 📱
+*   **Framework**: React Native (con Expo)
 *   **Lenguaje**: TypeScript
-*   **Estilos**: Tailwind CSS 4
-*   **Iconos**: Lucide React
-*   **Gráficos**: Recharts
+*   **Estilos**: NativeWind (Tailwind CSS)
+*   **Iconos**: Lucide React Native
+*   **Base de Datos Local**: SQLite (expo-sqlite)
 
 ## 📋 Pre-requisitos
 
@@ -52,9 +52,9 @@ Antes de comenzar, asegúrate de tener instalado:
         spring.datasource.password=tu_contraseña
         ```
 
-3.  **Instalar Dependencias Frontend**
+3.  **Instalar Dependencias Móviles**
     ```bash
-    cd frontend
+    cd mobile
     npm install
     ```
 
@@ -72,13 +72,13 @@ cd seedCoin
 ```
 El servidor iniciará en `http://localhost:8080`.
 
-**2. Frontend (Next.js)**
+**2. Aplicación Móvil (Expo)**
 En una nueva terminal:
 ```bash
-cd frontend
-npm run dev
+cd mobile
+npm start
 ```
-La aplicación estará disponible en `http://localhost:3000`.
+La aplicación estará disponible usando Expo Go en tu dispositivo móvil o emuladores iOS/Android.
 
 ## 📚 Documentación Adicional
 Para una guía detallada sobre cómo usar la aplicación, consulta el [Manual de Usuario](documentacion/manual_de_usuario.md).
