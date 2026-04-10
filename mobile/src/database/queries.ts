@@ -68,6 +68,18 @@ export const QUERIES_TRANSACTION = {
   INSERT_NAMED: `
     INSERT INTO TRANSACTIONS (account_id, is_income, amount, category_id, description, transaction_date, status) 
     VALUES ($account_id, $is_income, $amount, $category_id, $description, $transaction_date, $status);
+  `,
+
+  GET_ALL_DETAILED: `
+    SELECT 
+      T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
+      C.name as category_name, C.icon as category_icon, C.color as category_color,
+      A.name as account_name
+    FROM TRANSACTIONS T
+    LEFT JOIN CATEGORY C ON T.category_id = C.category_id
+    LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
+    WHERE T.is_active = 1
+    ORDER BY T.transaction_date DESC;
   `
 };
 
