@@ -69,6 +69,7 @@ function RootLayoutNav() {
       <SQLiteProvider databaseName={DB_NAME} onInit={migrateDbIfNeeded} useSuspense>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
           <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
         </Stack>
       </SQLiteProvider>

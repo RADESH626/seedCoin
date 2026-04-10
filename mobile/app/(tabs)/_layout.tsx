@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { CustomTabBar } from '@/components/CustomTabBar';
+import { CustomTabBar } from '@/components/navigation/CustomTabBar';
 
 export default function TabLayout() {
   return (
@@ -12,6 +12,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{ title: 'Inicio' }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{ title: 'Historial' }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{ title: 'Perfil' }}
       />
     </Tabs>
   );

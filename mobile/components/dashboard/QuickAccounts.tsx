@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { Landmark, PlusCircle } from 'lucide-react-native';
-import { router } from 'expo-router';
+import { Landmark } from 'lucide-react-native';
+import { AddAccountButton } from '@/components/ui/AddAccountButton';
 import Colors from '@/constants/Colors';
 import { formatMoney } from '@/src/helpers/ui';
 import { Account } from '@/src/database/types';
@@ -35,13 +35,7 @@ export function QuickAccounts({ accounts }: Props) {
               </View>
             ))}
             {/* Botón Permanente para agregar mas cuentas al final del scroll */}
-            <Pressable 
-              onPress={() => router.push('/add-account' as any)}
-              className="bg-dark-800 border-2 border-dashed border-dark-600 rounded-2xl p-4 items-center justify-center min-w-[120px]"
-            >
-              <PlusCircle color={Colors.seed[500]} size={24} className="mb-2" />
-              <Text className="text-xs text-seed-400 font-bold">Añadir</Text>
-            </Pressable>
+            <AddAccountButton />
           </>
         )}
       </ScrollView>

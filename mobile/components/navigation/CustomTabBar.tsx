@@ -3,6 +3,7 @@ import { View, Alert } from 'react-native';
 import { Home, Wallet, PieChart, User } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { TabBarButton } from './TabBarButton';
 import { TabBarFAB } from './TabBarFAB';
 
@@ -14,6 +15,8 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   };
 
   const isHomeFocused = state.routes[state.index].name === 'index';
+  const isHistoryFocused = state.routes[state.index].name === 'history';
+  const isProfileFocused = state.routes[state.index].name === 'profile';
 
   return (
     <View 
@@ -29,11 +32,11 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       <TabBarButton 
         label="Historial" 
         Icon={Wallet} 
-        isFocused={false} 
-        onPress={() => handleDummyPress('Historial')} 
+        isFocused={isHistoryFocused} 
+        onPress={() => navigation.navigate('history')} 
       />
       
-      <TabBarFAB onPress={() => handleDummyPress('Nueva Transacción')} />
+      <TabBarFAB onPress={() => router.push('/add-transaction' as any)} />
 
       <TabBarButton 
         label="Límites" 
@@ -44,8 +47,8 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       <TabBarButton 
         label="Perfil" 
         Icon={User} 
-        isFocused={false} 
-        onPress={() => handleDummyPress('Perfil')} 
+        isFocused={isProfileFocused} 
+        onPress={() => navigation.navigate('profile')} 
       />
     </View>
   );
