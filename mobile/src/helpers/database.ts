@@ -8,7 +8,7 @@ import { isNativeDatabaseError as checkNativeError } from '../database/types';
 export async function withNativeRetry<T>(
   fn: () => Promise<T>,
   label: string,
-  maxRetries = 1,
+  maxRetries = 3,
   delayMs = 500
 ): Promise<T> {
   try {

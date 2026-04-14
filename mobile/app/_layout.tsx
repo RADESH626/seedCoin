@@ -14,9 +14,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
-import { SQLiteProvider } from 'expo-sqlite';
-import { migrateDbIfNeeded } from '@/src/database';
-import { DB_NAME } from '@/src/database/connection';
+import { getDBConnection } from '@/src/database/connection';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -41,6 +39,13 @@ export default function RootLayout() {
     Inter_700Bold,
     Inter_800ExtraBold,
   });
+  const [dbLoaded, setDbLoaded] = useState(false);
+
+  useEffect(() => {
+    getDBConnection()
+      .then(() => setDbLoaded(true))
+      .catch((e) => console.error("Error initializing DB:", e));
+  }, []);
 
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -49,12 +54,12 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && dbLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, dbLoaded]);
 
-  if (!loaded) {
+  if (!loaded || !dbLoaded) {
     return null;
   }
 
@@ -66,13 +71,11 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SQLiteProvider databaseName={DB_NAME} onInit={migrateDbIfNeeded} useSuspense>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
-          <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
-        </Stack>
-      </SQLiteProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
+        <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
+      </Stack>
     </ThemeProvider>
   );
 }

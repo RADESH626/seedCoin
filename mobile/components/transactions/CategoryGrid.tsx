@@ -28,8 +28,10 @@ interface Props {
   isIncome: boolean;
 }
 
-export function CategoryGrid({ categories, selectedCategoryId, onSelectCategory, isIncome }: Props) {
-  const filteredCategories = categories.filter(c => c.is_income === (isIncome ? 1 : 0));
+export function CategoryGrid({ categories = [], selectedCategoryId, onSelectCategory, isIncome }: Props) {
+  const filteredCategories = Array.isArray(categories) 
+    ? categories.filter(c => c.is_income === (isIncome ? 1 : 0))
+    : [];
 
   return (
     <View className="mb-8">

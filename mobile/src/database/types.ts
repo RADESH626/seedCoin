@@ -119,10 +119,17 @@ export interface CreateTransactionInput {
 // TYPE GUARDS
 // ====================
 
-/** Detecta errores nativos de SQLite que requieren retry */
+/** Detecta errores nativos de SQLite que requieren retry (NPE, reyecciones del engine, etc) */
 export function isNativeDatabaseError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  
+  const msg = error.message;
   return (
-    error instanceof Error &&
-    error.message.includes('NativeDatabase.prepareAsync')
+    msg.includes('NativeDatabase.prepareAsync') ||
+    msg.includes('NativeDatabase.execAsync') ||
+    msg.includes('NativeDatabase.getAllAsync') ||
+    msg.includes('NativeDatabase.getFirstAsync') ||
+    msg.includes('NullPointerException') ||
+    msg.includes('database is closed') // Común en race conditions
   );
 }

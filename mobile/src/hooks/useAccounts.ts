@@ -6,6 +6,7 @@ import type { Account } from '../database/types';
 export function useAccounts() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const fetchAccounts = useCallback(async () => {
     try {
@@ -16,6 +17,7 @@ export function useAccounts() {
       log.error('useAccounts: Error fetching accounts', error);
     } finally {
       setLoading(false);
+      setIsInitialLoad(false);
     }
   }, []);
 
@@ -30,6 +32,8 @@ export function useAccounts() {
 
   return {
     accounts,
+    loading,
+    isInitialLoad,
     fetchAccounts,
     addAccount,
   };
