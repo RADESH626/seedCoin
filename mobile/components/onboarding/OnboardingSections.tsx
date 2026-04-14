@@ -39,7 +39,7 @@ export function NameSelection({ nameInput, setNameInput, onContinue }: NameSelec
         autoFocus={true}
       />
 
-      <PrimaryButton 
+      <PrimaryButton
         label="Continuar"
         onPress={onContinue}
         disabled={!nameInput.trim()}
@@ -69,10 +69,10 @@ export function AccountStart({ userName, onCreateAccount }: AccountStartProps) {
         Perfecto, <Text className="text-seed-400">{userName}</Text>
       </Text>
       <Text className="text-gray-400 text-base text-center mb-10 leading-relaxed px-4">
-        Ahora crea tu primera cuenta y comienza a rastrear tu dinero con estilo.
+        Ahora vamos a crear tu primera cuenta para comenzar a gestionar tus finanzas.
       </Text>
 
-      <PrimaryButton 
+      <PrimaryButton
         label="Crea tu primera cuenta"
         onPress={onCreateAccount}
       />

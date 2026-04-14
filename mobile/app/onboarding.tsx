@@ -8,24 +8,26 @@ import { NameSelection, AccountStart } from '@/components/onboarding/OnboardingS
 
 export default function OnboardingScreen() {
   const { getPreference, setPreference } = usePreferences();
-  const { accounts, fetchAccounts } = useAccounts();
+  const { accounts, fetchAccounts, isInitialLoad } = useAccounts();
   const [userName, setUserName] = useState<string | null>(null);
   const [nameInput, setNameInput] = useState('');
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (accounts.length > 0) {
+    // Solo redirigir si ya terminamos la carga inicial y detectamos cuentas
+    if (!isInitialLoad && accounts.length > 0) {
       log.info('OnboardingScreen: Cuentas detectadas, redirigiendo al Dashboard...');
       router.replace('/(tabs)');
     }
-  }, [accounts]);
+  }, [accounts, isInitialLoad]);
 
   useFocusEffect(useCallback(() => {
     let active = true;
 
     const init = async () => {
       log.info('OnboardingScreen: Enfocado. Estabilizando conexión...');
-      await new Promise(resolve => setTimeout(resolve, 300));
+      // Un pequeño delay para que la animación de navegación respire
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       if (!active) return;
 
@@ -38,7 +40,7 @@ export default function OnboardingScreen() {
         }
       } catch (e) {
         log.error('OnboardingScreen: Error en carga inicial', e);
-        setChecked(true);
+        if (active) setChecked(true);
       }
     };
 

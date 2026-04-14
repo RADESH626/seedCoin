@@ -3,6 +3,7 @@ import { View, Text, TextInput, KeyboardAvoidingView, Platform, Alert, ScrollVie
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useAccounts } from '@/src/hooks/useAccounts';
 import { createAccount } from '@/src/services/AccountService';
 import { ModalHeader } from '@/components/ui/ModalHeader';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
@@ -11,7 +12,7 @@ import { ACCOUNT_TYPES } from '@/src/database/types';
 
 export default function AddAccountScreen() {
   const insets = useSafeAreaInsets();
-  
+  const { accounts } = useAccounts();
   const [name, setName] = useState('');
   const [accountType, setAccountType] = useState<string>(ACCOUNT_TYPES.CASH.id);
   const [balance, setBalance] = useState('');
@@ -23,13 +24,21 @@ export default function AddAccountScreen() {
       return;
     }
 
-    // Convertimos a número de forma segura (el servicio aplicará toCents)
     const initialBalance = parseFloat(balance) || 0;
 
     try {
       setLoading(true);
       await createAccount(name.trim(), accountType, initialBalance);
-      router.back();
+      
+      // Si era la primera cuenta (onboarding), vamos directo al dashboard usando REPLACE
+      // para que no haya flashback del onboarding
+      if (accounts.length === 0) {
+        // Aprovechamos para refrescar la lista global si fuera necesario, 
+        // aunque el dashboard lo hará al entrar.
+        router.replace('/(tabs)');
+      } else {
+        router.back();
+      }
     } catch (e) {
       console.error(e);
       Alert.alert('Error', 'No se pudo crear la cuenta localmente.');

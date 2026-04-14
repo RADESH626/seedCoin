@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
-import { Bell, RefreshCcw } from 'lucide-react-native';
+import { RefreshCcw } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
@@ -71,10 +71,6 @@ export function DashboardHeader() {
           className="w-10 h-10 rounded-full bg-dark-800 border border-dark-700 items-center justify-center"
         >
           <RefreshCcw color="#d1d5db" size={18} />
-        </Pressable>
-        <Pressable className="w-10 h-10 rounded-full bg-dark-800 border border-dark-700 items-center justify-center relative">
-          <Bell color="#d1d5db" size={20} />
-          <View className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-dark-800" />
         </Pressable>
       </View>
     </View>
