@@ -1,15 +1,23 @@
 import { QUERIES_TRANSACTION } from '../database/queries';
 import type { Transaction, CreateTransactionInput } from '../database/types';
 import { getDBConnection } from '../database/connection';
+import { fromCents, toCents } from '../helpers/currency';
+import { withNativeRetry } from '../helpers/database';
 
 export const getTransactionsByAccount = async (accountId: number): Promise<Transaction[]> => {
-  const db = await getDBConnection();
-  return await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_BY_ACCOUNT, [accountId]);
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_BY_ACCOUNT, [accountId]);
+    return result.map(tx => ({ ...tx, amount: fromCents(tx.amount) }));
+  }, 'TransactionService.getTransactionsByAccount');
 };
 
 export const getRecentTransactions = async (limit: number = 10): Promise<Transaction[]> => {
-  const db = await getDBConnection();
-  return await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_RECENT, [limit]);
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getAllAsync<Transaction>(QUERIES_TRANSACTION.GET_RECENT, [limit]);
+    return result.map(tx => ({ ...tx, amount: fromCents(tx.amount) }));
+  }, 'TransactionService.getRecentTransactions');
 };
 
 export const createTransaction = async (data: CreateTransactionInput) => {
@@ -23,23 +31,58 @@ export const createTransaction = async (data: CreateTransactionInput) => {
     transactionDate = new Date().toISOString(),
   } = data;
 
-  const db = await getDBConnection();
+  const amountInCents = toCents(amount);
 
-  const statement = await db.prepareAsync(QUERIES_TRANSACTION.INSERT_NAMED);
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const statement = await db.prepareAsync(QUERIES_TRANSACTION.INSERT_NAMED);
+    try {
+      const isIncomeInt = isIncome ? 1 : 0;
+      await statement.executeAsync({
+        $account_id: accountId,
+        $is_income: isIncomeInt,
+        $amount: amountInCents,
+        $category_id: categoryId,
+        $description: description,
+        $transaction_date: transactionDate,
+        $status: status,
+      });
+      return true;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }, 'TransactionService.createTransaction');
+};
 
-  try {
-    const isIncomeInt = isIncome ? 1 : 0;
-    await statement.executeAsync({
-      $account_id: accountId,
-      $is_income: isIncomeInt,
-      $amount: amount,
-      $category_id: categoryId,
-      $description: description,
-      $transaction_date: transactionDate,
-      $status: status,
-    });
-    return true;
-  } finally {
-    await statement.finalizeAsync();
-  }
+export const getMonthlyStats = async () => {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getFirstAsync<any>(QUERIES_TRANSACTION.GET_MONTHLY_STATS);
+    return {
+      total_income: fromCents(result?.total_income ?? 0),
+      total_expense: fromCents(result?.total_expense ?? 0),
+    };
+  }, 'TransactionService.getMonthlyStats');
+};
+
+export const getAllDetailedTransactions = async () => {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_ALL_DETAILED);
+    return (result ?? []).map(tx => ({
+      ...tx,
+      amount: fromCents(tx.amount)
+    }));
+  }, 'TransactionService.getAllDetailed');
+};
+
+export const getRecentTransactionsWithCategory = async () => {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_RECENT_WITH_CATEGORY);
+    return (result ?? []).map(tx => ({
+      ...tx,
+      amount: fromCents(tx.amount)
+    }));
+  }, 'TransactionService.getRecentWithCategory');
 };
