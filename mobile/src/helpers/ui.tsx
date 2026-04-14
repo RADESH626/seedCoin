@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   CreditCard, Banknote, Briefcase, Utensils, Gift, 
   Home, Car, Zap, Gamepad2, HeartPulse, GraduationCap, 

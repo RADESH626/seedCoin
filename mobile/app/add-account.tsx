@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, TextInput, Pressable, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { X, Landmark, Wallet, CreditCard, PiggyBank } from 'lucide-react-native';

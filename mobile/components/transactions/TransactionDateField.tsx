@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, Pressable, TextInput } from 'react-native';
 import { Calendar as CalendarIcon, ChevronDown } from 'lucide-react-native';
 import Colors from '@/constants/Colors';

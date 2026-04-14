@@ -1,10 +1,11 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { formatMoney } from '@/src/helpers/ui';
 import { TransactionItem } from '../transactions/TransactionItem';
+import type { RecentTransaction } from '@/src/database/types';
 
 interface Props {
-  recentTransactions: any[];
+  recentTransactions: RecentTransaction[];
 }
 
 export function RecentTransactions({ recentTransactions }: Props) {
@@ -26,16 +27,12 @@ export function RecentTransactions({ recentTransactions }: Props) {
         ) : (
           recentTransactions.map((tx, index) => {
             const isLast = index === recentTransactions.length - 1;
-            const isIncome = tx.is_income === 1;
-            // Usar rgba para el fondo del ícono con opacidad (usamos hex + 33 que es ~20%)
-            const iconBgStyle = { backgroundColor: `${tx.category_color}33` };
-            const txDate = new Date(tx.transaction_date).toLocaleDateString();
-
+            
             return (
-              <React.Fragment key={tx.transaction_id}>
+              <Fragment key={tx.transaction_id}>
                 <TransactionItem transaction={tx} />
                 {!isLast && <View className="h-px bg-dark-700 mx-3" />}
-              </React.Fragment>
+              </Fragment>
             );
           })
         )}

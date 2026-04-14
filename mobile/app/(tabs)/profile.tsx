@@ -1,14 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { User, Settings, Database, Info, Save, RotateCcw, ChevronRight, Wallet } from 'lucide-react-native';
-import * as SQLite from 'expo-sqlite';
 
 import { usePreferences, useAccounts } from '@/src/database/hooks';
 import { formatMoney } from '@/src/helpers/ui';
 import { log } from '@/src/services/logger';
-import { DB_NAME } from '@/src/database/connection';
+import { resetDatabase } from '@/src/database/utils';
 import Colors from '@/constants/Colors';
 
 export default function ProfileScreen() {
@@ -53,21 +52,9 @@ export default function ProfileScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              const db = await SQLite.openDatabaseAsync(DB_NAME);
-              await db.execAsync(`
-                PRAGMA foreign_keys = OFF;
-                DROP TABLE IF EXISTS ACCOUNT;
-                DROP TABLE IF EXISTS CATEGORY;
-                DROP TABLE IF EXISTS DEBT;
-                DROP TABLE IF EXISTS TRANSACTIONS;
-                DROP TABLE IF EXISTS BUDGET;
-                DROP TABLE IF EXISTS PREFERENCES;
-                PRAGMA user_version = 0;
-                PRAGMA foreign_keys = ON;
-              `);
-              log.info('Profile: Base de datos reseteada con éxito.');
+              await resetDatabase();
               Alert.alert("Realizado", "Base de datos purgada. Reinicia la app para configurarla de nuevo.");
-            } catch(e) {
+            } catch (e) {
               log.error('Profile: Error en reset', e);
               Alert.alert("Error", "No se pudo limpiar la base de datos.");
             }

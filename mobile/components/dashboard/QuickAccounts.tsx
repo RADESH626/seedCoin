@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Landmark } from 'lucide-react-native';
 import { AddAccountButton } from '@/components/ui/AddAccountButton';

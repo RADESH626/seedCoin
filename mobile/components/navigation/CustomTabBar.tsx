@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Alert } from 'react-native';
 import { Home, Wallet, PieChart, User, Target } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { useTransactionsHistory } from '@/src/database/hooks';
 import { TransactionItem } from '@/components/transactions/TransactionItem';
 import { log } from '@/src/services/logger';
 import Colors from '@/constants/Colors';
+import type { DetailedTransaction } from '@/src/database/types';
 
 type FilterType = 'ALL' | 'INCOME' | 'EXPENSE';
 
@@ -33,7 +34,7 @@ export default function HistoryScreen() {
 
   // Agrupación por fechas
   const groupedHistory = useMemo(() => {
-    const groups: Record<string, any[]> = {};
+    const groups: Record<string, DetailedTransaction[]> = {};
     
     filteredHistory.forEach(tx => {
       const dateObj = new Date(tx.transaction_date);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Plus } from 'lucide-react-native';
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { log } from '@/src/services/logger';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { useFocusEffect, Redirect, router } from 'expo-router';

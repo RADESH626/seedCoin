@@ -1,6 +1,5 @@
-import * as SQLite from 'expo-sqlite';
 import { QUERIES_ACCOUNT } from '../database/queries';
-import { Account } from '../database/types';
+import type { Account } from '../database/types';
 import { getDBConnection } from '../database/connection';
 
 export const getAccounts = async (): Promise<Account[]> => {

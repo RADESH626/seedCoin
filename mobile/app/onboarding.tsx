@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, Pressable, TextInput } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';

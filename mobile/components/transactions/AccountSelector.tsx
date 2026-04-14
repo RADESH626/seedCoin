@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { formatMoney } from '@/src/helpers/ui';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text } from 'react-native';
 import { ArrowDown, ArrowUp } from 'lucide-react-native';
 import { formatMoney } from '@/src/helpers/ui';

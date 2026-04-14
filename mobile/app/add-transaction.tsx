@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import { router } from 'expo-router';
 import { X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import { log } from '@/src/services/logger';
 import { useAccounts, useCategories } from '@/src/database/hooks';
@@ -51,7 +51,7 @@ export default function AddTransactionScreen() {
     }
   }, [accounts, selectedAccountId]);
 
-  const handleDateChange = (event: any, selectedDate?: Date) => {
+  const handleDateChange = (_event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (selectedDate) setDate(selectedDate);
   };
@@ -74,15 +74,15 @@ export default function AddTransactionScreen() {
 
     try {
       log.info('AddTransaction: Guardando transacción...', { amount: numericAmount, isIncome });
-      await createTransaction(
-        selectedAccountId,
+      await createTransaction({
+        accountId: selectedAccountId,
         isIncome,
-        numericAmount,
-        selectedCategoryId,
-        description.trim(),
-        'COMPLETED',
-        date.toISOString()
-      );
+        amount: numericAmount,
+        categoryId: selectedCategoryId,
+        description: description.trim(),
+        status: 'COMPLETED',
+        transactionDate: date.toISOString(),
+      });
       router.back();
     } catch (e) {
       log.error('AddTransaction: Error al guardar', e);

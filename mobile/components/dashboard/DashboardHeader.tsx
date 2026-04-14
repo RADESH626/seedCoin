@@ -1,12 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
 import { Bell, RefreshCcw } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import * as SQLite from 'expo-sqlite';
 import { log } from '@/src/services/logger';
 import { usePreferences } from '@/src/database/hooks';
-import { DB_NAME } from '@/src/database/connection';
+import { resetDatabase } from '@/src/database/utils';
 
 export function DashboardHeader() {
   const insets = useSafeAreaInsets();
@@ -39,21 +38,7 @@ export function DashboardHeader() {
           style: "destructive",
           onPress: async () => {
             try {
-              // Solución Robusta: Eliminamos las tablas de forma explícita y reiniciamos el marcador de versión.
-              // Esto evita corromper el motor nativo de SQLite y asegura una reinicialización limpia.
-              const db = await SQLite.openDatabaseAsync(DB_NAME);
-              await db.execAsync(`
-                PRAGMA foreign_keys = OFF;
-                DROP TABLE IF EXISTS ACCOUNT;
-                DROP TABLE IF EXISTS CATEGORY;
-                DROP TABLE IF EXISTS DEBT;
-                DROP TABLE IF EXISTS TRANSACTIONS;
-                DROP TABLE IF EXISTS BUDGET;
-                DROP TABLE IF EXISTS PREFERENCES;
-                PRAGMA user_version = 0;
-                PRAGMA foreign_keys = ON;
-              `);
-              log.info('Soft Reset: Base de datos limpiada con éxito.');
+              await resetDatabase();
               Alert.alert("Realizado", "La base de datos ha sido purgada. Por favor reinicia la app (tecla 'r') para volver a empezar.");
             } catch (e) {
               log.error('Soft Reset: Error al purgar la base de datos', e);
