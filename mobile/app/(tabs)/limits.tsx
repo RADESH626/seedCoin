@@ -4,7 +4,7 @@ import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Target, Plus, ShieldCheck } from 'lucide-react-native';
 
-import { useBudgets } from '@/src/database/hooks';
+import { useBudgets } from '@/src/hooks/useBudgets';
 import { BudgetCard } from '@/components/transactions/BudgetCard';
 import { AddBudgetModal } from '@/components/modals/AddBudgetModal';
 import { log } from '@/src/services/logger';

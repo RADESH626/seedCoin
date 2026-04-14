@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Modal, Pressable, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { X, Save, Target } from 'lucide-react-native';
-import { useCategories } from '@/src/database/hooks';
+import { useCategories } from '@/src/hooks/useCategories';
 import { getCategoryIcon } from '@/src/helpers/ui';
 import { log } from '@/src/services/logger';
 

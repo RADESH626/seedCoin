@@ -4,7 +4,8 @@ import { router, useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
 import { Landmark, PlusCircle } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
-import { usePreferences, useAccounts } from '@/src/database/hooks';
+import { usePreferences } from '@/src/hooks/usePreferences';
+import { useAccounts } from '@/src/hooks/useAccounts';
 import { useEffect } from 'react';
 
 export default function OnboardingScreen() {
@@ -17,7 +18,7 @@ export default function OnboardingScreen() {
   useEffect(() => {
     if (accounts.length > 0) {
       log.info('OnboardingScreen: Cuentas detectadas, redirigiendo al Dashboard...');
-    router.replace('/(tabs)');
+      router.replace('/(tabs)');
     }
   }, [accounts]);
 
@@ -29,9 +30,9 @@ export default function OnboardingScreen() {
       log.info('OnboardingScreen: Enfocado. Estabilizando conexión...');
       // Pequeño delay de 300ms para permitir que la migración se asiente en el hilo nativo
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       if (!active) return;
-      
+
       try {
         const name = await getPreference('user_name');
         if (active) {
@@ -64,11 +65,11 @@ export default function OnboardingScreen() {
     return (
       <View className="flex-1 bg-dark-900 justify-center items-center px-6">
         <View className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
-        
+
         <View className="w-24 h-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
           <Landmark color={Colors.seed[400]} size={48} />
         </View>
-        
+
         <Text className="text-white text-3xl font-extrabold text-center tracking-tight mb-2">
           ¡Hola! ¿Cómo te llamas?
         </Text>
@@ -78,14 +79,14 @@ export default function OnboardingScreen() {
 
         <TextInput
           className="w-full bg-dark-800 border border-dark-700 rounded-2xl p-4 text-white text-center text-lg mb-6 shadow-inner"
-          placeholder="Tu nombre (Ej. Emanuel)"
+          placeholder="escribe tu nombre"
           placeholderTextColor="#4b5563"
           value={nameInput}
           onChangeText={setNameInput}
           autoFocus={true}
         />
-        
-        <Pressable 
+
+        <Pressable
           onPress={handleSaveName}
           className={`w-full py-4 rounded-2xl flex-row justify-center items-center shadow-lg ${nameInput.trim() ? 'bg-seed-600 shadow-seed-600/30' : 'bg-dark-700 opacity-50'}`}
           disabled={!nameInput.trim()}
@@ -99,19 +100,19 @@ export default function OnboardingScreen() {
   return (
     <View className="flex-1 bg-dark-900 justify-center items-center px-6">
       <View className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
-      
+
       <View className="w-24 h-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
         <Landmark color={Colors.seed[400]} size={48} />
       </View>
-      
+
       <Text className="text-white text-3xl font-extrabold text-center tracking-tight mb-3">
         Perfecto, <Text className="text-seed-400">{userName}</Text>
       </Text>
       <Text className="text-gray-400 text-base text-center mb-10 leading-relaxed px-4">
         Ahora crea tu primera cuenta y comienza a rastrear tu dinero con estilo.
       </Text>
-      
-      <Pressable 
+
+      <Pressable
         onPress={() => router.push('/add-account' as any)}
         className="w-full bg-seed-600 active:bg-seed-700 py-4 rounded-2xl flex-row justify-center items-center gap-2 shadow-lg shadow-seed-600/30"
       >

@@ -14,7 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import { log } from '@/src/services/logger';
-import { useAccounts, useCategories } from '@/src/database/hooks';
+import { useAccounts } from '@/src/hooks/useAccounts';
+import { useCategories } from '@/src/hooks/useCategories';
 import { createTransaction } from '@/src/services/TransactionService';
 
 // Importación de componentes atómicos extraídos

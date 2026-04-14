@@ -4,7 +4,7 @@ import { Bell, RefreshCcw } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
-import { usePreferences } from '@/src/database/hooks';
+import { usePreferences } from '@/src/hooks/usePreferences';
 import { resetDatabase } from '@/src/database/utils';
 
 export function DashboardHeader() {
