@@ -1,85 +1,66 @@
-# SeedCoin 🌱
+# SeedCoin 🌱 - Cultiva tu Libertad Financiera
 
-**SeedCoin** es tu plataforma personal para la gestión financiera segura y eficiente. Diseñada para ayudarte a "cultivar tu libertad financiera", SeedCoin te permite controlar tus ingresos, gastos, programar pagos y visualizar tu salud financiera a través de un dashboard intuitivo.
+**SeedCoin** es una aplicación móvil de gestión financiera personal diseñada para ofrecer seguridad, simplicidad y control total sobre tu economía. Construida con una arquitectura de alta fidelidad, SeedCoin permite a los usuarios rastrear ingresos, gastos y salud financiera sin depender de una conexión constante, utilizando una base de datos local robusta.
 
-## 🚀 Características Principales
+## ✨ Características Principales
 
-*   **Dashboard Interactivo**: Resumen financiero con balance total, gráficos de gastos vs. ingresos y transacciones recientes.
-*   **Gestión de Cuentas**: Administra múltiples tipos de cuentas (Efectivo, Bancos, Tarjetas) con seguimiento de saldos.
-*   **Registro de Transacciones**: Agrega ingresos y gastos con categorías personalizadas.
-*   **Transacciones Comunes (Presets)**: Crea plantillas para tus gastos frecuentes y regístralos con un solo clic.
-*   **Programación de Pagos**: Automatiza tus gastos e ingresos recurrentes (alquiler, suscripciones, nómina).
-*   **Historial Detallado**: Búsqueda avanzada y filtrado de movimientos pasados.
-*   **Seguridad**: Autenticación de usuarios segura.
+*   **Dashboard de Alta Fidelidad**: Visualización inmediata del balance total y resumen mensual de ingresos/gastos.
+*   **Arquitectura Hardened (Cero Tolerancia)**: Sistema de capas estrictamente separadas (UI Orchestrators → Hooks → Services → Database).
+*   **Gestión de Cuentas Atómica**: Soporte para múltiples cuentas (Efectivo, Bancos, Ahorros, Crédito) con iconos dinámicos.
+*   **Historial Inteligente**: Agrupación automática de movimientos por fechas y filtrado avanzado por tipo de flujo.
+*   **Privacidad Total**: Todos tus datos financieros se almacenan localmente en tu dispositivo mediante SQLite.
+*   **Onboarding Fluido**: Proceso de configuración inicial para personalizar la experiencia desde el primer segundo.
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Stack Tecnológico (Mobile-First)
 
-### Aplicación Móvil (Core) 📱
-*   **Arquitectura**: Capas (Services, Hooks, Components) para máxima escalabilidad.
-*   **Framework**: React Native (con Expo SDK 54).
-*   **Lenguaje**: TypeScript (Strict Mode).
-*   **Estilos**: NativeWind (Tailwind CSS 3.4).
-*   **Base de Datos Local**: SQLite (`expo-sqlite`) con soporte para transacciones atómicas.
-*   **Diseño**: Atomic Design para componentes reutilizables.
+*   **Framework**: [Expo SDK 54](https://docs.expo.dev/) (React Native).
+*   **Base de Datos**: [Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/) con migraciones atómicas.
+*   **Estilos**: [NativeWind v4](https://www.nativewind.dev/) (Tailwind CSS 3.4).
+*   **Iconografía**: [Lucide React Native](https://lucide.dev/).
+*   **Arquitectura**: Atomic Design System & Domain-Driven Layering.
+*   **Tipado**: TypeScript 5.9 (Strict Mode).
 
-### Backend (Opcional/Futuro) ☕
-*   **Lenguaje**: Java 17 / Spring Boot 3.2.0.
-*   **Base de Datos**: MySQL.
+## 📂 Estructura del Proyecto (Versión Hardened)
 
-## 📋 Pre-requisitos
+```text
+mobile/
+├── app/                  # Orquestadores de rutas (Expo Router)
+├── components/           # UI Atoms & Complex UI Sections
+│   ├── ui/               # Átomos reutilizables (Botones, Headers, Overlays)
+│   └── [feature]/        # Componentes específicos por funcionalidad
+├── src/
+│   ├── services/         # Lógica de negocio y acceso a datos (Single Source of Truth)
+│   ├── hooks/            # Puentes de orquestación entre UI y Servicios
+│   ├── helpers/          # Utilidades puras (Moneda, Fecha, Base de Datos)
+│   └── database/         # Esquemas, triggers y configuración de SQLite
+└── constants/            # Tokens de diseño y constantes de dominio
+```
 
-Antes de comenzar, asegúrate de tener instalado:
-*   [Java JDK 17](https://www.oracle.com/java/technologies/downloads/#java17)
-*   [Node.js](https://nodejs.org/) (versión LTS recomendada)
-*   [MySQL Server](https://dev.mysql.com/downloads/installer/)
+## 🚀 Instalación y Ejecución
 
-## ⚙️ Instalación y Configuración
-
-1.  **Clonar el repositorio**
+1.  **Clonar y Acceder**:
     ```bash
     git clone https://github.com/RADESH626/seedCoin.git
-    cd seedCoin
+    cd seedCoin/mobile
     ```
 
-2.  **Configurar Base de Datos**
-    *   Crea una base de datos en MySQL llamada `seed_coin` (o el nombre que prefieras).
-    *   Abre el archivo `seedCoin/src/main/resources/application.properties` y actualiza las credenciales de tu base de datos si es necesario:
-        ```properties
-        spring.datasource.url=jdbc:mysql://localhost:3306/seed_coin
-        spring.datasource.username=tu_usuario
-        spring.datasource.password=tu_contraseña
-        ```
-
-3.  **Instalar Dependencias Móviles**
+2.  **Instalar Dependencias**:
     ```bash
-    cd mobile
     npm install
     ```
 
-## ▶️ Ejecución
+3.  **Iniciar Desarrollo**:
+    ```bash
+    npx expo start
+    ```
+    *Usa la aplicación Expo Go en tu dispositivo móvil o un emulador de iOS/Android.*
 
-### Método Rápido (Windows)
-Ejecuta el script `run.bat` en la raíz del proyecto. Esto iniciará tanto el backend como el frontend en nuevas ventanas y guardará los logs.
+## 🤖 AI-Agent Guidelines (Bilingual Model)
 
-### Método Manual
+Este proyecto utiliza el estándar **SeedCoin AI-Agent**. Consulta el archivo [AGENTS.md](AGENTS.md) para entender las guías de desarrollo, convenciones de nombres y el uso de habilidades (Skills) automatizadas.
 
-**1. Backend (Spring Boot)**
-```bash
-cd seedCoin
-./mvnw spring-boot:run
-```
-El servidor iniciará en `http://localhost:8080`.
-
-**2. Aplicación Móvil (Expo)**
-En una nueva terminal:
-```bash
-cd mobile
-npm start
-```
-La aplicación estará disponible usando Expo Go en tu dispositivo móvil o emuladores iOS/Android.
-
-## 📚 Documentación Adicional
-Para una guía detallada sobre cómo usar la aplicación, consulta el [Manual de Usuario](documentacion/manual_de_usuario.md).
+*   **Spanish (Human-First)**: Comentarios, documentación y visión del producto.
+*   **English (AI-First)**: Metadata del sistema, nombres de variables (camelCase) y lógica de bajo nivel.
 
 ---
-Desarrollado con ❤️ por el equipo de SeedCoin.
+Desarrollado con ❤️ para empoderar tu futuro financiero.
