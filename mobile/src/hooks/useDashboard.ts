@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 import { log } from '../services/logger';
-import { getTotalBalance } from '../services/AccountService';
-import { 
-  getMonthlyStats, 
-  getRecentTransactionsWithCategory 
-} from '../services/TransactionService';
+import { DashboardService } from '../services/DashboardService';
 import type { RecentTransaction } from '../database/types';
 
+/**
+ * Hook para la gestión de datos agregados del Dashboard.
+ * Orquesta la recuperación de balances, estadísticas y transacciones recientes.
+ */
 export function useDashboard() {
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
@@ -18,16 +18,13 @@ export function useDashboard() {
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
+      const data = await DashboardService.getDashboardSummary();
       
-      const balance = await getTotalBalance();
-      setTotalBalance(balance);
-
-      const stats = await getMonthlyStats();
-      setMonthlyIncome(stats.total_income);
-      setMonthlyExpense(stats.total_expense);
-
-      const txs = await getRecentTransactionsWithCategory();
-      setRecentTransactions(txs);
+      setTotalBalance(data.totalBalance);
+      setMonthlyIncome(data.monthlyIncome);
+      setMonthlyExpense(data.monthlyExpense);
+      setRecentTransactions(data.recentTransactions);
+      setBalanceGrowthPct(data.balanceGrowthPct);
 
     } catch (error: unknown) {
       log.error('useDashboard: Error fetching dashboard data', error);
