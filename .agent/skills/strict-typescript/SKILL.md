@@ -1,5 +1,5 @@
 ---
-name: typescript-estricto
+name: strict-typescript
 description: >
   Strict TypeScript patterns and typing best practices.
   Trigger: When implementing or refactoring TypeScript in .ts/.tsx (types, interfaces, generics, const maps, type guards, removing any, tightening unknown).

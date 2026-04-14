@@ -33,17 +33,17 @@ If everyone follows this rule:
 Every time you touch code, look for **at least one small improvement**:
 
 ### Quick Wins (Do Immediately)
-- Rename a poorly named variable → activate `nombres-limpios`
+- Rename a poorly named variable → activate `clean-names`
 - Remove a redundant comment → activate `comentarios-limpios`
 - Remove dead code or unused imports
 - Replace a magic number with a named constant
 - Extract a deeply nested block into a well-named function
 
 ### Deep Improvements (When Time Allows)
-- Split a function that does multiple things → activate `funciones-limpias`
+- Split a function that does multiple things → activate `clean-functions`
 - Remove duplication (DRY) → see G5 below
 - Add missing boundary checks
-- Improve test coverage → activate `tests-limpios`
+- Improve test coverage → activate `clean-tests`
 
 ---
 
@@ -149,13 +149,13 @@ This skill coordinates specialized skills based on context:
 
 | Task | Skill to Activate |
 |------|-------------------|
-| Name variables, functions, components | `nombres-limpios` |
+| Name variables, functions, components | `clean-names` |
 | Write or edit comments | `comentarios-limpios` |
-| Create or refactor functions/hooks | `funciones-limpias` |
-| Write or review tests | `tests-limpios` |
+| Create or refactor functions/hooks | `clean-functions` |
+| Write or review tests | `clean-tests` |
 | TDD flow (Red→Green→Refactor) | `tdd-workflow` |
-| Write types, interfaces, generics | `typescript-estricto` |
-| Create React/React Native components | `react-moderno` |
+| Write types, interfaces, generics | `strict-typescript` |
+| Create React/React Native components | `modern-react` |
 | Prepare a commit | `commits-limpios` |
 | Interact with SQLite | `database` |
 | Create/modify routes | `routing` |

@@ -86,8 +86,8 @@ metadata:
 
 | Type | Pattern | Examples |
 |------|---------|----------|
-| Generic skill | `{technology}` | `typescript-estricto`, `react-moderno` |
-| Domain skill | `{domain}-{aspect}` | `funciones-limpias`, `tests-limpios` |
+| Generic skill | `{technology}` | `strict-typescript`, `modern-react` |
+| Domain skill | `{domain}-{aspect}` | `clean-functions`, `clean-tests` |
 | Workflow skill | `{action}` | `commits-limpios`, `tdd-workflow` |
 | Meta skill | `skill-{action}` | `skill-creator`, `skill-sync` |
 

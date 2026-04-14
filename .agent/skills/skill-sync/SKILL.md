@@ -94,8 +94,8 @@ When creating or modifying a skill, follow these steps:
 Given this skill:
 
 ```yaml
-# .agent/skills/react-moderno/SKILL.md
-name: react-moderno
+# .agent/skills/modern-react/SKILL.md
+name: modern-react
 metadata:
   auto_invoke: "Writing React/React Native components"
 ```
@@ -103,7 +103,7 @@ metadata:
 Generates in AGENTS.md:
 
 ```markdown
-| Writing React/React Native components | **React Moderno** | `.agent/skills/react-moderno/SKILL.md` |
+| Writing React/React Native components | **React Moderno** | `.agent/skills/modern-react/SKILL.md` |
 ```
 
 ---

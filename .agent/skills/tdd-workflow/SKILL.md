@@ -184,8 +184,8 @@ it("should handle decimal precision", () => {
 Tests GREEN → Improve code quality WITHOUT changing behavior.
 
 - Extract functions/methods
-- Improve names → invoke `nombres-limpios`
-- Add types → invoke `typescript-estricto`
+- Improve names → invoke `clean-names`
+- Add types → invoke `strict-typescript`
 - Reduce duplication
 
 **Run tests after EACH change → Must stay GREEN**
@@ -261,4 +261,4 @@ cd mobile && npx jest --onlyChanged
 
 - **Existing tests**: `mobile/src/**/*.test.ts`
 - **Jest config**: `mobile/jest.config.js`
-- **Complement**: `.agent/skills/tests-limpios/SKILL.md` (test quality)
+- **Complement**: `.agent/skills/clean-tests/SKILL.md` (test quality)

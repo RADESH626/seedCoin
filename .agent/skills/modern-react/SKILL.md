@@ -1,5 +1,5 @@
 ---
-name: react-moderno
+name: modern-react
 description: >
   Modern React 19 and React Native patterns.
   Trigger: When writing React 19 components, hooks in .tsx, refs as props, React Native patterns, NativeWind, or Expo Router.

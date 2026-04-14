@@ -1,5 +1,5 @@
 ---
-name: funciones-limpias
+name: clean-functions
 description: >
   Use when writing, fixing, editing, or refactoring functions, hooks, and components in TypeScript/React Native.
   Applies Clean Code principles — max 3 arguments, single responsibility, no flag parameters.
@@ -147,4 +147,4 @@ grep -rn "function.*,.*,.*,.*)" mobile/src/ --include="*.ts" --include="*.tsx"
 
 - **Project hooks**: `mobile/src/database/hooks.ts`
 - **Types**: `mobile/src/database/types.ts`
-- **Complement**: `.agent/skills/typescript-estricto/SKILL.md` (typing)
+- **Complement**: `.agent/skills/strict-typescript/SKILL.md` (typing)

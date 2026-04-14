@@ -1,5 +1,5 @@
 ---
-name: tests-limpios
+name: clean-tests
 description: >
   Use when writing, fixing, editing, or refactoring tests in TypeScript.
   Applies Clean Code principles for testing — fast tests, boundary coverage, F.I.R.S.T., one concept per test.

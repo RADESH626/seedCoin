@@ -35,7 +35,7 @@ Ensure architectural coherence and visual consistency across all screens and com
 2. Check if a base component (`Button`, `Card`) exists in `components/` that can be reused before creating one from scratch.
 3. Use `export default` if consumed by Expo Router in `app/`, or named export (`export function`) if it belongs to `components/`.
 
-> **Note:** For React 19 patterns, modern React Native, NativeWind, and Expo Router, see `.agent/skills/react-moderno/SKILL.md`.
+> **Note:** For React 19 patterns, modern React Native, NativeWind, and Expo Router, see `.agent/skills/modern-react/SKILL.md`.
 
 ## Commands
 
@@ -56,4 +56,4 @@ cd mobile && npm run lint
 - **Screens**: `mobile/app/`
 - **Types**: `mobile/src/database/types.ts`
 - **Theme**: `mobile/tailwind.config.js`
-- **Complement**: `.agent/skills/react-moderno/SKILL.md` (React 19 + RN patterns)
+- **Complement**: `.agent/skills/modern-react/SKILL.md` (React 19 + RN patterns)

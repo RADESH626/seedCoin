@@ -42,21 +42,17 @@ Mapping of developer intents to specific Agent Skills.
 
 | User Intent / Action | Skill to Invoke | Location |
 | :--- | :--- | :--- |
-| Modify, refactor, or create Backend endpoints | **Backend Development Skill** | `.agent/skills/backend_development/SKILL.md` |
 | Create interfaces, fix Frontend styles or logic | **Frontend Development Skill** | `.agent/skills/frontend_development/SKILL.md` |
-| Create integration tests, E2E, or validate flows | **E2E Testing Skill** | `.agent/skills/e2e_testing/SKILL.md` |
-| Map code styles to Pencil components | **Pencil Component Properties** | `.agent/skills/pencil/component-properties/SKILL.md` |
-| Adapt code using Pencil properties | **Pencil-to-Code** | `.agent/skills/pencil/pencil-to-code/SKILL.md` |
 | Create a new skill for the agent | **Skill Creator** | `.agent/skills/skill-creator/SKILL.md` |
-| Writing, fixing, or refactoring functions/hooks | **Funciones Limpias** | `.agent/skills/funciones-limpias/SKILL.md` |
-| Naming, renaming, or reviewing variables/functions/components | **Nombres Limpios** | `.agent/skills/nombres-limpios/SKILL.md` |
-| Writing, fixing, or reviewing tests (Jest/SQLite/Maestro) | **Tests Limpios** | `.agent/skills/tests-limpios/SKILL.md` |
+| Writing, fixing, or refactoring functions/hooks | **Clean Functions** | `.agent/skills/clean-functions/SKILL.md` |
+| Naming, renaming, or reviewing variables/functions/components | **Clean Names** | `.agent/skills/clean-names/SKILL.md` |
+| Writing, fixing, or reviewing tests (Jest/SQLite/Maestro) | **Clean Tests** | `.agent/skills/clean-tests/SKILL.md` |
 | Fixing, editing, debugging, or working with any TS/RN code | **Boy Scout** | `.agent/skills/boy-scout/SKILL.md` |
-| Writing, fixing, or reviewing comments and inline documentation | **Comentarios Limpios** | `.agent/skills/comentarios-limpios/SKILL.md` |
-| Writing or reviewing TypeScript types, interfaces, or generics | **TypeScript Estricto** | `.agent/skills/typescript-estricto/SKILL.md` |
+| Writing, fixing, or reviewing comments and inline documentation | **Clean Comments** | `.agent/skills/clean-comments/SKILL.md` |
+| Writing or reviewing TypeScript types, interfaces, or generics | **Strict TypeScript** | `.agent/skills/strict-typescript/SKILL.md` |
 | Implementing feature, fixing bug, or refactoring with TDD | **TDD Workflow** | `.agent/skills/tdd-workflow/SKILL.md` |
-| Writing React 19 / React Native / Expo Router components | **React Moderno** | `.agent/skills/react-moderno/SKILL.md` |
-| Creating git commits or preparing code for commit | **Commits Limpios** | `.agent/skills/commits-limpios/SKILL.md` |
+| Writing React 19 / React Native / Expo Router components | **Modern React** | `.agent/skills/modern-react/SKILL.md` |
+| Creating git commits or preparing code for commit | **Clean Commits** | `.agent/skills/clean-commits/SKILL.md` |
 | Creating or modifying a skill, syncing AGENTS.md | **Skill Sync** | `.agent/skills/skill-sync/SKILL.md` |
 
 ## 3. Project Overview
