@@ -23,7 +23,8 @@ export const QUERIES_ACCOUNT = {
 // ====================
 
 export const QUERIES_CATEGORY = {
-  GET_ALL_ORDERED: `SELECT * FROM CATEGORY ORDER BY name ASC;`
+  GET_ALL: `SELECT * FROM CATEGORY ORDER BY name ASC;`,
+  GET_ALL_EXPENSES: `SELECT * FROM CATEGORY WHERE is_income = 0 ORDER BY name ASC;`
 };
 
 // ====================
@@ -80,6 +81,38 @@ export const QUERIES_TRANSACTION = {
     LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
     WHERE T.is_active = 1
     ORDER BY T.transaction_date DESC;
+  `
+};
+
+export const QUERIES_BUDGET = {
+  GET_BUDGETS_WITH_PROGRESS: `
+    SELECT 
+      B.budget_id, B.limit_amount, B.period,
+      C.category_id, C.name as category_name, C.icon as category_icon, C.color as category_color,
+      COALESCE((
+        SELECT SUM(amount) 
+        FROM TRANSACTIONS T 
+        WHERE T.category_id = B.category_id 
+          AND T.is_income = 0 
+          AND T.is_active = 1 
+          AND T.status = 'COMPLETED'
+          AND T.transaction_date >= date('now', 'start of month')
+      ), 0) as total_spent
+    FROM BUDGET B
+    JOIN CATEGORY C ON B.category_id = C.category_id;
+  `,
+
+  INSERT_BUDGET: `
+    INSERT INTO BUDGET (category_id, period, limit_amount, alerts_enabled)
+    VALUES (?, ?, ?, ?);
+  `,
+
+  DELETE_BUDGET: `
+    DELETE FROM BUDGET WHERE budget_id = ?;
+  `,
+
+  UPDATE_BUDGET_AMOUNT: `
+    UPDATE BUDGET SET limit_amount = ? WHERE budget_id = ?;
   `
 };
 

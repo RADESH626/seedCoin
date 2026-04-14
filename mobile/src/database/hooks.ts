@@ -1,6 +1,6 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
-import { QUERIES_ACCOUNT, QUERIES_CATEGORY, QUERIES_TRANSACTION, QUERIES_PREFERENCES } from './queries';
+import { QUERIES_ACCOUNT, QUERIES_CATEGORY, QUERIES_TRANSACTION, QUERIES_PREFERENCES, QUERIES_BUDGET } from './queries';
 import { log } from '../services/logger';
 import { DB_NAME } from './connection';
 import * as SQLite from 'expo-sqlite';
@@ -56,17 +56,25 @@ export function useCategories() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const result = await db.getAllAsync(QUERIES_CATEGORY.GET_ALL_ORDERED);
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const result = await db.getAllAsync<any>(QUERIES_CATEGORY.GET_ALL);
       setCategories(result);
     } catch (e) {
-      console.error('Error fetching categories', e);
+      log.error('useCategories: Error fetching categories', e);
     }
-  }, [db]);
+  }, []);
 
-  return {
-    categories,
-    fetchCategories,
-  };
+  const fetchExpensesCategories = useCallback(async () => {
+    try {
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const result = await db.getAllAsync<any>(QUERIES_CATEGORY.GET_ALL_EXPENSES);
+      setCategories(result);
+    } catch (e) {
+      log.error('useCategories: Error fetching expense categories', e);
+    }
+  }, []);
+
+  return { categories, fetchCategories, fetchExpensesCategories };
 }
 
 // Hook del Dashboard (Lógica analítica de la app)
@@ -158,6 +166,61 @@ export function useTransactionsHistory() {
     loading,
     history,
     fetchHistory
+  };
+}
+
+/**
+ * Hook para gestionar los presupuestos y límites mensuales
+ */
+export function useBudgets() {
+  const [loading, setLoading] = useState(false);
+  const [budgets, setBudgets] = useState<any[]>([]);
+
+  const fetchBudgets = useCallback(async (retryCount = 0) => {
+    try {
+      setLoading(true);
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const result = await db.getAllAsync<any>(QUERIES_BUDGET.GET_BUDGETS_WITH_PROGRESS);
+      setBudgets(result || []);
+    } catch (e: any) {
+      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
+        log.warn('useBudgets: Reintentando carga de presupuestos...');
+        setTimeout(() => fetchBudgets(retryCount + 1), 500);
+      } else {
+        log.error('useBudgets: Error al obtener presupuestos', e);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const addBudget = useCallback(async (categoryId: number, limit: number) => {
+    try {
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      await db.runAsync(QUERIES_BUDGET.INSERT_BUDGET, [categoryId, 'MONTHLY', limit, 1]);
+      await fetchBudgets();
+      log.info('useBudgets: Presupuesto creado con éxito');
+    } catch (e) {
+      log.error('useBudgets: Error al crear presupuesto', e);
+    }
+  }, [fetchBudgets]);
+
+  const deleteBudget = useCallback(async (budgetId: number) => {
+    try {
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      await db.runAsync(QUERIES_BUDGET.DELETE_BUDGET, [budgetId]);
+      await fetchBudgets();
+    } catch (e) {
+      log.error('useBudgets: Error al eliminar presupuesto', e);
+    }
+  }, [fetchBudgets]);
+
+  return {
+    loading,
+    budgets,
+    fetchBudgets,
+    addBudget,
+    deleteBudget
   };
 }
 

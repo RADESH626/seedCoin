@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
-import { Home, Wallet, PieChart, User } from 'lucide-react-native';
+import { Home, Wallet, PieChart, User, Target } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -15,6 +15,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   };
 
   const isHomeFocused = state.routes[state.index].name === 'index';
+  const isLimitsFocused = state.routes[state.index].name === 'limits';
   const isHistoryFocused = state.routes[state.index].name === 'history';
   const isProfileFocused = state.routes[state.index].name === 'profile';
 
@@ -40,9 +41,9 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
 
       <TabBarButton 
         label="Límites" 
-        Icon={PieChart} 
-        isFocused={false} 
-        onPress={() => handleDummyPress('Límites')} 
+        Icon={Target} 
+        isFocused={isLimitsFocused} 
+        onPress={() => navigation.navigate('limits')} 
       />
       <TabBarButton 
         label="Perfil" 

@@ -14,6 +14,10 @@ export default function TabLayout() {
         options={{ title: 'Inicio' }}
       />
       <Tabs.Screen
+        name="limits"
+        options={{ title: 'Límites' }}
+      />
+      <Tabs.Screen
         name="history"
         options={{ title: 'Historial' }}
       />
