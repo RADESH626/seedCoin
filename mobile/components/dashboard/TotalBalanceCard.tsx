@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TrendingUp, TrendingDown } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
-import { formatMoney } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 
 interface Props {
   totalBalance: number;

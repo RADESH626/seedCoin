@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import { ArrowDown, ArrowUp } from 'lucide-react-native';
-import { formatMoney } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 
 interface Props {
   monthlyIncome: number;

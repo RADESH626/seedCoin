@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { formatMoney } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 import { TransactionItem } from '../transactions/TransactionItem';
 import type { RecentTransaction } from '@/src/database/types';
 

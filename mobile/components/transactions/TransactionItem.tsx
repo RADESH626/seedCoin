@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native';
-import { getCategoryIcon, formatMoney } from '@/src/helpers/ui';
+import { getCategoryIcon } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 
 interface Props {
   transaction: {

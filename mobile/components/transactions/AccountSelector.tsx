@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { formatMoney } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 
 interface Props {
   accounts: any[];

@@ -5,7 +5,8 @@ import {
 } from 'lucide-react-native';
 
 /**
- * Mapea un iconName en string al componente respectivo de Lucide-React-Native
+ * Mapea un iconName en string al componente respectivo de Lucide-React-Native.
+ * Solo utilidades visuales/interfaz.
  */
 export const getCategoryIcon = (iconName: string, color: string, size: number) => {
   switch (iconName) {
@@ -24,27 +25,4 @@ export const getCategoryIcon = (iconName: string, color: string, size: number) =
     case 'remove-circle-outline': return <MinusCircle color={color} size={size} />;
     default: return <CircleDollarSign color={color} size={size} />;
   }
-};
-
-export type CurrencyType = 'USD' | 'COP';
-
-/**
- * Formatea un número según el estándar de moneda local
- * @param amount Cantidad en número
- * @param currency 'USD' (por defecto) o 'COP'
- */
-export const formatMoney = (amount: number, currency: CurrencyType = 'USD') => {
-  if (currency === 'COP') {
-    // Formato colombiano: sin decimales, usando 'es-CO' para separadores correctos (1.000.000)
-    return '$' + amount.toLocaleString('es-CO', { 
-      minimumFractionDigits: 0, 
-      maximumFractionDigits: 0 
-    });
-  }
-  
-  // Default: Dólares (USD)
-  return '$' + amount.toLocaleString('en-US', { 
-    minimumFractionDigits: 2, 
-    maximumFractionDigits: 2 
-  });
 };

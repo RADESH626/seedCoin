@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Landmark } from 'lucide-react-native';
 import { AddAccountButton } from '@/components/ui/AddAccountButton';
 import Colors from '@/constants/Colors';
-import { formatMoney } from '@/src/helpers/ui';
+import { formatMoney } from '@/src/helpers/currency';
 import { Account } from '@/src/database/types';
 
 interface Props {
