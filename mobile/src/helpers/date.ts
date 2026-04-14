@@ -22,3 +22,16 @@ export function getDateLabel(dateStr: string): string {
     year: 'numeric' 
   });
 }
+
+/**
+ * Obtiene una etiqueta de hora amigable (HH:MM AM/PM).
+ */
+export function getTimeLabel(dateString: string): string {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true 
+  }).toUpperCase();
+}

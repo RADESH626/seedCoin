@@ -1,5 +1,5 @@
 import { QUERIES_ACCOUNT } from '../database/queries';
-import type { Account } from '../database/types';
+import type { Account, TotalBalanceRow } from '../database/types';
 import { getDBConnection } from '../database/connection';
 import { fromCents, toCents } from '../helpers/currency';
 import { withNativeRetry } from '../helpers/database';
@@ -53,7 +53,7 @@ export const deleteAccount = async (account_id: number) => {
 export const getTotalBalance = async (): Promise<number> => {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getFirstAsync<{ total: number }>(QUERIES_ACCOUNT.GET_TOTAL_BALANCE);
+    const result = await db.getFirstAsync<TotalBalanceRow>(QUERIES_ACCOUNT.GET_TOTAL_BALANCE);
     return fromCents(result?.total ?? 0);
   }, 'AccountService.getTotalBalance');
 };
