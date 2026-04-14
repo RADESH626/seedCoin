@@ -18,22 +18,15 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   if (currentDbVersion === 0) {
     log.info('migrateDbIfNeeded: Inicializando esquema y tablas SQLite por primera vez...');
     try {
+      // Usamos execAsync para crear el esquema base (Tablas, Triggers, Índices)
       await db.execAsync(CREATE_TABLES);
-      log.info('migrateDbIfNeeded: Tablas creadas correctamente.');
       await db.execAsync(CREATE_TRIGGERS);
-      log.info('migrateDbIfNeeded: Triggers configurados correctamente.');
       await db.execAsync(CREATE_INDEXES);
-      log.info('migrateDbIfNeeded: Índices creados correctamente.');
-    } catch (err) {
-      log.error('migrateDbIfNeeded: Error crítico creando esquema base', err);
-      throw err;
-    }
+      await db.execAsync(CREATE_PREFERENCES_TABLE);
+      log.info('migrateDbIfNeeded: Esquema base creado correctamente.');
 
-    log.info('migrateDbIfNeeded: Tablas, Triggers e Índices creados. Inyectando categorías iniciales...');
-
-    // Poblar (seed) las categorías la primera vez
-    let insertedCount = 0;
-    try {
+      // Poblar (seed) las categorías de forma atómica
+      let insertedCount = 0;
       const statement = await db.prepareAsync(SEED_CATEGORIES_QUERY);
       try {
         for (const category of INITIAL_CATEGORIES) {
@@ -49,14 +42,16 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       } finally {
         await statement.finalizeAsync();
       }
-      log.info(`migrateDbIfNeeded: Categorías insertadas: ${insertedCount} registros.`);
+      log.info(`migrateDbIfNeeded: Categorías iniciales inyectadas: ${insertedCount} registros.`);
+
+      // Solo después de TODO el éxito inicial, subimos a v2 (v1 + preferences)
+      currentDbVersion = 2;
+      await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
+      log.info('migrateDbIfNeeded: Inicialización (v2) completada exitosamente.');
     } catch (err) {
-      log.error('migrateDbIfNeeded: Error insertando categorías iniciales', err);
+      log.error('migrateDbIfNeeded: Error crítico durante la inicialización de la DB', err);
+      throw err; // Re-lanzamos para que la App sepa que no puede continuar
     }
-    
-    currentDbVersion = 1;
-    await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
-    log.info('migrateDbIfNeeded: Inicialización completada exitosamente.');
   }
 
   // MIGRACIÓN A V2

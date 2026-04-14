@@ -5,7 +5,8 @@ export const CREATE_TABLES = `
         account_type TEXT NOT NULL,
         initial_balance INTEGER NOT NULL DEFAULT 0,
         current_balance INTEGER NOT NULL DEFAULT 0,
-        is_active BOOLEAN NOT NULL DEFAULT 1
+        is_active BOOLEAN NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS CATEGORY (
@@ -14,7 +15,8 @@ export const CREATE_TABLES = `
         is_income BOOLEAN NOT NULL,
         icon TEXT,
         color TEXT,
-        is_default BOOLEAN NOT NULL DEFAULT 0
+        is_default BOOLEAN NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS DEBT (
@@ -23,7 +25,8 @@ export const CREATE_TABLES = `
         principal_amount INTEGER NOT NULL,
         interest_rate REAL,
         remaining_amount INTEGER NOT NULL,
-        due_date TEXT
+        due_date TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS TRANSACTIONS (
@@ -39,6 +42,7 @@ export const CREATE_TABLES = `
         status TEXT NOT NULL,
         recurrence_frequency TEXT,
         is_active BOOLEAN NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id),
         FOREIGN KEY (debt_id) REFERENCES DEBT(debt_id),
         FOREIGN KEY (transfer_transaction_id) REFERENCES TRANSACTIONS(transaction_id),
@@ -71,6 +75,16 @@ export const CREATE_TRIGGERS = `
     BEGIN
         UPDATE ACCOUNT
         SET current_balance = current_balance + CASE WHEN NEW.is_income THEN NEW.amount ELSE -NEW.amount END
+        WHERE account_id = NEW.account_id;
+    END;
+
+    -- Actualizar saldo cuando se borra o inactiva una transacción
+    CREATE TRIGGER IF NOT EXISTS update_account_balance_after_delete
+    AFTER UPDATE OF is_active ON TRANSACTIONS
+    WHEN OLD.is_active = 1 AND NEW.is_active = 0 AND NEW.status = 'COMPLETED'
+    BEGIN
+        UPDATE ACCOUNT
+        SET current_balance = current_balance - CASE WHEN NEW.is_income THEN NEW.amount ELSE -NEW.amount END
         WHERE account_id = NEW.account_id;
     END;
 

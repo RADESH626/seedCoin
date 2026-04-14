@@ -6,7 +6,7 @@ export const INITIAL_CATEGORIES = [
     { name: 'Otros Ingresos', is_income: 1, icon: 'add-circle-outline', color: '#16a085', is_default: 1 },
 
     // Gastos
-    { name: 'Alimentacion', is_income: 0, icon: 'restaurant', color: '#e74c3c', is_default: 1 },
+    { name: 'Alimentación', is_income: 0, icon: 'restaurant', color: '#e74c3c', is_default: 1 },
     { name: 'Vivienda', is_income: 0, icon: 'home', color: '#c0392b', is_default: 1 },
     { name: 'Transporte', is_income: 0, icon: 'car', color: '#e67e22', is_default: 1 },
     { name: 'Servicios', is_income: 0, icon: 'flash', color: '#d35400', is_default: 1 },

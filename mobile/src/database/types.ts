@@ -2,11 +2,11 @@ import { SQLiteDatabase } from 'expo-sqlite';
 
 /** Tipos de cuenta soportados (const + type pattern para seguridad y limpieza) */
 export const ACCOUNT_TYPES = {
-  CASH: 'CASH',
-  BANK: 'BANK',
-  SAVINGS: 'SAVINGS',
-  CREDIT: 'CREDIT',
-  OTHER: 'OTHER',
+  CASH: { id: 'CASH', label: 'Efectivo', icon: 'wallet' },
+  BANK: { id: 'BANK', label: 'Banco', icon: 'landmark' },
+  SAVINGS: { id: 'SAVINGS', label: 'Ahorros', icon: 'piggy-bank' },
+  CREDIT: { id: 'CREDIT', label: 'Tarjeta', icon: 'credit-card' },
+  OTHER: { id: 'OTHER', label: 'Otro', icon: 'more-horizontal' },
 } as const;
 
 export type AccountType = keyof typeof ACCOUNT_TYPES;
@@ -63,6 +63,7 @@ export interface RecentTransaction extends Transaction {
   category_name: string;
   category_icon: string;
   category_color: string;
+  account_name?: string;
 }
 
 /** Resultado detallado para el historial de transacciones */

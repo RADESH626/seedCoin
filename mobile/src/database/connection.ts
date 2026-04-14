@@ -9,5 +9,8 @@ export const DB_NAME = 'seedcoin.db';
  * por lo que es óptimo llamar a esta función en todos los servicios.
  */
 export const getDBConnection = async (): Promise<SQLite.SQLiteDatabase> => {
-  return await SQLite.openDatabaseAsync(DB_NAME);
+  const db = await SQLite.openDatabaseAsync(DB_NAME);
+  // Habilitar claves foraneas explícitamente para integridad referencial
+  await db.execAsync('PRAGMA foreign_keys = ON;');
+  return db;
 };
