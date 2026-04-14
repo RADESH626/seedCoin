@@ -1,24 +1,59 @@
+---
+name: frontend-development
+description: >
+  Golden rules for creating, modifying, or refactoring React Native components.
+  Trigger: When creating interfaces, fixing styles or frontend logic.
+metadata:
+  author: seedcoin
+  version: "1.1"
+  scope: [root, mobile]
+  auto_invoke: "Creating interfaces, fixing Frontend styles or logic"
+---
+
 # Frontend Development Skill (React Native & UI)
 
-Este skill define las reglas de oro para cualquier modificación, creación o refactorización de componentes visuales en SeedCoin.
+This skill defines the golden rules for any modification, creation, or refactoring of visual components in SeedCoin.
 
-## 1. Propósito
-Garantizar la coherencia arquitectónica y consistencia visual en todas las pantallas y componentes de la aplicación móvil (React Native).
+## 1. Purpose
+Ensure architectural coherence and visual consistency across all screens and components of the mobile application (React Native).
 
-## 2. Ubicación de Archivos Relevantes
-- **Componentes Reutilizables:** `mobile/components/`
-- **Pantallas / Rutas:** `mobile/app/`
+## 2. Relevant File Locations
+- **Reusable Components:** `mobile/components/`
+- **Screens / Routes:** `mobile/app/`
 
-## 3. Reglas del Proyecto (Estrictas)
-1. **Functional Components:** **NUNCA** utilices componentes de clase (`class Component extends React.Component`). Utiliza exclusivamente Componentes Funcionales de React (elementos que retornen JSX) combinados con Hooks.
-2. **Nomenclatura:** 
-   - Archivos: `PascalCase` para componentes (`UserProfile.tsx`).
-   - Hooks y funciones: `camelCase` (`useUserData`, `fetchData`).
-3. **TypeScript:** Tipado fuerte obligatorio interactuando con las interfaces definidas en `mobile/src/database/types.ts`. Prohibir uso de `any`.
-4. **Dispositivos Seguros:** Utiliza siempre el contexto seguro. Las pantallas primarias deben estar envueltas en componentes de márgenes seguros para evitar sobrelapamiento con el 'notch' o la barra de sistema (`react-native-safe-area-context`).
-5. **Atomización de Interfaces (Modulariad):** Prohibido tener archivos de pantalla (`app/`) con más de 150-200 líneas de código JSX inline. Si un bloque de UI (ej: un formulario complejo, una lista decorada o un selector) posee su propia lógica visual o supera las 30 líneas, debe ser extraído a un componente independiente en `components/`. Esto facilita la lectura, el testing y la reutilización.
+## 3. Project Rules (Strict)
+1. **Functional Components:** **NEVER** use class components (`class Component extends React.Component`). Use exclusively React Functional Components (elements returning JSX) combined with Hooks.
+2. **Naming:**
+   - Files: `PascalCase` for components (`UserProfile.tsx`).
+   - Hooks and functions: `camelCase` (`useUserData`, `fetchData`).
+3. **TypeScript:** Strong typing mandatory when interacting with interfaces defined in `mobile/src/database/types.ts`. Using `any` is forbidden.
+4. **Safe Area:** Always use the safe area context. Primary screens must be wrapped in safe area components to avoid overlapping with the notch or system bar (`react-native-safe-area-context`).
+5. **UI Atomization (Modularity):** Forbidden to have screen files (`app/`) with more than 150-200 lines of inline JSX code. If a UI block (e.g., a complex form, decorated list, or selector) has its own visual logic or exceeds 30 lines, it must be extracted into an independent component in `components/`. This facilitates readability, testing, and reusability.
 
-## 4. Flujo de Trabajo Estándar
-1. Analizar el diseño / mockup requerido.
-2. Identificar si existe un componente base (`Button`, `Card`) dentro de `components/` que se pueda reutilizar antes de crear uno desde cero.
-3. Asegurar de exportarlo por defecto (`export default`) si será consumido por Expo Router en `app/`, o hacer exportación nombrada (`export function`) si pertenece a `components/`.
+## 4. Standard Workflow
+1. Analyze the required design / mockup.
+2. Check if a base component (`Button`, `Card`) exists in `components/` that can be reused before creating one from scratch.
+3. Use `export default` if consumed by Expo Router in `app/`, or named export (`export function`) if it belongs to `components/`.
+
+> **Note:** For React 19 patterns, modern React Native, NativeWind, and Expo Router, see `.agent/skills/react-moderno/SKILL.md`.
+
+## Commands
+
+```bash
+# Start dev server
+cd mobile && npm start
+
+# Type check
+cd mobile && npx tsc --noEmit
+
+# Lint
+cd mobile && npm run lint
+```
+
+## Resources
+
+- **Components**: `mobile/components/`
+- **Screens**: `mobile/app/`
+- **Types**: `mobile/src/database/types.ts`
+- **Theme**: `mobile/tailwind.config.js`
+- **Complement**: `.agent/skills/react-moderno/SKILL.md` (React 19 + RN patterns)

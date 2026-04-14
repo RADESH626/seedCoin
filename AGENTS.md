@@ -47,7 +47,17 @@ Mapping of developer intents to specific Agent Skills.
 | Create integration tests, E2E, or validate flows | **E2E Testing Skill** | `.agent/skills/e2e_testing/SKILL.md` |
 | Map code styles to Pencil components | **Pencil Component Properties** | `.agent/skills/pencil/component-properties/SKILL.md` |
 | Adapt code using Pencil properties | **Pencil-to-Code** | `.agent/skills/pencil/pencil-to-code/SKILL.md` |
-| Create a new skill for the agent | **skill-creator** | `.agent/skills/skill-creator/SKILL.md` |
+| Create a new skill for the agent | **Skill Creator** | `.agent/skills/skill-creator/SKILL.md` |
+| Writing, fixing, or refactoring functions/hooks | **Funciones Limpias** | `.agent/skills/funciones-limpias/SKILL.md` |
+| Naming, renaming, or reviewing variables/functions/components | **Nombres Limpios** | `.agent/skills/nombres-limpios/SKILL.md` |
+| Writing, fixing, or reviewing tests (Jest/SQLite/Maestro) | **Tests Limpios** | `.agent/skills/tests-limpios/SKILL.md` |
+| Fixing, editing, debugging, or working with any TS/RN code | **Boy Scout** | `.agent/skills/boy-scout/SKILL.md` |
+| Writing, fixing, or reviewing comments and inline documentation | **Comentarios Limpios** | `.agent/skills/comentarios-limpios/SKILL.md` |
+| Writing or reviewing TypeScript types, interfaces, or generics | **TypeScript Estricto** | `.agent/skills/typescript-estricto/SKILL.md` |
+| Implementing feature, fixing bug, or refactoring with TDD | **TDD Workflow** | `.agent/skills/tdd-workflow/SKILL.md` |
+| Writing React 19 / React Native / Expo Router components | **React Moderno** | `.agent/skills/react-moderno/SKILL.md` |
+| Creating git commits or preparing code for commit | **Commits Limpios** | `.agent/skills/commits-limpios/SKILL.md` |
+| Creating or modifying a skill, syncing AGENTS.md | **Skill Sync** | `.agent/skills/skill-sync/SKILL.md` |
 
 ## 3. Project Overview
 
