@@ -1,0 +1,29 @@
+appId: com.anonymous.mobile
+---
+# Flujo: Bienvenida y Primera Transacción
+- clearState
+- launchApp
+- assertVisible: "Bienvenido a SeedCoin"
+- tapOn: "Ingresa tu nombre"
+- inputText: "Tester"
+- tapOn: "Comenzar"
+- assertVisible: "Configurar mi capital"
+- tapOn: "Ej. Ahorros, Efectivo..."
+- inputText: "Billetera Test"
+- tapOn: "Saldo Inicial"
+- inputText: "100000"
+- tapOn: "Añadir Cuenta"
+- waitForAnimationEnd
+- assertVisible: "Capital Total"
+- assertVisible: "$100.000"
+
+# Flujo: Registrar un Gasto
+- tapOn:
+    id: "fab-add-transaction" # Debo asegurar que este ID exista
+- assertVisible: "Nuevo Movimiento"
+- tapOn: "0"
+- inputText: "40000"
+- tapOn: "Comida" # Selecciona categoría
+- tapOn: "GUARDAR GASTO"
+- waitForAnimationEnd
+- assertVisible: "$60.000" # El balance debe haberse actualizado automáticamente
