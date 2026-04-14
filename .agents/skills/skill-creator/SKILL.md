@@ -30,7 +30,7 @@ Create a skill when:
 ## Directory Structure
 
 ```
-.agent/skills/{skill-name}/
+.agents/skills/{skill-name}/
 ├── SKILL.md              # Required — main skill file
 ├── assets/               # Optional — templates, schemas, examples
 │   ├── template.ts
@@ -109,7 +109,7 @@ Link to project files?      → references/ (with local path)
 
 ## Checklist Before Creating
 
-- [ ] Skill doesn't already exist (check `.agent/skills/`)
+- [ ] Skill doesn't already exist (check `.agents/skills/`)
 - [ ] Pattern is reusable (not a one-off task)
 - [ ] Name follows conventions
 - [ ] Frontmatter has `name`, `description`, `metadata`
@@ -133,14 +133,14 @@ Link to project files?      → references/ (with local path)
 
 ```bash
 # List existing skills
-ls .agent/skills/
+ls .agents/skills/
 
 # Check skill frontmatter
-head -20 .agent/skills/{name}/SKILL.md
+head -20 .agents/skills/{name}/SKILL.md
 ```
 
 ## Resources
 
-- **Existing skills**: `.agent/skills/`
+- **Existing skills**: `.agents/skills/`
 - **Agent config**: `AGENTS.md`
 - **Reference**: [Agent Skills Standard](https://agentskills.io)

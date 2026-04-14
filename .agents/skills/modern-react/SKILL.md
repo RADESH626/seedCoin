@@ -182,6 +182,35 @@ function AccountCard({ account, onPress }: AccountCardProps) {
     </Pressable>
   );
 }
+
+## Atomic Decomposition (REQUIRED)
+
+Large screens (`app/`) must not contain raw UI blocks if they represent logical sections. They should orchestrate small, specialized components.
+
+```tsx
+// ✅ GOOD: Orchestration
+function ProfileScreen() {
+  return (
+    <ScrollView>
+      <ProfileIdentityCard />
+      <ProfileStats />
+      <ProfileMenu />
+      <ProfileFooter />
+    </ScrollView>
+  );
+}
+
+// ❌ NEVER: Monolithic JSX
+function ProfileScreen() {
+  return (
+    <ScrollView>
+      {/* 50 lines of Identity logic */}
+      {/* 40 lines of Stats logic */}
+      {/* 80 lines of Menu items */}
+    </ScrollView>
+  );
+}
+```
 ```
 
 ## Quick Reference

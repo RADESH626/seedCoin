@@ -18,6 +18,7 @@ metadata:
 
 - ALWAYS use conventional-commits format: `type(scope): description`
 - ALWAYS keep the first line under 72 characters
+- ALWAYS commit changes separate by logical functionality
 - ALWAYS ask for user confirmation before committing
 - NEVER be overly specific (avoid counts like "6 files", "3 tests")
 - NEVER include implementation details in the title

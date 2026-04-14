@@ -28,7 +28,7 @@ Ensure architectural coherence and visual consistency across all screens and com
    - Hooks and functions: `camelCase` (`useUserData`, `fetchData`).
 3. **TypeScript:** Strong typing mandatory when interacting with interfaces defined in `mobile/src/database/types.ts`. Using `any` is forbidden.
 4. **Safe Area:** Always use the safe area context. Primary screens must be wrapped in safe area components to avoid overlapping with the notch or system bar (`react-native-safe-area-context`).
-5. **UI Atomization (Modularity):** Forbidden to have screen files (`app/`) with more than 150-200 lines of inline JSX code. If a UI block (e.g., a complex form, decorated list, or selector) has its own visual logic or exceeds 30 lines, it must be extracted into an independent component in `components/`. This facilitates readability, testing, and reusability.
+5. **Semantic UI Atomization (Strict):** Screen files (`app/`) should not be monolithic. Any UI section representing a distinct logical or semantic block (e.g., Identity Card, Stats Summary, Action Menu, Footer) **MUST** be extracted into a separate component in `components/<feature>/`. Do not wait for a block to exceed a specific line count; if it defines a clear sub-section of the UI, it belongs in its own file. Screen files must act as orchestrators, aiming to keep their total JSX footprint minimal and overall file length under 150 lines. This promotes modularity, easier testing, and clearer screen structure.
 
 ## 4. Standard Workflow
 1. Analyze the required design / mockup.

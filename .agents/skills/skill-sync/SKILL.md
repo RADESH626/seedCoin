@@ -17,7 +17,7 @@ metadata:
 
 ## Purpose
 
-Keep the **Auto-invoke Skills** section in `AGENTS.md` in sync with each skill's metadata in `.agent/skills/`. When you create or modify a skill, you must update AGENTS.md so the agent invokes it automatically.
+Keep the **Auto-invoke Skills** section in `AGENTS.md` in sync with each skill's metadata in `.agents/skills/`. When you create or modify a skill, you must update AGENTS.md so the agent invokes it automatically.
 
 ---
 
@@ -75,7 +75,7 @@ When creating or modifying a skill, follow these steps:
    └── Remove row if skill was deleted
 
 4. Verify consistency
-   ├── Every skill in .agent/skills/ has a row in AGENTS.md
+   ├── Every skill in .agents/skills/ has a row in AGENTS.md
    └── Every row in AGENTS.md points to an existing skill
 ```
 
@@ -86,7 +86,7 @@ When creating or modifying a skill, follow these steps:
 ```markdown
 | User Intent / Action | Skill to Invoke | Location |
 | :--- | :--- | :--- |
-| {auto_invoke text} | **{Readable Name}** | `.agent/skills/{name}/SKILL.md` |
+| {auto_invoke text} | **{Readable Name}** | `.agents/skills/{name}/SKILL.md` |
 ```
 
 ### Example
@@ -94,7 +94,7 @@ When creating or modifying a skill, follow these steps:
 Given this skill:
 
 ```yaml
-# .agent/skills/modern-react/SKILL.md
+# .agents/skills/modern-react/SKILL.md
 name: modern-react
 metadata:
   auto_invoke: "Writing React/React Native components"
@@ -103,7 +103,7 @@ metadata:
 Generates in AGENTS.md:
 
 ```markdown
-| Writing React/React Native components | **React Moderno** | `.agent/skills/modern-react/SKILL.md` |
+| Writing React/React Native components | **React Moderno** | `.agents/skills/modern-react/SKILL.md` |
 ```
 
 ---
@@ -114,20 +114,20 @@ Generates in AGENTS.md:
 - [ ] `metadata.auto_invoke` defined with clear action
 - [ ] Auto-invoke table in AGENTS.md updated
 - [ ] No orphan skills (in AGENTS.md but no file)
-- [ ] No missing skills (in `.agent/skills/` but no row in AGENTS.md)
+- [ ] No missing skills (in `.agents/skills/` but no row in AGENTS.md)
 
 ## Commands
 
 ```bash
 # List all skills with frontmatter
-for d in .agent/skills/*/; do echo "=== $d ==="; head -10 "$d/SKILL.md"; done
+for d in .agents/skills/*/; do echo "=== $d ==="; head -10 "$d/SKILL.md"; done
 
 # Count skills registered in AGENTS.md
-grep -c "\.agent/skills/" AGENTS.md
+grep -c "\.agents/skills/" AGENTS.md
 ```
 
 ## Resources
 
-- **Skills**: `.agent/skills/`
+- **Skills**: `.agents/skills/`
 - **Config**: `AGENTS.md`
-- **Skill creator**: `.agent/skills/skill-creator/SKILL.md`
+- **Skill creator**: `.agents/skills/skill-creator/SKILL.md`
