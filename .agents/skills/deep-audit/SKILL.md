@@ -21,9 +21,9 @@ This skill provides a structured process for auditing the SeedCoin codebase, ens
 
 When triggered, the Agent must follow these steps:
 
-### Step 1: Mapping
-- List all unique files in the requested scope (or the whole project if not specified).
-- Ignore boilerplate and generated files (e.g., `node_modules`, `.expo`, `build/`).
+### Step 1: Mapping & Inventory Tracker
+- List all unique files in the requested scope (ignoring `node_modules`, `.expo`, etc.).
+- **MANDATORY**: Create a tracking file (e.g., `PROYECTO_INVENTARIO.md`) with a checklist of all files to ensure 100% coverage and transparency of progress.
 
 ### Step 2: Categorization & Skill Matching
 Assign an audit persona to each file:

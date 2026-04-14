@@ -14,19 +14,17 @@
 
 ## 🛠️ Tecnologías Utilizadas
 
-### Backend ☕
-*   **Lenguaje**: Java 17
-*   **Framework**: Spring Boot 3.2.0
-*   **Base de Datos**: MySQL
-*   **Seguridad**: Spring Security
-*   **Herramientas**: Maven, Lombok
+### Aplicación Móvil (Core) 📱
+*   **Arquitectura**: Capas (Services, Hooks, Components) para máxima escalabilidad.
+*   **Framework**: React Native (con Expo SDK 54).
+*   **Lenguaje**: TypeScript (Strict Mode).
+*   **Estilos**: NativeWind (Tailwind CSS 3.4).
+*   **Base de Datos Local**: SQLite (`expo-sqlite`) con soporte para transacciones atómicas.
+*   **Diseño**: Atomic Design para componentes reutilizables.
 
-### Aplicación Móvil 📱
-*   **Framework**: React Native (con Expo)
-*   **Lenguaje**: TypeScript
-*   **Estilos**: NativeWind (Tailwind CSS)
-*   **Iconos**: Lucide React Native
-*   **Base de Datos Local**: SQLite (expo-sqlite)
+### Backend (Opcional/Futuro) ☕
+*   **Lenguaje**: Java 17 / Spring Boot 3.2.0.
+*   **Base de Datos**: MySQL.
 
 ## 📋 Pre-requisitos
 
