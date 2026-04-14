@@ -1,25 +1,30 @@
-// ====================
-// CONST + TYPE ENUMS
-// ====================
+import { SQLiteDatabase } from 'expo-sqlite';
 
-export const ACCOUNT_TYPE = {
-  CASH: 'Efectivo',
-  BANK: 'Banco',
-  SAVINGS: 'Ahorros',
-  CARD: 'Tarjeta',
+/** Tipos de cuenta soportados (const + type pattern para seguridad y limpieza) */
+export const ACCOUNT_TYPES = {
+  CASH: 'CASH',
+  BANK: 'BANK',
+  SAVINGS: 'SAVINGS',
+  CREDIT: 'CREDIT',
+  OTHER: 'OTHER',
 } as const;
 
-export type AccountType = (typeof ACCOUNT_TYPE)[keyof typeof ACCOUNT_TYPE];
+export type AccountType = keyof typeof ACCOUNT_TYPES;
 
+/** Estados de una transacción */
 export const TRANSACTION_STATUS = {
-  COMPLETED: 'COMPLETED',
   PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
 } as const;
 
-export type TransactionStatus = (typeof TRANSACTION_STATUS)[keyof typeof TRANSACTION_STATUS];
+export type TransactionStatus = keyof typeof TRANSACTION_STATUS;
+
+/** Filtros de historial */
+export type FilterType = 'ALL' | 'INCOME' | 'EXPENSE';
 
 // ====================
-// DATABASE ROW INTERFACES
+// INTERFACES DE BASE DE DATOS
 // ====================
 
 export interface Account {
@@ -29,6 +34,7 @@ export interface Account {
   initial_balance: number;
   current_balance: number;
   is_active: number;
+  created_at: string;
 }
 
 export interface Category {
@@ -43,69 +49,58 @@ export interface Category {
 export interface Transaction {
   transaction_id: number;
   account_id: number;
-  debt_id?: number | null;
-  transfer_transaction_id?: number | null;
-  is_income: number;
-  amount: number;
   category_id: number;
+  amount: number;
+  is_income: number;
   description: string;
   transaction_date: string;
   status: TransactionStatus;
-  recurrence_frequency?: string | null;
-  is_active: number;
+  created_at: string;
 }
 
-// ====================
-// QUERY RESULT INTERFACES
-// ====================
-
-/** Resultado de GET_RECENT_WITH_CATEGORY (JOIN transacción + categoría) */
-export interface RecentTransaction {
-  transaction_id: number;
-  amount: number;
-  is_income: number;
-  transaction_date: string;
-  description: string;
+/** Resultado de query para transacciones con información de categoría */
+export interface RecentTransaction extends Transaction {
   category_name: string;
   category_icon: string;
   category_color: string;
 }
 
-/** Resultado de GET_ALL_DETAILED (JOIN transacción + categoría + cuenta) */
+/** Resultado detallado para el historial de transacciones */
 export interface DetailedTransaction extends RecentTransaction {
   account_name: string;
 }
 
-/** Resultado de GET_MONTHLY_STATS */
+/** Resultado de estadísticas mensuales */
 export interface MonthlyStats {
   total_income: number;
   total_expense: number;
 }
 
-/** Resultado de GET_TOTAL_BALANCE */
+/** Resultado para balance total */
 export interface TotalBalanceRow {
   total: number;
 }
 
-/** Resultado de GET_BY_KEY en PREFERENCES */
+/** Resultado para preferencias */
 export interface PreferenceRow {
+  preference_key: string;
   preference_value: string;
 }
 
-/** Resultado de GET_BUDGETS_WITH_PROGRESS (JOIN budget + categoría + gasto acumulado) */
+/** Resultado para presupuestos con progreso calculado */
 export interface BudgetWithProgress {
   budget_id: number;
-  limit_amount: number;
-  period: string;
   category_id: number;
   category_name: string;
-  category_icon: string;
   category_color: string;
+  category_icon: string;
+  limit_amount: number;
   total_spent: number;
+  period: string;
 }
 
 // ====================
-// SERVICE INPUT INTERFACES
+// SERVICE INPUTS
 // ====================
 
 /** Input para crear una transacción (skill clean-functions: máx 3 args) */

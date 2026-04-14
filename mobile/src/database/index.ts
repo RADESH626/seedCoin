@@ -1,10 +1,10 @@
 import { SQLiteDatabase } from 'expo-sqlite';
-import { CREATE_TABLES, CREATE_TRIGGERS, CREATE_PREFERENCES_TABLE } from './schema';
+import { CREATE_TABLES, CREATE_TRIGGERS, CREATE_PREFERENCES_TABLE, CREATE_INDEXES } from './schema';
 import { INITIAL_CATEGORIES, SEED_CATEGORIES_QUERY } from './seed';
 import { log } from '@/src/services/logger';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 2;
+  const DATABASE_VERSION = 3;
 
   const result = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
   let currentDbVersion = result?.user_version ?? 0;
@@ -22,12 +22,14 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       log.info('migrateDbIfNeeded: Tablas creadas correctamente.');
       await db.execAsync(CREATE_TRIGGERS);
       log.info('migrateDbIfNeeded: Triggers configurados correctamente.');
+      await db.execAsync(CREATE_INDEXES);
+      log.info('migrateDbIfNeeded: Índices creados correctamente.');
     } catch (err) {
       log.error('migrateDbIfNeeded: Error crítico creando esquema base', err);
       throw err;
     }
 
-    log.info('migrateDbIfNeeded: Tablas y Triggers creados. Inyectando categorías iniciales...');
+    log.info('migrateDbIfNeeded: Tablas, Triggers e Índices creados. Inyectando categorías iniciales...');
 
     // Poblar (seed) las categorías la primera vez
     let insertedCount = 0;
@@ -64,5 +66,18 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 2;
     await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
     log.info('migrateDbIfNeeded: Migración a v2 (Tabla Preferences) completada.');
+  }
+
+  // MIGRACIÓN A V3 (Índices)
+  if (currentDbVersion === 2) {
+    log.info('migrateDbIfNeeded: Migrando base de datos de v2 a v3 (Índices)...');
+    try {
+      await db.execAsync(CREATE_INDEXES);
+      currentDbVersion = 3;
+      await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
+      log.info('migrateDbIfNeeded: Migración a v3 (Índices) completada exitosamente.');
+    } catch (err) {
+      log.error('migrateDbIfNeeded: Error en migración v3', err);
+    }
   }
 }

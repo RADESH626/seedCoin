@@ -3,8 +3,8 @@ export const CREATE_TABLES = `
         account_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         account_type TEXT NOT NULL,
-        initial_balance REAL NOT NULL DEFAULT 0,
-        current_balance REAL NOT NULL DEFAULT 0,
+        initial_balance INTEGER NOT NULL DEFAULT 0,
+        current_balance INTEGER NOT NULL DEFAULT 0,
         is_active BOOLEAN NOT NULL DEFAULT 1
     );
 
@@ -20,9 +20,9 @@ export const CREATE_TABLES = `
     CREATE TABLE IF NOT EXISTS DEBT (
         debt_id INTEGER PRIMARY KEY AUTOINCREMENT,
         creditor TEXT NOT NULL,
-        principal_amount REAL NOT NULL,
+        principal_amount INTEGER NOT NULL,
         interest_rate REAL,
-        remaining_amount REAL NOT NULL,
+        remaining_amount INTEGER NOT NULL,
         due_date TEXT
     );
 
@@ -32,7 +32,7 @@ export const CREATE_TABLES = `
         debt_id INTEGER,
         transfer_transaction_id INTEGER,
         is_income BOOLEAN NOT NULL,
-        amount REAL NOT NULL,
+        amount INTEGER NOT NULL,
         category_id INTEGER NOT NULL,
         description TEXT,
         transaction_date TEXT NOT NULL,
@@ -49,10 +49,18 @@ export const CREATE_TABLES = `
         budget_id INTEGER PRIMARY KEY AUTOINCREMENT,
         category_id INTEGER NOT NULL,
         period TEXT NOT NULL,
-        limit_amount REAL NOT NULL,
+        limit_amount INTEGER NOT NULL,
         alerts_enabled BOOLEAN NOT NULL DEFAULT 1,
         FOREIGN KEY (category_id) REFERENCES CATEGORY(category_id)
     );
+`;
+
+export const CREATE_INDEXES = `
+    -- Índices para mejorar el rendimiento de consultas y ordenación
+    CREATE INDEX IF NOT EXISTS idx_transactions_date ON TRANSACTIONS(transaction_date);
+    CREATE INDEX IF NOT EXISTS idx_transactions_account ON TRANSACTIONS(account_id);
+    CREATE INDEX IF NOT EXISTS idx_transactions_category ON TRANSACTIONS(category_id);
+    CREATE INDEX IF NOT EXISTS idx_budget_category ON BUDGET(category_id);
 `;
 
 export const CREATE_TRIGGERS = `

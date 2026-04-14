@@ -3,9 +3,9 @@
 // ====================
 
 export const QUERIES_ACCOUNT = {
-  GET_ALL_ACTIVE: `SELECT * FROM ACCOUNT WHERE is_active = 1;`,
+  GET_ALL_ACTIVE: `SELECT account_id, name, account_type, initial_balance, current_balance, is_active FROM ACCOUNT WHERE is_active = 1;`,
   
-  GET_ALL_ACTIVE_ORDERED: `SELECT * FROM ACCOUNT WHERE is_active = 1 ORDER BY account_id DESC;`,
+  GET_ALL_ACTIVE_ORDERED: `SELECT account_id, name, account_type, initial_balance, current_balance, is_active FROM ACCOUNT WHERE is_active = 1 ORDER BY account_id DESC;`,
   
   // Usado con parametros indexados (?)
   INSERT_INDEXED: `INSERT INTO ACCOUNT (name, account_type, initial_balance, current_balance) VALUES (?, ?, ?, ?);`,
@@ -23,8 +23,8 @@ export const QUERIES_ACCOUNT = {
 // ====================
 
 export const QUERIES_CATEGORY = {
-  GET_ALL: `SELECT * FROM CATEGORY ORDER BY name ASC;`,
-  GET_ALL_EXPENSES: `SELECT * FROM CATEGORY WHERE is_income = 0 ORDER BY name ASC;`
+  GET_ALL: `SELECT category_id, name, is_income, icon, color, is_default FROM CATEGORY ORDER BY name ASC;`,
+  GET_ALL_EXPENSES: `SELECT category_id, name, is_income, icon, color, is_default FROM CATEGORY WHERE is_income = 0 ORDER BY name ASC;`
 };
 
 // ====================
@@ -33,13 +33,21 @@ export const QUERIES_CATEGORY = {
 
 export const QUERIES_TRANSACTION = {
   GET_BY_ACCOUNT: `
-    SELECT * FROM TRANSACTIONS 
+    SELECT 
+      transaction_id, account_id, debt_id, transfer_transaction_id, 
+      is_income, amount, category_id, description, transaction_date, 
+      status, recurrence_frequency, is_active 
+    FROM TRANSACTIONS 
     WHERE account_id = ? AND is_active = 1 
     ORDER BY transaction_date DESC;
   `,
   
   GET_RECENT: `
-    SELECT * FROM TRANSACTIONS 
+    SELECT 
+      transaction_id, account_id, debt_id, transfer_transaction_id, 
+      is_income, amount, category_id, description, transaction_date, 
+      status, recurrence_frequency, is_active 
+    FROM TRANSACTIONS 
     WHERE is_active = 1 
     ORDER BY transaction_date DESC 
     LIMIT ?;
