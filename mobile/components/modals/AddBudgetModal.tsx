@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Modal, Pressable, TextInput, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { X, Save, Target } from 'lucide-react-native';
+import { Target } from 'lucide-react-native';
 import { useCategories } from '@/src/hooks/useCategories';
 import { getCategoryIcon } from '@/src/helpers/ui';
 import { log } from '@/src/services/logger';
+
+// Componentes Atómicos
+import { ModalHeader } from '../ui/ModalHeader';
+import { PrimaryButton } from '../ui/PrimaryButton';
 
 interface Props {
   visible: boolean;
@@ -11,8 +15,12 @@ interface Props {
   onSave: (categoryId: number, limit: number) => Promise<void>;
 }
 
+/**
+ * Modal para la creación de un nuevo límite de presupuesto.
+ * Implementa el patrón de diseño "Sheet" y utiliza átomos del sistema.
+ */
 export function AddBudgetModal({ visible, onClose, onSave }: Props) {
-  const { categories, fetchExpensesCategories } = useCategories();
+  const { categories, fetchExpensesCategories, loading } = useCategories();
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [limitAmount, setLimitAmount] = useState('');
 
@@ -26,12 +34,14 @@ export function AddBudgetModal({ visible, onClose, onSave }: Props) {
 
   const handleSave = async () => {
     const amount = parseFloat(limitAmount) || 0;
+    
     if (!selectedCategoryId) {
-      Alert.alert('Error', 'Selecciona una categoría');
+      Alert.alert('Incompleto', 'Por favor, selecciona una categoría para el límite.');
       return;
     }
+    
     if (amount <= 0) {
-      Alert.alert('Error', 'Ingresa un monto válido mayor a 0');
+      Alert.alert('Invalido', 'El monto del límite debe ser mayor a cero.');
       return;
     }
 
@@ -39,8 +49,8 @@ export function AddBudgetModal({ visible, onClose, onSave }: Props) {
       await onSave(selectedCategoryId, amount);
       onClose();
     } catch (e) {
-      log.error('AddBudgetModal: Error al guardar', e);
-      Alert.alert('Error', 'No se pudo crear el presupuesto');
+      log.error('AddBudgetModal: Error al guardar presupuesto', e);
+      Alert.alert('Error', 'No se pudo activar el presupuesto seleccionado.');
     }
   };
 
@@ -50,27 +60,35 @@ export function AddBudgetModal({ visible, onClose, onSave }: Props) {
         className="flex-1" 
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View className="flex-1 justify-end bg-black/60">
-          <View className="bg-dark-900 border-t border-dark-700 rounded-t-[40px] px-6 pt-6 pb-12 max-h-[90%]">
+        <View className="flex-1 justify-end bg-black/70">
+          <View className="bg-dark-900 border-t border-dark-700 rounded-t-[40px] px-6 pt-2 pb-12 max-h-[85%]">
             
-            <View className="flex-row justify-between items-center mb-8">
-              <View className="flex-row items-center gap-2">
-                <Target size={20} color="#fff" />
-                <Text className="text-white text-xl font-bold">Nuevo Límite</Text>
-              </View>
-              <Pressable onPress={onClose} className="bg-dark-800 p-2 rounded-full">
-                <X color="#9ca3af" size={20} />
-              </Pressable>
+            {/* Indicador de arrastre visual */}
+            <View className="items-center mb-4">
+              <View className="w-12 h-1 bg-dark-600 rounded-full" />
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <Text className="text-gray-400 text-xs font-bold uppercase mb-4 tracking-widest">1. Seleccionar Categoría</Text>
+            <ModalHeader 
+              title="Añadir Límite" 
+              Icon={Target} 
+              onClose={onClose} 
+            />
+
+            <ScrollView showsVerticalScrollIndicator={false} className="mt-4">
+              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
+                1. Seleccionar Categoría
+              </Text>
+              
               <View className="flex-row flex-wrap gap-2 mb-8">
                 {categories.map((cat) => (
                   <Pressable
                     key={cat.category_id}
                     onPress={() => setSelectedCategoryId(cat.category_id)}
-                    className={`flex-row items-center gap-2 px-4 py-2 rounded-full border ${selectedCategoryId === cat.category_id ? 'bg-seed-600 border-seed-400' : 'bg-dark-800 border-dark-700'}`}
+                    className={`flex-row items-center gap-2 px-5 py-3 rounded-2xl border ${
+                      selectedCategoryId === cat.category_id 
+                        ? 'bg-seed-600/20 border-seed-500' 
+                        : 'bg-dark-800 border-dark-700'
+                    }`}
                   >
                     {getCategoryIcon(cat.icon, selectedCategoryId === cat.category_id ? '#fff' : cat.color, 16)}
                     <Text className={`text-xs font-bold ${selectedCategoryId === cat.category_id ? 'text-white' : 'text-gray-400'}`}>
@@ -80,8 +98,11 @@ export function AddBudgetModal({ visible, onClose, onSave }: Props) {
                 ))}
               </View>
 
-              <Text className="text-gray-400 text-xs font-bold uppercase mb-4 tracking-widest">2. Monto Límite Mensual</Text>
-              <View className="flex-row items-center bg-dark-800 border border-dark-700 rounded-3xl p-6 mb-8">
+              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
+                2. Monto Límite Mensual
+              </Text>
+              
+              <View className="flex-row items-center bg-dark-800 border border-dark-700 rounded-[28px] p-6 mb-10">
                 <Text className="text-seed-400 text-3xl font-black mr-2">$</Text>
                 <TextInput
                   className="flex-1 text-white text-3xl font-black"
@@ -90,19 +111,15 @@ export function AddBudgetModal({ visible, onClose, onSave }: Props) {
                   keyboardType="numeric"
                   value={limitAmount}
                   onChangeText={setLimitAmount}
-                  autoFocus
+                  selectionColor="#3b82f6"
                 />
               </View>
 
-              <Pressable 
+              <PrimaryButton 
+                label="Activar Límite"
                 onPress={handleSave}
-                className="bg-seed-600 py-5 rounded-3xl items-center justify-center shadow-xl shadow-seed-600/30"
-              >
-                <View className="flex-row items-center gap-2">
-                  <Save color="#fff" size={20} />
-                  <Text className="text-white font-black text-lg tracking-widest uppercase">Activar Límite</Text>
-                </View>
-              </Pressable>
+                disabled={!selectedCategoryId || !limitAmount}
+              />
             </ScrollView>
 
           </View>

@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { log } from '@/src/services/logger';
-import { View, ScrollView, ActivityIndicator } from 'react-native';
-import { useFocusEffect, Redirect, router } from 'expo-router';
-import Colors from '@/constants/Colors';
+import { View, ScrollView } from 'react-native';
+import { useFocusEffect, Redirect } from 'expo-router';
 import { useDashboard } from '@/src/hooks/useDashboard';
 import { useAccounts } from '@/src/hooks/useAccounts';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
@@ -10,6 +9,8 @@ import { TotalBalanceCard } from '@/components/dashboard/TotalBalanceCard';
 import { MonthlySummary } from '@/components/dashboard/MonthlySummary';
 import { QuickAccounts } from '@/components/dashboard/QuickAccounts';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
+import { BackgroundAtmosphere } from '@/components/ui/BackgroundAtmosphere';
+import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 
 export default function IndexRoute() {
   const { loading, totalBalance, balanceGrowthPct, monthlyIncome, monthlyExpense, recentTransactions, fetchDashboardData } = useDashboard();
@@ -34,14 +35,12 @@ export default function IndexRoute() {
 
   return (
     <View className="flex-1 bg-dark-900">
-      <View className="absolute top-[-50px] right-[-50px] w-[200px] h-[200px] rounded-full bg-seed-600/15 scale-150 pointer-events-none" />
+      <BackgroundAtmosphere />
 
       <DashboardHeader />
 
       {loading ? (
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color={Colors.seed[500]} />
-        </View>
+        <LoadingOverlay message="Actualizando balance..." />
       ) : (
         <ScrollView
           contentContainerClassName="px-6 pt-4 pb-32 gap-6"

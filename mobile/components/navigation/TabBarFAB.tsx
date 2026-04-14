@@ -1,6 +1,9 @@
 import { View, Pressable } from 'react-native';
 import { Plus } from 'lucide-react-native';
 
+/**
+ * Botón de Acción Flotante (FAB) centralizado para la creación de transacciones.
+ */
 export function TabBarFAB({ onPress }: { onPress: () => void }) {
   return (
     <View className="relative w-16 h-16 justify-center items-center -mt-10">

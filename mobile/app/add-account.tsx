@@ -1,25 +1,21 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Pressable, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
 import { router } from 'expo-router';
-import { X, Landmark, Wallet, CreditCard, PiggyBank } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import Colors from '@/constants/Colors';
 import { createAccount } from '@/src/services/AccountService';
-
-const ACCOUNT_TYPES = [
-  { id: 'Efectivo', icon: Wallet },
-  { id: 'Banco', icon: Landmark },
-  { id: 'Ahorros', icon: PiggyBank },
-  { id: 'Tarjeta', icon: CreditCard },
-];
+import { ModalHeader } from '@/components/ui/ModalHeader';
+import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { AccountTypeSelector } from '@/components/accounts/AccountTypeSelector';
+import { ACCOUNT_TYPES } from '@/src/database/types';
 
 export default function AddAccountScreen() {
   const insets = useSafeAreaInsets();
   
   const [name, setName] = useState('');
-  const [accountType, setAccountType] = useState('Efectivo');
-  const [balance, setBalance] = useState(''); // Manejaremos string para el input y convertiremos en cop
+  const [accountType, setAccountType] = useState<string>(ACCOUNT_TYPES.CASH.id);
+  const [balance, setBalance] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -27,15 +23,18 @@ export default function AddAccountScreen() {
       return;
     }
 
+    // Convertimos a número de forma segura (el servicio aplicará toCents)
     const initialBalance = parseFloat(balance) || 0;
 
     try {
+      setLoading(true);
       await createAccount(name.trim(), accountType, initialBalance);
-      // Al cerrar el modal, volverá al index y el hook useFocus repintará los números instantáneamente
       router.back();
     } catch (e) {
       console.error(e);
       Alert.alert('Error', 'No se pudo crear la cuenta localmente.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,19 +44,10 @@ export default function AddAccountScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View 
-        className="flex-1 px-6 pt-4"
+        className="flex-1 px-6"
         style={{ paddingTop: Math.max(insets.top, 16) }}
       >
-        {/* Header del Modal */}
-        <View className="flex-row justify-between items-center pb-6">
-          <Text className="text-white text-2xl font-bold">Nueva Cuenta</Text>
-          <Pressable 
-            onPress={() => router.back()} 
-            className="w-10 h-10 bg-dark-800 rounded-full items-center justify-center"
-          >
-            <X color="#9ca3af" size={20} />
-          </Pressable>
-        </View>
+        <ModalHeader title="Nueva Cuenta" onClose={() => router.back()} />
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           {/* Input Nombre */}
@@ -72,31 +62,10 @@ export default function AddAccountScreen() {
             />
           </View>
 
-          {/* Selector de Tipos Visual */}
-          <View className="mb-6">
-            <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Tipo de fondo</Text>
-            <View className="flex-row flex-wrap justify-between gap-y-3">
-              {ACCOUNT_TYPES.map((type) => {
-                const IconComponent = type.icon;
-                const isSelected = accountType === type.id;
-                
-                return (
-                  <Pressable
-                    key={type.id}
-                    onPress={() => setAccountType(type.id)}
-                    className={`w-[48%] py-3 px-2 rounded-2xl flex-row items-center justify-center gap-2 border 
-                      ${isSelected ? 'bg-seed-900 border-seed-500' : 'bg-dark-800 border-dark-700'}
-                    `}
-                  >
-                    <IconComponent color={isSelected ? Colors.seed[400] : '#9ca3af'} size={18} />
-                    <Text className={`font-semibold ${isSelected ? 'text-seed-400' : 'text-gray-400'}`}>
-                      {type.id}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
+          <AccountTypeSelector 
+            selectedType={accountType} 
+            onSelect={setAccountType} 
+          />
 
           {/* Saldo Inicial COP */}
           <View className="mb-8">
@@ -116,19 +85,13 @@ export default function AddAccountScreen() {
           </View>
         </ScrollView>
 
-        {/* Action Button Siempre Abajo */}
         <View className="pb-8 pt-4">
-          <Pressable 
-            disabled={!name.trim()}
+          <PrimaryButton 
+            label="Guardar Cuenta"
             onPress={handleSave}
-            className={`w-full py-4 rounded-2xl items-center justify-center shadow-lg shadow-seed-600/20
-              ${!name.trim() ? 'bg-seed-950 opacity-60' : 'bg-seed-600 active:bg-seed-700'}
-            `}
-          >
-            <Text className={`font-bold text-lg ${!name.trim() ? 'text-seed-400' : 'text-white'}`}>
-              Guardar Cuenta
-            </Text>
-          </Pressable>
+            disabled={!name.trim()}
+            loading={loading}
+          />
         </View>
 
       </View>

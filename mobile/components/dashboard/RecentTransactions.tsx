@@ -1,22 +1,26 @@
 import { Fragment } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { formatMoney } from '@/src/helpers/currency';
+import { View, Text } from 'react-native';
 import { TransactionItem } from '../transactions/TransactionItem';
+import { SectionHeader } from '../ui/SectionHeader';
+import { router } from 'expo-router';
 import type { RecentTransaction } from '@/src/database/types';
 
 interface Props {
   recentTransactions: RecentTransaction[];
 }
 
+/**
+ * Componente del Dashboard para visualizar los últimos movimientos.
+ * Utiliza SectionHeader para mantener la consistencia visual.
+ */
 export function RecentTransactions({ recentTransactions }: Props) {
   return (
     <View className="gap-3">
-      <View className="flex-row justify-between items-center">
-        <Text className="text-xs font-bold text-gray-300 uppercase tracking-widest">Actividad Reciente</Text>
-        <Pressable>
-          <Text className="text-xs font-bold text-seed-400">Ver todo</Text>
-        </Pressable>
-      </View>
+      <SectionHeader 
+        title="Actividad Reciente" 
+        actionLabel="Ver todo" 
+        onActionPress={() => router.push('/history')}
+      />
 
       <View className="bg-dark-800 border border-dark-700 rounded-2xl p-2">
 

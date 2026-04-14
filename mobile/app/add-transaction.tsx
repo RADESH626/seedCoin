@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import {
   View,
-  Text,
-  Pressable,
   KeyboardAvoidingView,
   Platform,
   Alert,
   ScrollView,
 } from 'react-native';
 import { router } from 'expo-router';
-import { X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
@@ -24,6 +21,8 @@ import { AmountInput } from '@/components/transactions/AmountInput';
 import { AccountSelector } from '@/components/transactions/AccountSelector';
 import { CategoryGrid } from '@/components/transactions/CategoryGrid';
 import { TransactionDateField } from '@/components/transactions/TransactionDateField';
+import { ModalHeader } from '@/components/ui/ModalHeader';
+import { PrimaryButton } from '@/components/ui/PrimaryButton';
 
 export default function AddTransactionScreen() {
   const insets = useSafeAreaInsets();
@@ -38,6 +37,7 @@ export default function AddTransactionScreen() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -74,6 +74,7 @@ export default function AddTransactionScreen() {
     }
 
     try {
+      setLoading(true);
       log.info('AddTransaction: Guardando transacción...', { amount: numericAmount, isIncome });
       await createTransaction({
         accountId: selectedAccountId,
@@ -88,6 +89,8 @@ export default function AddTransactionScreen() {
     } catch (e) {
       log.error('AddTransaction: Error al guardar', e);
       Alert.alert('Error', 'No se pudo guardar la transacción.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,16 +101,7 @@ export default function AddTransactionScreen() {
     >
       <View className="flex-1 px-6" style={{ paddingTop: Math.max(insets.top, 16) }}>
         
-        {/* Header simplificado */}
-        <View className="flex-row justify-between items-center py-4">
-          <Text className="text-white text-2xl font-bold">Nuevo Movimiento</Text>
-          <Pressable 
-            onPress={() => router.back()} 
-            className="w-10 h-10 bg-dark-800 rounded-full items-center justify-center border border-dark-700"
-          >
-            <X color="#9ca3af" size={20} />
-          </Pressable>
-        </View>
+        <ModalHeader title="Nuevo Movimiento" onClose={() => router.back()} />
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           
@@ -148,17 +142,13 @@ export default function AddTransactionScreen() {
           <DateTimePicker value={date} mode="date" is24Hour={true} onChange={handleDateChange} />
         )}
 
-        {/* Botón de Acción Principal */}
-        <View className="absolute bottom-10 left-6 right-6">
-          <Pressable 
+        <View className="pb-10">
+          <PrimaryButton 
+            label={`Guardar ${isIncome ? 'Ingreso' : 'Gasto'}`}
             onPress={handleSave}
             disabled={!amount}
-            className={`w-full py-5 rounded-3xl items-center justify-center shadow-2xl ${!amount ? 'bg-dark-800 opacity-50' : 'bg-seed-600 active:bg-seed-700'}`}
-          >
-            <Text className="text-white font-black text-lg tracking-widest uppercase">
-              Guardar {isIncome ? 'Ingreso' : 'Gasto'}
-            </Text>
-          </Pressable>
+            loading={loading}
+          />
         </View>
       </View>
     </KeyboardAvoidingView>

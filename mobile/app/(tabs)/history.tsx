@@ -1,16 +1,17 @@
 import { useState, useCallback, useMemo } from 'react';
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTransactions } from '@/src/hooks/useTransactions';
 import { log } from '@/src/services/logger';
-import Colors from '@/constants/Colors';
-import { getDateLabel } from '@/src/helpers/date';
-import type { DetailedTransaction, FilterType } from '@/src/database/types';
+import { groupTransactionsByDate } from '@/src/helpers/transactions';
+import type { FilterType } from '@/src/database/types';
 
 import { HistoryFilters } from '@/components/transactions/HistoryFilters';
 import { TransactionGroup } from '@/components/transactions/TransactionGroup';
+import { ScreenHeader } from '@/components/ui/ScreenHeader';
+import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 
 export default function HistoryScreen() {
   const insets = useSafeAreaInsets();
@@ -31,17 +32,9 @@ export default function HistoryScreen() {
     return history.filter(tx => tx.is_income === isIncomeTarget);
   }, [history, activeFilter]);
 
-  // Agrupación por fechas (Etiqueta -> Transacciones)
+  // Agrupación por fechas (Etiqueta -> Transacciones) - Delegada al Helper
   const groupedHistory = useMemo(() => {
-    const groups: Record<string, DetailedTransaction[]> = {};
-
-    filteredHistory.forEach(tx => {
-      const dateLabel = getDateLabel(tx.transaction_date);
-      if (!groups[dateLabel]) groups[dateLabel] = [];
-      groups[dateLabel].push(tx);
-    });
-
-    return groups;
+    return groupTransactionsByDate(filteredHistory);
   }, [filteredHistory]);
 
   const groupKeys = Object.keys(groupedHistory);
@@ -52,12 +45,12 @@ export default function HistoryScreen() {
         className="px-6"
         style={{ paddingTop: Math.max(insets.top, 24) }}
       >
-        <Text className="text-white text-2xl font-bold mb-6">Historial</Text>
-
-        <HistoryFilters
-          activeFilter={activeFilter}
-          onFilterChange={setActiveFilter}
-        />
+        <ScreenHeader title="Historial" subtitle="Tus movimientos financieros">
+          <HistoryFilters
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+          />
+        </ScreenHeader>
       </View>
 
       <ScrollView
@@ -65,10 +58,7 @@ export default function HistoryScreen() {
         showsVerticalScrollIndicator={false}
       >
         {loading && history.length === 0 ? (
-          <View className="py-20 items-center">
-            <ActivityIndicator color={Colors.seed[400]} />
-            <Text className="text-gray-500 text-xs mt-4">Cargando movimientos...</Text>
-          </View>
+          <LoadingOverlay message="Cargando movimientos..." />
         ) : groupKeys.length === 0 ? (
           <View className="py-20 items-center opacity-50">
             <Text className="text-gray-400 text-sm">No se encontraron movimientos</Text>

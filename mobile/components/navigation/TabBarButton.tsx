@@ -8,12 +8,18 @@ interface TabBarButtonProps {
   onPress: () => void;
 }
 
+/**
+ * Componente individual para los botones de la barra de navegación inferior.
+ * Utiliza clases de Tailwind para gestionar los estados y colores del sistema.
+ */
 export function TabBarButton({ label, Icon, isFocused, onPress }: TabBarButtonProps) {
+  const iconColor = isFocused ? '#ffffff' : '#6b7280'; // Mantenemos el valor pero centralizado en la constante si es necesario
+
   return (
-    <Pressable onPress={onPress} className="items-center justify-center w-14 gap-1">
-      <Icon color={isFocused ? '#ffffff' : '#6b7280'} size={24} />
+    <Pressable onPress={onPress} className="items-center justify-center w-14 gap-1 active:opacity-60">
+      <Icon color={iconColor} size={22} />
       <Text 
-        className={`text-[10px] ${isFocused ? 'text-white font-semibold' : 'text-gray-500 font-medium'}`}
+        className={`text-[9px] font-bold uppercase tracking-tighter ${isFocused ? 'text-white' : 'text-gray-500'}`}
       >
         {label}
       </Text>

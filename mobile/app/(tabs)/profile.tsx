@@ -1,18 +1,20 @@
 import { useState, useCallback } from 'react';
-import { Text, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, Alert, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePreferences } from '@/src/hooks/usePreferences';
 import { useAccounts } from '@/src/hooks/useAccounts';
 import { log } from '@/src/services/logger';
-import { resetDatabase } from '@/src/database/utils';
+import { ProfileService } from '@/src/services/ProfileService';
+import { getTotalBalance } from '@/src/services/AccountService';
 
 // Componentes Atómicos
 import { ProfileIdentityCard } from '@/components/profile/ProfileIdentityCard';
 import { ProfileStats } from '@/components/profile/ProfileStats';
 import { ProfileMenu } from '@/components/profile/ProfileMenu';
 import { ProfileFooter } from '@/components/profile/ProfileFooter';
+import { ScreenHeader } from '@/components/ui/ScreenHeader';
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -21,6 +23,7 @@ export default function ProfileScreen() {
   const [userName, setUserName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [totalCapital, setTotalCapital] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -29,10 +32,11 @@ export default function ProfileScreen() {
         setTempName(val || 'Usuario');
       });
       fetchAccounts();
+      
+      // Obtenemos el balance total directamente del servicio para mayor precisión
+      getTotalBalance().then(setTotalCapital);
     }, [getPreference, fetchAccounts])
   );
-
-  const totalCapital = accounts.reduce((sum, acc) => sum + acc.current_balance, 0);
 
   const handleUpdateName = async () => {
     if (!tempName.trim()) {
@@ -56,7 +60,7 @@ export default function ProfileScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              await resetDatabase();
+              await ProfileService.purgeAllData();
               Alert.alert("Realizado", "Base de datos purgada. Reinicia la app para configurarla de nuevo.");
             } catch (e) {
               log.error('Profile: Error en reset', e);
@@ -78,7 +82,7 @@ export default function ProfileScreen() {
         style={{ paddingTop: Math.max(insets.top, 24) }}
         showsVerticalScrollIndicator={false}
       >
-        <Text className="text-white text-2xl font-bold mb-8">Perfil</Text>
+        <ScreenHeader title="Perfil" subtitle="Gestiona tu cuenta y ajustes" />
 
         <ProfileIdentityCard 
           userName={userName}
@@ -98,6 +102,7 @@ export default function ProfileScreen() {
 
         <ProfileFooter />
 
+        <View className="h-20" />
       </ScrollView>
     </KeyboardAvoidingView>
   );

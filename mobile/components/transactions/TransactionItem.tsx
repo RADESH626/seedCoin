@@ -1,26 +1,21 @@
 import { View, Text } from 'react-native';
 import { getCategoryIcon } from '@/src/helpers/ui';
 import { formatMoney } from '@/src/helpers/currency';
+import { getTimeLabel } from '@/src/helpers/date';
+import type { RecentTransaction } from '@/src/database/types';
 
 interface Props {
-  transaction: {
-    transaction_id: number;
-    amount: number;
-    is_income: number;
-    transaction_date: string;
-    description: string;
-    category_name: string;
-    category_icon: string;
-    category_color: string;
-    account_name?: string;
-  };
+  transaction: RecentTransaction;
   showAccountName?: boolean;
 }
 
+/**
+ * Atomo para representar un movimiento individual en listas.
+ * Utiliza tipado estricto del dominio y delegación de formateo.
+ */
 export function TransactionItem({ transaction: tx, showAccountName = false }: Props) {
   const isIncome = tx.is_income === 1;
   const iconBgStyle = { backgroundColor: `${tx.category_color}33` };
-  const txDate = new Date(tx.transaction_date);
 
   return (
     <View className="flex-row justify-between items-center p-3">
@@ -33,7 +28,7 @@ export function TransactionItem({ transaction: tx, showAccountName = false }: Pr
           <Text className="text-[11px] text-gray-400 mt-0.5" numberOfLines={1}>
             {tx.description ? `${tx.description} • ` : ''}
             {showAccountName && tx.account_name ? `${tx.account_name} • ` : ''}
-            {txDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {getTimeLabel(tx.transaction_date)}
           </Text>
         </View>
       </View>
