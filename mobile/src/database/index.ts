@@ -1,32 +1,33 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { CREATE_TABLES, CREATE_TRIGGERS, CREATE_PREFERENCES_TABLE } from './schema';
 import { INITIAL_CATEGORIES, SEED_CATEGORIES_QUERY } from './seed';
+import { log } from '@/src/services/logger';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   const DATABASE_VERSION = 2;
 
   const result = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
   let currentDbVersion = result?.user_version ?? 0;
-  console.log(`🔍 Versión actual de la DB: ${currentDbVersion}`);
+  log.info(`migrateDbIfNeeded: Versión actual de la DB: ${currentDbVersion}`);
 
   if (currentDbVersion >= DATABASE_VERSION) {
-    console.log(`✅ Base de datos SQLite cargada y lista. (Versión: ${currentDbVersion})`);
+    log.info(`migrateDbIfNeeded: Base de datos SQLite cargada y lista (v${currentDbVersion})`);
     return;
   }
 
   if (currentDbVersion === 0) {
-    console.log('⏳ Inicializando esquema y tablas SQLite por primera vez...');
+    log.info('migrateDbIfNeeded: Inicializando esquema y tablas SQLite por primera vez...');
     try {
       await db.execAsync(CREATE_TABLES);
-      console.log('✅ Tablas creadas correctamente.');
+      log.info('migrateDbIfNeeded: Tablas creadas correctamente.');
       await db.execAsync(CREATE_TRIGGERS);
-      console.log('✅ Triggers configurados correctamente.');
+      log.info('migrateDbIfNeeded: Triggers configurados correctamente.');
     } catch (err) {
-      console.error('❌ Error crítico creando esquema base:', err);
+      log.error('migrateDbIfNeeded: Error crítico creando esquema base', err);
       throw err;
     }
 
-    console.log('✅ Tablas y Triggers creados. Inyectando categorías iniciales...');
+    log.info('migrateDbIfNeeded: Tablas y Triggers creados. Inyectando categorías iniciales...');
 
     // Poblar (seed) las categorías la primera vez
     let insertedCount = 0;
@@ -46,22 +47,22 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       } finally {
         await statement.finalizeAsync();
       }
-      console.log(`✅ Semilla de categorías insertada: ${insertedCount} registros.`);
+      log.info(`migrateDbIfNeeded: Categorías insertadas: ${insertedCount} registros.`);
     } catch (err) {
-      console.error('❌ Error insertando categorías iniciales:', err);
+      log.error('migrateDbIfNeeded: Error insertando categorías iniciales', err);
     }
     
     currentDbVersion = 1;
     await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
-    console.log('🎉 Inicialización completada exitosamente.');
+    log.info('migrateDbIfNeeded: Inicialización completada exitosamente.');
   }
 
   // MIGRACIÓN A V2
   if (currentDbVersion === 1) {
-    console.log('⬆️ Migrando base de datos de v1 a v2...');
+    log.info('migrateDbIfNeeded: Migrando base de datos de v1 a v2...');
     await db.execAsync(CREATE_PREFERENCES_TABLE);
     currentDbVersion = 2;
     await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
-    console.log('✅ Migración a v2 (Tabla Preferences) completada.');
+    log.info('migrateDbIfNeeded: Migración a v2 (Tabla Preferences) completada.');
   }
 }

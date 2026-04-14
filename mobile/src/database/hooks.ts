@@ -1,46 +1,84 @@
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { QUERIES_ACCOUNT, QUERIES_CATEGORY, QUERIES_TRANSACTION, QUERIES_PREFERENCES, QUERIES_BUDGET } from './queries';
 import { log } from '../services/logger';
-import { DB_NAME } from './connection';
-import * as SQLite from 'expo-sqlite';
+import { getDBConnection } from './connection';
+import type {
+  Account,
+  Category,
+  RecentTransaction,
+  DetailedTransaction,
+  MonthlyStats,
+  TotalBalanceRow,
+  PreferenceRow,
+  BudgetWithProgress,
+  isNativeDatabaseError,
+} from './types';
+import { isNativeDatabaseError as checkNativeError } from './types';
 
-// Hook personalizado para operaciones de cuentas (ACCOUNT)
+// ====================
+// HELPER: Retry para errores nativos de SQLite
+// ====================
+
+async function withNativeRetry<T>(
+  fn: () => Promise<T>,
+  label: string,
+  maxRetries = 1,
+  delayMs = 500
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (error: unknown) {
+    if (maxRetries > 0 && checkNativeError(error)) {
+      log.warn(`${label}: NPE detectado en el motor nativo. Reintentando en ${delayMs}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      return withNativeRetry(fn, label, maxRetries - 1, delayMs);
+    }
+    log.error(`${label}: Error`, error);
+    throw error;
+  }
+}
+
+// ====================
+// Hook: Cuentas (ACCOUNT)
+// ====================
+
 export function useAccounts() {
-  const db = useSQLiteContext();
-  const [accounts, setAccounts] = useState<any[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchAccounts = useCallback(async (retryCount = 0) => {
+  const fetchAccounts = useCallback(async () => {
     try {
       log.debug('useAccounts: Fetching accounts...');
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getAllAsync<any>(QUERIES_ACCOUNT.GET_ALL_ACTIVE_ORDERED);
+      const db = await getDBConnection();
+      const result = await db.getAllAsync<Account>(QUERIES_ACCOUNT.GET_ALL_ACTIVE_ORDERED);
       setAccounts(result);
       log.debug('useAccounts: Accounts recuperadas', { count: result.length });
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
-        log.warn('useAccounts: NPE detectado en el motor nativo. Reintentando en 500ms...');
-        setTimeout(() => fetchAccounts(retryCount + 1), 500);
+    } catch (error: unknown) {
+      if (checkNativeError(error)) {
+        log.warn('useAccounts: NPE detectado. Reintentando en 500ms...');
+        const db = await getDBConnection();
+        const result = await db.getAllAsync<Account>(QUERIES_ACCOUNT.GET_ALL_ACTIVE_ORDERED);
+        setAccounts(result);
       } else {
-        log.error('useAccounts: Error fetching accounts', e);
+        log.error('useAccounts: Error fetching accounts', error);
       }
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const addAccount = useCallback(async (name: string, account_type: string, initial_balance: number) => {
+  const addAccount = useCallback(async (name: string, accountType: string, initialBalance: number) => {
     try {
+      const db = await getDBConnection();
       await db.runAsync(
         QUERIES_ACCOUNT.INSERT_INDEXED,
-        [name, account_type, initial_balance, initial_balance]
+        [name, accountType, initialBalance, initialBalance]
       );
-      await fetchAccounts(); // Refrescar estado local después de insertar
-    } catch (e) {
-      console.error('Error adding account', e);
+      await fetchAccounts();
+    } catch (error: unknown) {
+      log.error('useAccounts: Error adding account', error);
     }
-  }, [db, fetchAccounts]);
+  }, [fetchAccounts]);
 
   return {
     accounts,
@@ -49,77 +87,71 @@ export function useAccounts() {
   };
 }
 
-// Hook personalizado para categorías (CATEGORY)
+// ====================
+// Hook: Categorías (CATEGORY)
+// ====================
+
 export function useCategories() {
-  const db = useSQLiteContext();
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const fetchCategories = useCallback(async () => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getAllAsync<any>(QUERIES_CATEGORY.GET_ALL);
+      const db = await getDBConnection();
+      const result = await db.getAllAsync<Category>(QUERIES_CATEGORY.GET_ALL);
       setCategories(result);
-    } catch (e) {
-      log.error('useCategories: Error fetching categories', e);
+    } catch (error: unknown) {
+      log.error('useCategories: Error fetching categories', error);
     }
   }, []);
 
   const fetchExpensesCategories = useCallback(async () => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getAllAsync<any>(QUERIES_CATEGORY.GET_ALL_EXPENSES);
+      const db = await getDBConnection();
+      const result = await db.getAllAsync<Category>(QUERIES_CATEGORY.GET_ALL_EXPENSES);
       setCategories(result);
-    } catch (e) {
-      log.error('useCategories: Error fetching expense categories', e);
+    } catch (error: unknown) {
+      log.error('useCategories: Error fetching expense categories', error);
     }
   }, []);
 
   return { categories, fetchCategories, fetchExpensesCategories };
 }
 
-// Hook del Dashboard (Lógica analítica de la app)
+// ====================
+// Hook: Dashboard (Lógica analítica)
+// ====================
+
 export function useDashboard() {
-  const db = useSQLiteContext();
   const [loading, setLoading] = useState(true);
-  
-  // Estados analíticos
   const [totalBalance, setTotalBalance] = useState(0);
   const [balanceGrowthPct, setBalanceGrowthPct] = useState(0);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [monthlyExpense, setMonthlyExpense] = useState(0);
-  const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
+  const [recentTransactions, setRecentTransactions] = useState<RecentTransaction[]>([]);
 
-  const fetchDashboardData = useCallback(async (retryCount = 0) => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
+      const db = await getDBConnection();
 
-      // 1. Balance Total Actual
-      const balanceResult = await db.getFirstAsync<any>(QUERIES_ACCOUNT.GET_TOTAL_BALANCE);
-      const currentTotal = balanceResult?.total || 0;
-      setTotalBalance(currentTotal);
+      const balanceResult = await db.getFirstAsync<TotalBalanceRow>(QUERIES_ACCOUNT.GET_TOTAL_BALANCE);
+      setTotalBalance(balanceResult?.total ?? 0);
 
-      // 2. Ingresos y Gastos de ESTE mes
-      const statsResult = await db.getFirstAsync<any>(QUERIES_TRANSACTION.GET_MONTHLY_STATS);
-      const income = statsResult?.total_income || 0;
-      const expense = statsResult?.total_expense || 0;
-      setMonthlyIncome(income);
-      setMonthlyExpense(expense);
+      const statsResult = await db.getFirstAsync<MonthlyStats>(QUERIES_TRANSACTION.GET_MONTHLY_STATS);
+      setMonthlyIncome(statsResult?.total_income ?? 0);
+      setMonthlyExpense(statsResult?.total_expense ?? 0);
 
-      // 3. Cálculo del % vs Mes Anterior
-      // Balance Inicio de Mes = Balance Actual - (Ingresos Mes - Gastos Mes)
-      const netThisMonth = income - expense;
-      const txsResult = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_RECENT_WITH_CATEGORY);
-
-      setTotalBalance(balanceResult?.total || 0);
-      setMonthlyIncome(statsResult?.total_income || 0);
-      setMonthlyExpense(statsResult?.total_expense || 0);
-      setRecentTransactions(txsResult || []);
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
+      const txsResult = await db.getAllAsync<RecentTransaction>(QUERIES_TRANSACTION.GET_RECENT_WITH_CATEGORY);
+      setRecentTransactions(txsResult ?? []);
+    } catch (error: unknown) {
+      if (checkNativeError(error)) {
         log.warn('useDashboard: Reintentando carga tras posible colisión nativa...');
-        setTimeout(() => fetchDashboardData(retryCount + 1), 500);
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const db = await getDBConnection();
+        const balanceResult = await db.getFirstAsync<TotalBalanceRow>(QUERIES_ACCOUNT.GET_TOTAL_BALANCE);
+        setTotalBalance(balanceResult?.total ?? 0);
       } else {
-        log.error('useDashboard: Error fetching dashboard data', e);
+        log.error('useDashboard: Error fetching dashboard data', error);
       }
     } finally {
       setLoading(false);
@@ -133,30 +165,30 @@ export function useDashboard() {
     monthlyIncome,
     monthlyExpense,
     recentTransactions,
-    fetchDashboardData
+    fetchDashboardData,
   };
 }
 
-/**
- * Hook para obtener y filtrar el historial completo de transacciones
- */
+// ====================
+// Hook: Historial de transacciones
+// ====================
+
 export function useTransactionsHistory() {
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<DetailedTransaction[]>([]);
 
-  const fetchHistory = useCallback(async (retryCount = 0) => {
+  const fetchHistory = useCallback(async () => {
     try {
       setLoading(true);
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_ALL_DETAILED);
-      setHistory(result || []);
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
-        log.warn('useTransactionsHistory: Reintentando carga del historial...');
-        setTimeout(() => fetchHistory(retryCount + 1), 500);
-      } else {
-        log.error('useTransactionsHistory: Error al obtener historial', e);
-      }
+
+      await withNativeRetry(async () => {
+        const db = await getDBConnection();
+        const result = await db.getAllAsync<DetailedTransaction>(QUERIES_TRANSACTION.GET_ALL_DETAILED);
+        setHistory(result ?? []);
+      }, 'useTransactionsHistory');
+
+    } catch (error: unknown) {
+      log.error('useTransactionsHistory: Error al obtener historial', error);
     } finally {
       setLoading(false);
     }
@@ -165,30 +197,30 @@ export function useTransactionsHistory() {
   return {
     loading,
     history,
-    fetchHistory
+    fetchHistory,
   };
 }
 
-/**
- * Hook para gestionar los presupuestos y límites mensuales
- */
+// ====================
+// Hook: Presupuestos y límites mensuales
+// ====================
+
 export function useBudgets() {
   const [loading, setLoading] = useState(false);
-  const [budgets, setBudgets] = useState<any[]>([]);
+  const [budgets, setBudgets] = useState<BudgetWithProgress[]>([]);
 
-  const fetchBudgets = useCallback(async (retryCount = 0) => {
+  const fetchBudgets = useCallback(async () => {
     try {
       setLoading(true);
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getAllAsync<any>(QUERIES_BUDGET.GET_BUDGETS_WITH_PROGRESS);
-      setBudgets(result || []);
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
-        log.warn('useBudgets: Reintentando carga de presupuestos...');
-        setTimeout(() => fetchBudgets(retryCount + 1), 500);
-      } else {
-        log.error('useBudgets: Error al obtener presupuestos', e);
-      }
+
+      await withNativeRetry(async () => {
+        const db = await getDBConnection();
+        const result = await db.getAllAsync<BudgetWithProgress>(QUERIES_BUDGET.GET_BUDGETS_WITH_PROGRESS);
+        setBudgets(result ?? []);
+      }, 'useBudgets');
+
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al obtener presupuestos', error);
     } finally {
       setLoading(false);
     }
@@ -196,22 +228,22 @@ export function useBudgets() {
 
   const addBudget = useCallback(async (categoryId: number, limit: number) => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const db = await getDBConnection();
       await db.runAsync(QUERIES_BUDGET.INSERT_BUDGET, [categoryId, 'MONTHLY', limit, 1]);
       await fetchBudgets();
       log.info('useBudgets: Presupuesto creado con éxito');
-    } catch (e) {
-      log.error('useBudgets: Error al crear presupuesto', e);
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al crear presupuesto', error);
     }
   }, [fetchBudgets]);
 
   const deleteBudget = useCallback(async (budgetId: number) => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const db = await getDBConnection();
       await db.runAsync(QUERIES_BUDGET.DELETE_BUDGET, [budgetId]);
       await fetchBudgets();
-    } catch (e) {
-      log.error('useBudgets: Error al eliminar presupuesto', e);
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al eliminar presupuesto', error);
     }
   }, [fetchBudgets]);
 
@@ -220,47 +252,42 @@ export function useBudgets() {
     budgets,
     fetchBudgets,
     addBudget,
-    deleteBudget
+    deleteBudget,
   };
 }
 
-// Hook para gestionar preferencias de usuario (ej. nombre temporal/definitivo)
+// ====================
+// Hook: Preferencias de usuario
+// ====================
+
 export function usePreferences() {
-  const db = useSQLiteContext();
-  
-  const getPreference = useCallback(async (key: string, retryCount = 0): Promise<string | null> => {
+  const getPreference = useCallback(async (key: string): Promise<string | null> => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      const result = await db.getFirstAsync<any>(QUERIES_PREFERENCES.GET_BY_KEY, [key]);
-      return result?.preference_value || null;
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
-        log.warn(`usePreferences: NPE en getPreference(${key}). Reintentando...`);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return getPreference(key, retryCount + 1);
-      }
-      log.error(`Error getting preference ${key}`, e);
+      return await withNativeRetry(async () => {
+        const db = await getDBConnection();
+        const result = await db.getFirstAsync<PreferenceRow>(QUERIES_PREFERENCES.GET_BY_KEY, [key]);
+        return result?.preference_value ?? null;
+      }, `usePreferences.get(${key})`);
+    } catch (error: unknown) {
+      log.error(`usePreferences: Error getting preference ${key}`, error);
       return null;
     }
   }, []);
 
-  const setPreference = useCallback(async (key: string, value: string, retryCount = 0): Promise<void> => {
+  const setPreference = useCallback(async (key: string, value: string): Promise<void> => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
-      await db.runAsync(QUERIES_PREFERENCES.SET_KEY, [key, value]);
-      log.info(`usePreferences: Preferencia ${key} actualizada con éxito.`);
-    } catch (e: any) {
-      if (retryCount < 1 && e?.message?.includes('NativeDatabase.prepareAsync')) {
-        log.warn(`usePreferences: NPE en setPreference(${key}). Reintentando...`);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return setPreference(key, value, retryCount + 1);
-      }
-      log.error(`Error setting preference ${key}`, e);
+      await withNativeRetry(async () => {
+        const db = await getDBConnection();
+        await db.runAsync(QUERIES_PREFERENCES.SET_KEY, [key, value]);
+        log.info(`usePreferences: Preferencia ${key} actualizada con éxito.`);
+      }, `usePreferences.set(${key})`);
+    } catch (error: unknown) {
+      log.error(`usePreferences: Error setting preference ${key}`, error);
     }
   }, []);
 
   return {
     getPreference,
-    setPreference
+    setPreference,
   };
 }
