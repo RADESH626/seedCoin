@@ -88,6 +88,23 @@ export const CREATE_TRIGGERS = `
         WHERE account_id = NEW.account_id;
     END;
 
+    -- Actualizar saldo cuando se edita una transacción (monto, cuenta o tipo)
+    CREATE TRIGGER IF NOT EXISTS update_account_balance_after_update
+    AFTER UPDATE ON TRANSACTIONS
+    WHEN OLD.is_active = 1 AND NEW.is_active = 1 AND NEW.status = 'COMPLETED'
+    BEGIN
+        -- Revertir impacto anterior en la cuenta original
+        UPDATE ACCOUNT
+        SET current_balance = current_balance - CASE WHEN OLD.is_income THEN OLD.amount ELSE -OLD.amount END
+        WHERE account_id = OLD.account_id;
+
+        -- Aplicar nuevo impacto en la cuenta (puede ser la misma o una nueva)
+        UPDATE ACCOUNT
+        SET current_balance = current_balance + CASE WHEN NEW.is_income THEN NEW.amount ELSE -NEW.amount END
+        WHERE account_id = NEW.account_id;
+    END;
+
+
     -- Actualizar deuda cuando se paga la misma
     CREATE TRIGGER IF NOT EXISTS update_debt_balance_after_insert
     AFTER INSERT ON TRANSACTIONS

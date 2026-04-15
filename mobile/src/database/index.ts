@@ -4,7 +4,7 @@ import { INITIAL_CATEGORIES, SEED_CATEGORIES_QUERY } from './seed';
 import { log } from '@/src/services/logger';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 3;
+  const DATABASE_VERSION = 4;
 
   const result = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
   let currentDbVersion = result?.user_version ?? 0;
@@ -73,6 +73,19 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       log.info('migrateDbIfNeeded: Migración a v3 (Índices) completada exitosamente.');
     } catch (err) {
       log.error('migrateDbIfNeeded: Error en migración v3', err);
+    }
+  }
+
+  // MIGRACIÓN A V4 (Triggers de edición)
+  if (currentDbVersion === 3) {
+    log.info('migrateDbIfNeeded: Migrando base de datos de v3 a v4 (Disparadores de edición)...');
+    try {
+      await db.execAsync(CREATE_TRIGGERS);
+      currentDbVersion = 4;
+      await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
+      log.info('migrateDbIfNeeded: Migración a v4 (Disparadores) completada exitosamente.');
+    } catch (err) {
+      log.error('migrateDbIfNeeded: Error en migración v4', err);
     }
   }
 }

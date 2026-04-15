@@ -115,6 +115,10 @@ export interface CreateTransactionInput {
   transactionDate?: string;
 }
 
+export interface UpdateTransactionInput extends CreateTransactionInput {
+  transactionId: number;
+}
+
 // ====================
 // TYPE GUARDS
 // ====================

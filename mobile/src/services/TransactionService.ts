@@ -1,5 +1,5 @@
 import { QUERIES_TRANSACTION } from '../database/queries';
-import type { Transaction, CreateTransactionInput, MonthlyStats, DetailedTransaction, RecentTransaction } from '../database/types';
+import type { Transaction, CreateTransactionInput, UpdateTransactionInput, MonthlyStats, DetailedTransaction, RecentTransaction } from '../database/types';
 import { getDBConnection } from '../database/connection';
 import { fromCents, toCents } from '../helpers/currency';
 import { withNativeRetry } from '../helpers/database';
@@ -86,3 +86,54 @@ export const getRecentTransactionsWithCategory = async (): Promise<RecentTransac
     }));
   }, 'TransactionService.getRecentWithCategory');
 };
+export async function getTransactionById(id: number): Promise<Transaction | null> {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getFirstAsync<Transaction>(QUERIES_TRANSACTION.GET_BY_ID, [id]);
+    if (!result) return null;
+    return { ...result, amount: fromCents(result.amount) };
+  }, 'TransactionService.getTransactionById');
+}
+
+export async function updateTransaction(data: UpdateTransactionInput) {
+  const {
+    transactionId,
+    accountId,
+    isIncome,
+    amount,
+    categoryId,
+    description = '',
+    status = 'COMPLETED',
+    transactionDate,
+  } = data;
+
+  const amountInCents = toCents(amount);
+
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const statement = await db.prepareAsync(QUERIES_TRANSACTION.UPDATE_NAMED);
+    try {
+      await statement.executeAsync({
+        $transaction_id: transactionId,
+        $account_id: accountId,
+        $is_income: isIncome ? 1 : 0,
+        $amount: amountInCents,
+        $category_id: categoryId,
+        $description: description,
+        $transaction_date: transactionDate,
+        $status: status,
+      });
+      return true;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }, 'TransactionService.updateTransaction');
+}
+
+export async function deleteTransaction(id: number) {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    await db.runAsync(QUERIES_TRANSACTION.SOFT_DELETE_TRANSACTION, { $id: id });
+    return true;
+  }, 'TransactionService.deleteTransaction');
+}

@@ -12,7 +12,7 @@ interface LoadingOverlayProps {
  */
 export function LoadingOverlay({ message = 'Cargando...' }: LoadingOverlayProps) {
   return (
-    <View className="flex-1 justify-center items-center">
+    <View className="flex-1 justify-center items-center bg-dark-900">
       <ActivityIndicator size="large" color={Colors.seed[500]} />
       {message && (
         <Text className="text-gray-500 text-xs mt-4 font-medium uppercase tracking-widest">

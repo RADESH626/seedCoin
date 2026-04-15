@@ -1,21 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   KeyboardAvoidingView,
   Platform,
   Alert,
   ScrollView,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { Trash2 } from 'lucide-react-native';
 
 import { log } from '@/src/services/logger';
 import { useAccounts } from '@/src/hooks/useAccounts';
 import { useCategories } from '@/src/hooks/useCategories';
-import { createTransaction } from '@/src/services/TransactionService';
+import { useTransactions } from '@/src/hooks/useTransactions';
+import { createTransaction, updateTransaction } from '@/src/services/TransactionService';
 
-// Importación de componentes atómicos extraídos
+// Importación de componentes atómicos
 import { TransactionTypeSelector } from '@/components/transactions/TransactionTypeSelector';
 import { AmountInput } from '@/components/transactions/AmountInput';
 import { AccountSelector } from '@/components/transactions/AccountSelector';
@@ -26,8 +30,12 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 
 export default function AddTransactionScreen() {
   const insets = useSafeAreaInsets();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const isEditing = !!id;
+
   const { accounts, fetchAccounts } = useAccounts();
   const { categories, fetchCategories } = useCategories();
+  const { getById, removeTransaction } = useTransactions();
 
   // Estados del Formulario
   const [isIncome, setIsIncome] = useState(false);
@@ -38,19 +46,45 @@ export default function AddTransactionScreen() {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
 
-  // Cargar datos iniciales
+  // Cargar datos iniciales (Cuentas y Categorías)
   useEffect(() => {
     fetchAccounts();
     fetchCategories();
   }, [fetchAccounts, fetchCategories]);
 
-  // Autoseleccionar primera cuenta si existe
+  // Si estamos editando, cargar la transacción específica
   useEffect(() => {
-    if (accounts.length > 0 && selectedAccountId === null) {
+    if (isEditing && !isInitialDataLoaded) {
+      const loadTransaction = async () => {
+        try {
+          const tx = await getById(parseInt(id));
+          if (tx) {
+            setIsIncome(tx.is_income === 1);
+            setAmount(tx.amount.toString());
+            setDescription(tx.description || '');
+            setSelectedAccountId(tx.account_id);
+            setSelectedCategoryId(tx.category_id);
+            setDate(new Date(tx.transaction_date));
+            setIsInitialDataLoaded(true);
+          }
+        } catch (error) {
+          log.error('AddTransaction: Error cargando transacción para editar', error);
+          Alert.alert('Error', 'No se pudo cargar la información del movimiento.');
+          router.back();
+        }
+      };
+      loadTransaction();
+    }
+  }, [isEditing, id, getById, isInitialDataLoaded]);
+
+  // Autoseleccionar primera cuenta si es nueva transacción
+  useEffect(() => {
+    if (!isEditing && accounts.length > 0 && selectedAccountId === null) {
       setSelectedAccountId(accounts[0].account_id);
     }
-  }, [accounts, selectedAccountId]);
+  }, [accounts, selectedAccountId, isEditing]);
 
   const handleDateChange = (_event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
@@ -65,7 +99,7 @@ export default function AddTransactionScreen() {
       return;
     }
     if (!selectedAccountId) {
-      Alert.alert('Falta cuenta', 'Debes seleccionar una cuenta de origen/destino');
+      Alert.alert('Falta cuenta', 'Debes seleccionar una cuenta');
       return;
     }
     if (!selectedCategoryId) {
@@ -73,38 +107,65 @@ export default function AddTransactionScreen() {
       return;
     }
 
-    // Validación de fondos suficientes para gastos (Unhappy Path)
-    if (!isIncome) {
-      const selectedAccount = accounts.find(a => a.account_id === selectedAccountId);
-      if (selectedAccount && selectedAccount.current_balance < numericAmount) {
-        Alert.alert(
-          'Saldo insuficiente',
-          'La cuenta seleccionada no tiene fondos suficientes para realizar este gasto.'
-        );
-        return;
-      }
-    }
-
     try {
       setLoading(true);
-      log.info('AddTransaction: Guardando transacción...', { amount: numericAmount, isIncome });
-      await createTransaction({
+      const transactionData = {
         accountId: selectedAccountId,
         isIncome,
         amount: numericAmount,
         categoryId: selectedCategoryId,
         description: description.trim(),
-        status: 'COMPLETED',
+        status: 'COMPLETED' as const,
         transactionDate: date.toISOString(),
-      });
+      };
+
+      if (isEditing) {
+        log.info('AddTransaction: Actualizando transacción...', { id, amount: numericAmount });
+        await updateTransaction({
+          ...transactionData,
+          transactionId: parseInt(id),
+        });
+      } else {
+        log.info('AddTransaction: Creando transacción...', { amount: numericAmount });
+        await createTransaction(transactionData);
+      }
+      
       router.back();
     } catch (e) {
       log.error('AddTransaction: Error al guardar', e);
-      Alert.alert('Error', 'No se pudo guardar la transacción.');
+      Alert.alert('Error', 'No se pudo guardar el movimiento.');
     } finally {
       setLoading(false);
     }
   };
+
+  const handleDelete = useCallback(() => {
+    if (!id) return;
+
+    Alert.alert(
+      'Eliminar Movimiento',
+      '¿Estás seguro de que deseas eliminar este movimiento? Esta acción no se puede deshacer.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Eliminar', 
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              setLoading(true);
+              await removeTransaction(parseInt(id));
+              router.back();
+            } catch (error) {
+              log.error('AddTransaction: Error eliminando', error);
+              Alert.alert('Error', 'No se pudo eliminar el movimiento.');
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      ]
+    );
+  }, [id, removeTransaction]);
 
   return (
     <KeyboardAvoidingView 
@@ -113,7 +174,10 @@ export default function AddTransactionScreen() {
     >
       <View className="flex-1 px-6" style={{ paddingTop: Math.max(insets.top, 16) }}>
         
-        <ModalHeader title="Nuevo Movimiento" onClose={() => router.back()} />
+        <ModalHeader 
+          title={isEditing ? 'Editar Movimiento' : 'Nuevo Movimiento'} 
+          onClose={() => router.back()} 
+        />
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           
@@ -148,6 +212,17 @@ export default function AddTransactionScreen() {
             onDescriptionChange={setDescription} 
           />
 
+          {isEditing && (
+            <TouchableOpacity 
+              onPress={handleDelete}
+              className="mt-8 mb-4 py-4 flex-row items-center justify-center bg-red-500/10 border border-red-500/20 rounded-2xl"
+            >
+              <Trash2 size={20} color="#f87171" className="mr-2" />
+              <Text className="text-red-400 font-bold ml-2">Eliminar Movimiento</Text>
+            </TouchableOpacity>
+          )}
+
+          <View className="h-10" />
         </ScrollView>
 
         {showDatePicker && (
@@ -156,7 +231,7 @@ export default function AddTransactionScreen() {
 
         <View className="pb-10">
           <PrimaryButton 
-            label={`Guardar ${isIncome ? 'Ingreso' : 'Gasto'}`}
+            label={isEditing ? 'Actualizar' : `Guardar ${isIncome ? 'Ingreso' : 'Gasto'}`}
             onPress={handleSave}
             disabled={!amount}
             loading={loading}
