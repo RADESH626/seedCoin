@@ -20,6 +20,7 @@ export function ModalHeader({ title, onClose, Icon }: ModalHeaderProps) {
         <Text className="text-white text-2xl font-bold">{title}</Text>
       </View>
       <Pressable 
+        testID="close-modal-button"
         onPress={onClose} 
         className="w-10 h-10 bg-dark-800 rounded-full items-center justify-center border border-dark-700 active:bg-dark-700"
       >

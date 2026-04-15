@@ -1,0 +1,39 @@
+name: Mobile Tests CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    name: Expo Mobile Tests
+    runs-on: ubuntu-latest
+
+    # Definimos que todos los comandos por defecto se corran dentro de la carpeta mobile
+    defaults:
+      run:
+        working-directory: ./mobile
+
+    steps:
+      # 1. Clona el código en la máquina virtual
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Prepara e instala un entorno Node optimizado
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          # Optimiza la velocidad cacheando las descargas de paquetes para NPM
+          cache: 'npm'
+          cache-dependency-path: './mobile/package-lock.json'
+
+      # 3. Instala dependencias limpias usando npm ci (evita discrepancias con package.json)
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      # 4. Asegura que el CLI inyecte variables o entornos necesarios para pasar tests nativos
+      - name: 🧪 Run Jest Tests
+        run: npm test

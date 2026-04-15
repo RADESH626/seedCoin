@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react-native';
-import { AmountInput } from '../AmountInput';
+import { AmountInput } from '@/components/transactions/AmountInput';
 
 describe('AmountInput', () => {
   it('debe renderizar el monto inicial correctamente', () => {

@@ -1,4 +1,4 @@
-import { formatMoney, toCents, fromCents } from '../currency';
+import { formatMoney, toCents, fromCents } from '@/src/helpers/currency';
 
 describe('currency helpers', () => {
   describe('formatMoney', () => {

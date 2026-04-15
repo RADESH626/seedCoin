@@ -1,4 +1,4 @@
-import { getDateLabel } from '../helpers/date';
+import { getDateLabel } from './date';
 import type { DetailedTransaction } from '../database/types';
 
 /**
