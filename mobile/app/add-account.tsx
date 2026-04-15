@@ -1,22 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAccounts } from '@/src/hooks/useAccounts';
-import { createAccount } from '@/src/services/AccountService';
+import { createAccount, getAccountById, updateAccount } from '@/src/services/AccountService';
 import { ModalHeader } from '@/components/ui/ModalHeader';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { AccountTypeSelector } from '@/components/accounts/AccountTypeSelector';
 import { ACCOUNT_TYPES } from '@/src/database/types';
 
-export default function AddAccountScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const isEditing = !!id;
+
   const insets = useSafeAreaInsets();
-  const { accounts } = useAccounts();
+  const { accounts, fetchAccounts } = useAccounts();
   const [name, setName] = useState('');
   const [accountType, setAccountType] = useState<string>(ACCOUNT_TYPES.CASH.id);
   const [balance, setBalance] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isEditing && id) {
+      getAccountById(parseInt(id)).then(acc => {
+        if (acc) {
+          setName(acc.name);
+          setAccountType(acc.account_type);
+          setBalance(acc.initial_balance.toString());
+        }
+      });
+    }
+  }, [id, isEditing]);
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -28,20 +42,22 @@ export default function AddAccountScreen() {
 
     try {
       setLoading(true);
-      await createAccount(name.trim(), accountType, initialBalance);
+      if (isEditing && id) {
+        await updateAccount(parseInt(id), name.trim(), accountType, initialBalance);
+      } else {
+        await createAccount(name.trim(), accountType, initialBalance);
+      }
       
-      // Si era la primera cuenta (onboarding), vamos directo al dashboard usando REPLACE
-      // para que no haya flashback del onboarding
-      if (accounts.length === 0) {
-        // Aprovechamos para refrescar la lista global si fuera necesario, 
-        // aunque el dashboard lo hará al entrar.
+      await fetchAccounts();
+
+      if (!isEditing && accounts.length === 0) {
         router.replace('/(tabs)');
       } else {
         router.back();
       }
     } catch (e) {
       console.error(e);
-      Alert.alert('Error', 'No se pudo crear la cuenta localmente.');
+      Alert.alert('Error', `No se pudo ${isEditing ? 'actualizar' : 'crear'} la cuenta localmente.`);
     } finally {
       setLoading(false);
     }
@@ -56,7 +72,7 @@ export default function AddAccountScreen() {
         className="flex-1 px-6"
         style={{ paddingTop: Math.max(insets.top, 16) }}
       >
-        <ModalHeader title="Nueva Cuenta" onClose={() => router.back()} />
+        <ModalHeader title={isEditing ? "Editar Cuenta" : "Nueva Cuenta"} onClose={() => router.back()} />
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           {/* Input Nombre */}
@@ -78,7 +94,9 @@ export default function AddAccountScreen() {
 
           {/* Saldo Inicial COP */}
           <View className="mb-8">
-            <Text className="text-gray-400 text-sm font-medium mb-2 ml-1">Capital Inicial (COP)</Text>
+            <Text className="text-gray-400 text-sm font-medium mb-2 ml-1">
+              {isEditing ? 'Capital Inicial (Ajustar)' : 'Capital Inicial (COP)'}
+            </Text>
             <View className="flex-row items-center w-full bg-dark-800 px-4 rounded-2xl border border-dark-700 focus:border-seed-500 focus-within:border-seed-500 overflow-hidden">
               <Text className="text-gray-400 text-lg font-bold pr-2">$</Text>
               <TextInput
@@ -91,12 +109,17 @@ export default function AddAccountScreen() {
               />
               <Text className="text-gray-500 text-sm font-bold pl-2">COP</Text>
             </View>
+            {isEditing && (
+              <Text className="text-[10px] text-gray-500 mt-2 ml-1 italic">
+                Nota: Cambiar el capital inicial ajustará automáticamente el saldo actual.
+              </Text>
+            )}
           </View>
         </ScrollView>
 
         <View className="pb-8 pt-4">
           <PrimaryButton 
-            label="Guardar Cuenta"
+            label={isEditing ? "Actualizar Cuenta" : "Guardar Cuenta"}
             onPress={handleSave}
             disabled={!name.trim()}
             loading={loading}
