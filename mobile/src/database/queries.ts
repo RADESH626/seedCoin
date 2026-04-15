@@ -15,6 +15,10 @@ export const QUERIES_ACCOUNT = {
   
   SOFT_DELETE: `UPDATE ACCOUNT SET is_active = 0 WHERE account_id = $id;`,
   
+  GET_BY_ID: `SELECT account_id, name, account_type, initial_balance, current_balance, is_active FROM ACCOUNT WHERE account_id = $id;`,
+  
+  UPDATE_NAMED: `UPDATE ACCOUNT SET name = $name, account_type = $type, initial_balance = $initial, current_balance = current_balance + ($initial - initial_balance) WHERE account_id = $id;`,
+  
   GET_TOTAL_BALANCE: `SELECT SUM(current_balance) as total FROM ACCOUNT WHERE is_active = 1;`
 };
 
@@ -89,7 +93,34 @@ export const QUERIES_TRANSACTION = {
     LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
     WHERE T.is_active = 1
     ORDER BY T.transaction_date DESC;
-  `
+  `,
+
+  GET_BY_ID: `
+    SELECT 
+      transaction_id, account_id, debt_id, transfer_transaction_id, 
+      is_income, amount, category_id, description, transaction_date, 
+      status, recurrence_frequency, is_active 
+    FROM TRANSACTIONS 
+    WHERE transaction_id = ? AND is_active = 1;
+  `,
+
+  UPDATE_NAMED: `
+    UPDATE TRANSACTIONS SET
+      account_id = $account_id,
+      is_income = $is_income,
+      amount = $amount,
+      category_id = $category_id,
+      description = $description,
+      transaction_date = $transaction_date,
+      status = $status
+    WHERE transaction_id = $transaction_id;
+  `,
+
+  SOFT_DELETE_TRANSACTION: `
+    UPDATE TRANSACTIONS SET is_active = 0 WHERE transaction_id = $id;
+  `,
+
+  COUNT_BY_ACCOUNT: `SELECT COUNT(*) as total FROM TRANSACTIONS WHERE account_id = $id AND is_active = 1;`
 };
 
 export const QUERIES_BUDGET = {
