@@ -73,6 +73,18 @@ export default function AddTransactionScreen() {
       return;
     }
 
+    // Validación de fondos suficientes para gastos (Unhappy Path)
+    if (!isIncome) {
+      const selectedAccount = accounts.find(a => a.account_id === selectedAccountId);
+      if (selectedAccount && selectedAccount.current_balance < numericAmount) {
+        Alert.alert(
+          'Saldo insuficiente',
+          'La cuenta seleccionada no tiene fondos suficientes para realizar este gasto.'
+        );
+        return;
+      }
+    }
+
     try {
       setLoading(true);
       log.info('AddTransaction: Guardando transacción...', { amount: numericAmount, isIncome });

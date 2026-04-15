@@ -48,9 +48,7 @@ export function CategoryGrid({ categories = [], selectedCategoryId, onSelectCate
               className="items-center w-[22%]"
             >
               <View 
-                className={`w-14 h-14 rounded-2xl items-center justify-center border-2 mb-2 
-                  ${isSelected ? 'bg-seed-600 border-seed-400 scale-105 shadow-lg shadow-seed-600/40' : 'bg-dark-800 border-dark-700'}
-                `}
+                className={`w-14 h-14 rounded-2xl items-center justify-center border-2 mb-2 ${isSelected ? 'bg-seed-600 border-seed-400' : 'bg-dark-800 border-dark-700'}`}
               >
                 <Icon color={isSelected ? '#fff' : (cat.color || '#9ca3af')} size={24} />
               </View>

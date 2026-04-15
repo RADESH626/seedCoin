@@ -61,5 +61,31 @@ Index of custom skills currently available in `.agents/skills/`:
 ## 🚀 Vision
 SeedCoin aims to provide a premium, secure, and extremely performant offline-first financial experience.
 
-> [!IMPORTANT]
 > When performing any task, the Agent MUST prioritize **Financial Precision** and **Code Cleanliness** over implementation speed.
+
+---
+
+## 🐛 Known Quirks & Gotchas
+
+### NativeWind v4 + Expo Router "Navigation Context" Crash
+**El Síntoma:** Un error que paraliza la aplicación con el mensaje `Couldn't find a navigation context. Have you wrapped your app with 'NavigationContainer'?`. El stack trace suele apuntar a constructores internos de renderizado en `react-native-css-interop`.
+
+**La Causa Raíz:**
+1. **Parser de NativeWind:** NativeWind v4 es estricto con los `className`. Si detecta una sintaxis que no entiende dentro de un prop `className` (por ejemplo, múltiples interpolaciones con saltos de línea `\n` vacíos usando backticks), activa un sistema para registrar un **Warning** (Advertencia).
+2. **Stringify Letal:** Para imprimir la advertencia en consola, el método `printUpgradeWarning()` de NativeWind escanea transversalmente y ejecuta `JSON.stringify()` sobre el Árbol del Componente de React (sus `props` y estado interno).
+3. **El Gatillo de Navegación:** En React 18/19, la librería `@react-navigation/...` implementa un *getter* especial en su `NavigationContext` para desarrolladores. Si intentas leer este contexto fuera de lugar (como lo hace el escáner indiscriminado de stringify de NativeWind), el getter estalla y fuerza un crasheo con la excepción de "Contexto no encontrado".
+  
+**La Solución Estricta:**
+- ¡NUNCA dejes interpolaciones multilíneas sin parsear ni uses saltos de línea brutos dentros de tu prop `className="..."`!
+- Mantén tus string literals limpios en una sola línea.
+  
+  **Incorrecto (Va a crashear tu navegación):**
+  ```tsx
+  className={`w-14 h-14
+    ${isSelected ? 'bg-blue' : 'bg-red'}
+  `}
+  ```
+  **Correcto:**
+  ```tsx
+  className={`w-14 h-14 ${isSelected ? 'bg-blue' : 'bg-red'}`}
+  ```
