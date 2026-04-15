@@ -12,7 +12,8 @@ import {
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { getDBConnection } from '@/src/database/connection';
 
@@ -28,6 +29,16 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const SeedCoinTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: '#050B14', // bg-dark-900
+    card: '#050B14',
+    border: '#1E293B', // dark-700
+  },
+};
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -60,7 +71,11 @@ export default function RootLayout() {
   }, [loaded, dbLoaded]);
 
   if (!loaded || !dbLoaded) {
-    return null;
+    return (
+      <View style={{ flex: 1, backgroundColor: '#050B14' }}>
+        <StatusBar style="light" />
+      </View>
+    );
   }
 
   return <RootLayoutNav />;
@@ -70,11 +85,13 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={SeedCoinTheme}>
+      <StatusBar style="light" />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
         <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="manage-accounts" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
