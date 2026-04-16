@@ -3,6 +3,8 @@ name: skill-sync
 description: >
   Syncs skill metadata with the Auto-invoke table in AGENTS.md.
   Trigger: After creating or modifying a skill, regenerating Auto-invoke tables, or verifying that no skills are missing from AGENTS.md.
+trigger: Regenerate AGENTS.md auto-invoke tables
+allowed-tools: [Read, Edit, Write, Command]
 metadata:
   author: seedcoin
   version: "1.0"

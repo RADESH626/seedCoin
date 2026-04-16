@@ -1,3 +1,10 @@
+---
+name: workflow
+description: Meta-skill for operational AI-human interaction protocols.
+trigger: General SeedCoin development questions
+allowed-tools: [Read, Edit, Write]
+---
+
 # IA Workflow & Protocol Skill
 
 Este skill no trata de React ni Bases de datos, se trata exclusiva de cómo tú (Agente IA) debes interactuar con el código del Usuario a nivel operativo para evitar confusiones, sobre-ingeniería y código roto. Un meta-skill.

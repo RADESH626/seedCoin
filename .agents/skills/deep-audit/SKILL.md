@@ -3,6 +3,8 @@ name: deep-audit
 description: >
   Systematic framework for exhaustive, file-by-file project reviews and audits.
   Trigger: When the user asks for a "review", "audit", or "checking best practices".
+trigger: Performing a deep code audit
+allowed-tools: [Read, Glob, Grep, Task]
 metadata:
   author: seedcoin
   version: "1.0"

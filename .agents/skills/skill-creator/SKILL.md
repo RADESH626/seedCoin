@@ -3,6 +3,8 @@ name: skill-creator
 description: >
   Creates new AI agent skills following project standards.
   Trigger: When the user asks to create a new skill, add agent instructions, or document recurring patterns.
+trigger: Creating new skills
+allowed-tools: [Read, Edit, Write, Glob]
 metadata:
   author: seedcoin
   version: "2.0"

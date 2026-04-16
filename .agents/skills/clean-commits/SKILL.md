@@ -1,8 +1,10 @@
 ---
-name: commits-limpios
+name: clean-commits
 description: >
   Create professional git commits following conventional-commits format.
   Trigger: When creating commits, after completing code changes, when user asks to commit.
+trigger: Committing changes
+allowed-tools: [Read, Edit, Write, Command]
 metadata:
   author: seedcoin
   version: "1.0"

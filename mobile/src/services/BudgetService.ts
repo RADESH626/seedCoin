@@ -34,3 +34,14 @@ export const deleteBudget = async (budgetId: number) => {
     return true;
   }, 'BudgetService.deleteBudget');
 };
+
+export const updateBudget = async (budgetId: number, limit: number) => {
+  const limitInCents = toCents(limit);
+  
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    await db.runAsync(QUERIES_BUDGET.UPDATE_BUDGET_AMOUNT, [limitInCents, budgetId]);
+    return true;
+  }, 'BudgetService.updateBudget');
+};
+

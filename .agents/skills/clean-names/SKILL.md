@@ -3,6 +3,8 @@ name: clean-names
 description: >
   Use when naming, renaming, or reviewing names of variables, functions, hooks, components, interfaces, or modules in TypeScript/React Native.
   Applies Clean Code principles — descriptive names, appropriate length, ecosystem conventions.
+trigger: Naming, renaming, or reviewing variables/functions
+allowed-tools: [Read, Edit, Write, Grep]
 metadata:
   author: seedcoin
   version: "1.1"

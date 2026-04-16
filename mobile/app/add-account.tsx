@@ -10,6 +10,8 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { AccountTypeSelector } from '@/components/accounts/AccountTypeSelector';
 import { ACCOUNT_TYPES } from '@/src/database/types';
 
+
+export default function AddAccountScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const isEditing = !!id;
 

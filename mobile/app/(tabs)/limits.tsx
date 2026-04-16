@@ -9,11 +9,14 @@ import { BudgetCard } from '@/components/transactions/BudgetCard';
 import { AddBudgetModal } from '@/components/modals/AddBudgetModal';
 import { log } from '@/src/services/logger';
 import Colors from '@/constants/Colors';
+import type { BudgetWithProgress } from '@/src/database/types';
 
 export default function LimitsScreen() {
   const insets = useSafeAreaInsets();
-  const { budgets, fetchBudgets, addBudget, loading } = useBudgets();
+  const { budgets, fetchBudgets, addBudget, updateExistingBudget, removeBudget, loading } = useBudgets();
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [editingBudget, setEditingBudget] = useState<BudgetWithProgress | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -21,6 +24,21 @@ export default function LimitsScreen() {
       fetchBudgets();
     }, [fetchBudgets])
   );
+
+  const handleCreateNew = () => {
+    setEditingBudget(null);
+    setModalVisible(true);
+  };
+
+  const handleEdit = (budget: BudgetWithProgress) => {
+    setEditingBudget(budget);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setEditingBudget(null);
+  };
 
   return (
     <View className="flex-1 bg-dark-900">
@@ -34,7 +52,7 @@ export default function LimitsScreen() {
             <Text className="text-gray-500 text-xs">Control de gastos mensuales</Text>
           </View>
           <Pressable 
-            onPress={() => setModalVisible(true)}
+            onPress={handleCreateNew}
             className="w-12 h-12 bg-seed-600 rounded-2xl items-center justify-center shadow-lg shadow-seed-600/30"
           >
             <Plus color="#fff" size={24} />
@@ -68,7 +86,7 @@ export default function LimitsScreen() {
             <Text className="text-gray-500 text-xs text-center px-10">Crea tu primer límite de gasto para empezar a ahorrar hoy mismo.</Text>
             
             <Pressable 
-              onPress={() => setModalVisible(true)}
+              onPress={handleCreateNew}
               className="mt-6 bg-dark-800 border border-dark-700 px-6 py-3 rounded-full"
             >
               <Text className="text-seed-400 font-bold text-sm">Crear Presupuesto</Text>
@@ -76,7 +94,11 @@ export default function LimitsScreen() {
           </View>
         ) : (
           budgets.map((budget) => (
-            <BudgetCard key={budget.budget_id} budget={budget} />
+            <BudgetCard 
+              key={budget.budget_id} 
+              budget={budget} 
+              onEdit={handleEdit}
+            />
           ))
         )}
         <View className="h-32" />
@@ -84,9 +106,14 @@ export default function LimitsScreen() {
 
       <AddBudgetModal 
         visible={modalVisible} 
-        onClose={() => setModalVisible(false)} 
+        onClose={handleCloseModal} 
         onSave={addBudget} 
+        onUpdate={updateExistingBudget}
+        onDelete={removeBudget}
+        initialBudget={editingBudget}
       />
+
     </View>
   );
 }
+

@@ -4,6 +4,8 @@ description: >
   Test-Driven Development workflow for SeedCoin.
   Trigger: ALWAYS when implementing features, fixing bugs, or refactoring — regardless of component.
   This is a MANDATORY workflow, not optional.
+trigger: Implementing feature or fixing bug
+allowed-tools: [Read, Edit, Write, Command, Task]
 metadata:
   author: seedcoin
   version: "1.0"

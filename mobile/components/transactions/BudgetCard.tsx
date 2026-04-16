@@ -1,19 +1,16 @@
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { getCategoryIcon } from '@/src/helpers/ui';
 import { formatMoney } from '@/src/helpers/currency';
+import type { BudgetWithProgress } from '@/src/database/types';
+
 
 interface Props {
-  budget: {
-    budget_id: number;
-    limit_amount: number;
-    total_spent: number;
-    category_name: string;
-    category_icon: string;
-    category_color: string;
-  };
+  budget: BudgetWithProgress;
+  onEdit?: (budget: BudgetWithProgress) => void;
 }
 
-export function BudgetCard({ budget }: Props) {
+export function BudgetCard({ budget, onEdit }: Props) {
+
   const percentage = Math.min((budget.total_spent / budget.limit_amount) * 100, 100);
   const remaining = Math.max(budget.limit_amount - budget.total_spent, 0);
   
@@ -26,7 +23,10 @@ export function BudgetCard({ budget }: Props) {
   }
 
   return (
-    <View className="bg-dark-800 border border-dark-700 rounded-[32px] p-5 mb-4">
+    <Pressable 
+      onPress={() => onEdit?.(budget)}
+      className="bg-dark-800 border border-dark-700 rounded-[32px] p-5 mb-4 active:bg-dark-700/50"
+    >
       <View className="flex-row justify-between items-center mb-4">
         <View className="flex-row items-center gap-3">
           <View 
@@ -40,11 +40,12 @@ export function BudgetCard({ budget }: Props) {
             <Text className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Mensual</Text>
           </View>
         </View>
-        <View className="items-end">
+        <View className="items-end mr-1">
           <Text className="text-white font-black text-sm">{formatMoney(budget.limit_amount, 'COP')}</Text>
           <Text className="text-gray-500 text-[10px]">Límite</Text>
         </View>
       </View>
+
 
       {/* Barra de Progreso */}
       <View className="h-2 w-full bg-dark-700 rounded-full overflow-hidden mb-3">
@@ -64,6 +65,7 @@ export function BudgetCard({ budget }: Props) {
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
+
 }

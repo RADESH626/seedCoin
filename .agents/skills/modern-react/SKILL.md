@@ -3,6 +3,8 @@ name: modern-react
 description: >
   Modern React 19 and React Native patterns.
   Trigger: When writing React 19 components, hooks in .tsx, refs as props, React Native patterns, NativeWind, or Expo Router.
+trigger: Writing React 19 / Expo / NativeWind code
+allowed-tools: [Read, Edit, Write]
 metadata:
   author: seedcoin
   version: "1.0"

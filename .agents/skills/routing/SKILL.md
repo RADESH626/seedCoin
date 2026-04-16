@@ -1,3 +1,10 @@
+---
+name: routing
+description: Expo Router v6 navigation structure and path management.
+trigger: Working with navigation or routes
+allowed-tools: [Read, Edit, Write]
+---
+
 # Routing Skill (Expo Router)
 
 Este skill controla la correcta manipulación de la navegación y estructura de rutas para la aplicación móvil usando Expo Router v6.

@@ -3,7 +3,8 @@ name: clean-tests
 description: >
   Use when writing, fixing, editing, or refactoring tests in TypeScript.
   Applies Clean Code principles for testing — fast tests, boundary coverage, F.I.R.S.T., one concept per test.
-  Configured for Jest, SQLite, and Maestro.
+trigger: Writing or reviewing tests (Jest/Maestro)
+allowed-tools: [Read, Edit, Write, Command, Task]
 metadata:
   author: seedcoin
   version: "1.1"

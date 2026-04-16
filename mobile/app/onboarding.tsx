@@ -4,6 +4,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
 import { usePreferences } from '@/src/hooks/usePreferences';
 import { useAccounts } from '@/src/hooks/useAccounts';
+import { useSingleAction } from '@/src/hooks/useSingleAction';
 import { NameSelection, AccountStart } from '@/components/onboarding/OnboardingSections';
 
 export default function OnboardingScreen() {
@@ -12,6 +13,10 @@ export default function OnboardingScreen() {
   const [userName, setUserName] = useState<string | null>(null);
   const [nameInput, setNameInput] = useState('');
   const [checked, setChecked] = useState(false);
+
+  const { execute: handleCreateAccount } = useSingleAction(() => 
+    router.push('/add-account' as any)
+  );
 
   useEffect(() => {
     // Solo redirigir si ya terminamos la carga inicial y detectamos cuentas
@@ -70,7 +75,7 @@ export default function OnboardingScreen() {
       ) : (
         <AccountStart 
           userName={userName}
-          onCreateAccount={() => router.push('/add-account' as any)}
+          onCreateAccount={handleCreateAccount}
         />
       )}
     </View>

@@ -1,3 +1,10 @@
+---
+name: task-processing
+description: Protocol for planning and executing development tasks.
+trigger: Working on task
+allowed-tools: [Read, Edit, Write, Task]
+---
+
 # Task Processing & Queue Execution Skill
 
 Este skill define el protocolo a seguir para la lectura, planeación y ejecución de las solicitudes de desarrollo contenidas en la bandeja de entrada (el archivo TODO).

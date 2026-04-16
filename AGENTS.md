@@ -2,106 +2,98 @@
 
 This file defines the context, skills, and development standards for AI agents working on the **SeedCoin** project.
 
-## 1. Repository Guidelines
+## How to Use This Guide
+- Start here for project-wide norms and AI behaviors.
+- The repository follows a bilingual model: **Spanish** for humans (docs, comments), **English** for AI/System (skills, code, logic).
+- Local skills in `.agents/skills/` provide detailed patterns on-demand.
+- ALWAYS consult the **Auto-invoke Skills** table before performing any action.
 
-*   **Language Standard (Bilingual Model):** 
-    *   **Spanish (Human-First):** Used for codebase comments, general documentation (`documentacion/`), and root files (`README.md`, `run.bat`).
-    *   **English (AI-First):** Used for all system-level files within `.agents/` (Skills, Knowledge, Metadata) to ensure AI precision. Variable and function names must be in English (camelCase).
-*   **Clean Code:** Maintain SOLID, DRY, and KISS principles.
-*   **Standardization:** Follow Java (Google Style) and TypeScript (Standard/Prettier) style conventions.
-*   **Documentation:** Update `README.md` and internal documentation when making significant changes.
+## Available Skills
 
-## 2. Available Skills
-
-### Generic Skills
-General technical skills required for the SeedCoin mobile technology stack.
-
+### Generic Skills (Any Project)
 | Skill | Description | URL |
-| :--- | :--- | :--- |
-| `react-native` | Mobile Framework | [React Native Docs](https://reactnative.dev/docs/getting-started) (v0.81.5) |
-| `expo` | App Router & Build | [Expo Docs](https://docs.expo.dev/) (SDK 54) |
-| `expo-router` | Enrutamiento | [Expo Router](https://docs.expo.dev/router/introduction/) (v6) |
-| `react` | UI Library | [React Docs](https://react.dev/) (v19) |
-| `typescript` | Frontend Language | [TypeScript Docs](https://www.typescriptlang.org/) (v5.9) |
-| `nativewind` | CSS/NativeWind | [NativeWind Docs](https://www.nativewind.dev/) (v4.2 con Tailwind 3.4) |
-| `sqlite` | Local Database | [Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/) (v16) |
+|-------|-------------|-----|
+| `typescript` | Const types, flat interfaces, utility types | [TypeScript Docs](https://www.typescriptlang.org/) |
+| `react-19` | Modern React 19 patterns (no useMemo/useCallback by default) | [React Docs](https://react.dev/) |
+| `react-native` | Mobile Framework conventions | [React Native Docs](https://reactnative.dev/docs/getting-started) |
+| `expo-54` | App Router, SDK 54, SQLite, and Build | [Expo Docs](https://docs.expo.dev/) |
+| `nativewind-4` | Tailwind 3.4 for Native, className patterns | [NativeWind Docs](https://www.nativewind.dev/) |
+| `tdd` | Test-Driven Development workflow | [TDD Workflow](.agents/skills/tdd-workflow/SKILL.md) |
 
 ### SeedCoin-Specific Skills
-Project-specific domain knowledge.
+| Skill | Description | URL |
+|-------|-------------|-----|
+| `boy-scout` | General refactoring and clean code orchestration | [.agents/skills/boy-scout/SKILL.md](.agents/skills/boy-scout/SKILL.md) |
+| `clean-database` | Standards for Schema, Queries, and Indexes | [.agents/skills/clean-database/SKILL.md](.agents/skills/clean-database/SKILL.md) |
+| `clean-functions` | SRP, max 3 arguments, hook modularity | [.agents/skills/clean-functions/SKILL.md](.agents/skills/clean-functions/SKILL.md) |
+| `clean-names` | CamelCase, descriptive naming, domain clarity | [.agents/skills/clean-names/SKILL.md](.agents/skills/clean-names/SKILL.md) |
+| `clean-tests` | F.I.R.S.T. principle, Jest, SQLite testing | [.agents/skills/clean-tests/SKILL.md](.agents/skills/clean-tests/SKILL.md) |
+| `clean-comments` | Metadata-free comments, bilingual documentation | [.agents/skills/clean-comments/SKILL.md](.agents/skills/clean-comments/SKILL.md) |
+| `clean-commits` | Professional commits (conventional-commits) | [.agents/skills/clean-commits/SKILL.md](.agents/skills/clean-commits/SKILL.md) |
+| `deep-audit` | Exhaustive codebase review framework | [.agents/skills/deep-audit/SKILL.md](.agents/skills/deep-audit/SKILL.md) |
+| `frontend-development`| UI Atomization and Component extraction | [.agents/skills/frontend_development/SKILL.md](.agents/skills/frontend_development/SKILL.md) |
+| `modern-react` | Atomicity, refs as props, React 19 features | [.agents/skills/modern-react/SKILL.md](.agents/skills/modern-react/SKILL.md) |
+| `strict-typescript` | Type-first development, removing 'any' | [.agents/skills/strict-typescript/SKILL.md](.agents/skills/strict-typescript/SKILL.md) |
+| `skill-creator` | Create new AI agent specialized skills | [.agents/skills/skill-creator/SKILL.md](.agents/skills/skill-creator/SKILL.md) |
+| `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
+| `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
 
-| Skill | Description | Location Details |
-| :--- | :--- | :--- |
-| `ui-components` | Reusable component library (Buttons, Inputs, Modals). | `mobile/components` |
+## Auto-invoke Skills
+When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 
-### Auto-invoke Skills
-Mapping of developer intents to specific Agent Skills.
+| Action | Skill |
+|--------|-------|
+| Adding or modifying database schema/queries | `clean-database` |
+| After creating or modifying any code | `verify-build` |
+| At the start of every task or session | `AI Knowledge Base (.agents/KNOWLEDGE.md)` |
+| Committing changes | `clean-commits` |
+| Creating / extract UI components | `frontend-development` |
+| Creating new skills | `skill-creator` |
+| Dealing with comments or documentation | `clean-comments` |
+| Debugging build or TSC errors | `verify-build` |
+| Designing or optimizing SQLite | `clean-database` |
+| Fixing, editing, or refactoring code | `boy-scout` |
+| Implementing feature or fixing bug | `tdd-workflow` |
+| Naming, renaming, or reviewing variables/functions | `clean-names` |
+| Performing a deep code audit | `deep-audit` |
+| Refactoring React components/performance | `modern-react` |
+| Regenerate AGENTS.md auto-invoke tables | `skill-sync` |
+| Writing or reviewing tests (Jest/Maestro) | `clean-tests` |
+| Writing or reviewing TypeScript types/interfaces | `strict-typescript` |
+| Writing React 19 / Expo / NativeWind code | `modern-react` |
 
-| User Intent / Action | Skill to Invoke | Location |
-| :--- | :--- | :--- |
-| At the start of every task or session | **AI Knowledge Base** | `.agents/KNOWLEDGE.md` |
-| Create interfaces, fix Frontend styles or logic | **Frontend Development Skill** | `.agents/skills/frontend_development/SKILL.md` |
-| Create a new skill for the agent | **Skill Creator** | `.agents/skills/skill-creator/SKILL.md` |
-| Writing, fixing, or refactoring functions/hooks | **Clean Functions** | `.agents/skills/clean-functions/SKILL.md` |
-| Naming, renaming, or reviewing variables/functions/components | **Clean Names** | `.agents/skills/clean-names/SKILL.md` |
-| Writing, fixing, or reviewing tests (Jest/SQLite/Maestro) | **Clean Tests** | `.agents/skills/clean-tests/SKILL.md` |
-| Fixing, editing, debugging, or working with any TS/RN code | **Boy Scout** | `.agents/skills/boy-scout/SKILL.md` |
-| Writing, fixing, or reviewing comments and inline documentation | **Clean Comments** | `.agents/skills/clean-comments/SKILL.md` |
-| Writing or reviewing TypeScript types, interfaces, or generics | **Strict TypeScript** | `.agents/skills/strict-typescript/SKILL.md` |
-| Implementing feature, fixing bug, or refactoring with TDD | **TDD Workflow** | `.agents/skills/tdd-workflow/SKILL.md` |
-| Writing React 19 / React Native / Expo Router components | **Modern React** | `.agents/skills/modern-react/SKILL.md` |
-| Creating git commits or preparing code for commit | **Clean Commits** | `.agents/skills/clean-commits/SKILL.md` |
-| Creating or modifying a skill, syncing AGENTS.md | **Skill Sync** | `.agents/skills/skill-sync/SKILL.md` |
-| Writing or refactoring React components/performance | **React Best Practices** | `.agents/skills/vercel-react-best-practices/SKILL.md` |
-| Writing or reviewing TypeScript code Patterns | **TS Best Practices** | `.agents/skills/typescript-best-practices/SKILL.md` |
-| Designing or optimizing SQLite databases | **SQLite Expert** | `.agents/skills/sqlite-database-expert/SKILL.md` |
-| Optimizing SQL queries and schema design | **SQL/Postgres Best Practices** | `.agents/skills/supabase-postgres-best-practices/SKILL.md` |
-| Writing or refactoring SQL, schema, or indexes | **Clean Database** | `.agents/skills/clean-database/SKILL.md` |
-| Deep project review or best practice audit | **Deep Audit** | `.agents/skills/deep-audit/SKILL.md` |
+## Project Overview
+SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
 
-## 3. Project Overview
+| Component | Location | Tech Stack |
+|-----------|----------|------------|
+| Mobile App | `mobile/` | React Native, Expo SDK 54, NativeWind, SQLite |
+| Documentation | `documentacion/` | Markdown, User Guides, Diagrams |
+| AI Protocols | `.agents/` | Agent Skills, Knowledge Base, Metadata |
 
-**SeedCoin** is a personal platform for secure and efficient financial management, allowing users to control income, expenses, and visualize their financial health.
-
-### Main Components
-
-| Component | Path | Description |
-| :--- | :--- | :--- |
-| **Mobile App** | `mobile/` | **React Native / Expo** application. Maneja la interfaz de usuario, estado global, y base de datos local SQLite. |
-| **Documentation** | `documentacion/` | User manuals, diagrams, and additional technical guides. |
-
-## 4. Development
+## Development
 
 ### Setup & Run
-Essential commands to set up the development environment.
-
-**Mobile (Expo):**
 ```bash
+# Mobile (Expo)
 cd mobile
 npm install
 npm start
-# Úsalo via Expo Go o en la web.
 ```
 
-### Quick Script (Windows)
-Run `run.bat` in the root to start both services simultaneously.
-
 ### Code Quality
-*   **Backend:** Run `./mvnw test` for unit tests.
-*   **Frontend:** Run `npm run lint` for static analysis.
+- **Static Analysis**: `npm run lint` (in `mobile/`).
+- **Build Verification**: Run `verify-build` skill after changes.
+- **Testing**: `npm test` for unit and integration tests.
 
-## 5. Commit & Pull Request Guidelines
+## Commit & Pull Request Guidelines
+Follow conventional-commit style: `<type>[scope]: <description>`
 
-### Conventional Commits
-Follow the format: `<type>[optional scope]: <description>`
+**Types:** `feat`, `fix`, `docs`, `chore`, `perf`, `refactor`, `test`, `style`
 
-*   `feat`: New functionality (e.g., `feat(auth): login endpoint`).
-*   `fix`: Bug corrections (e.g., `fix(ui): responsive navbar`).
-*   `docs`: Documentation changes.
-*   `refactor`: Code change that neither adds features nor fixes bugs.
-*   `test`: Add or correct tests.
-*   `chore`: Maintenance, dependencies, configuration.
-
-### Pull Requests
-*   Descriptive title following Conventional Commits.
-*   Clear description of changes made.
-*   Ensure tests pass before requesting review.
+### Before creating a PR:
+1. Ensure all tests pass (`clean-tests`).
+2. Run `verify-build` to check TypeScript integrity.
+3. Update relevant documentation in `documentacion/` if feature changes.
+4. Ensure code follows "Financial Integrity" rules (KNOWLEDGE.md).
+5. Link screenshots/recordings for UI changes.

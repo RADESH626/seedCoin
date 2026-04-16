@@ -4,6 +4,8 @@ description: >
   Use when fixing, editing, changing, debugging, or working with any TypeScript/React Native code.
   Applies the Boy Scout Rule — always leave code cleaner than you found it.
   Orchestrates other clean code skills and applies general principles (DRY, SRP, Law of Demeter).
+trigger: Fixing, editing, or refactoring code
+allowed-tools: [Read, Edit, Write, Grep, Command]
 metadata:
   author: seedcoin
   version: "1.1"

@@ -1,3 +1,10 @@
+---
+name: bug-fixing
+description: Protocol for error resolution and persistent bug fixing.
+trigger: Protocol for error resolution and persistent bug fixing
+allowed-tools: [Read, Edit, Write, Grep, Command, Web]
+---
+
 # Bug Fixing & Error Resolution Skill
 
 Este skill define el protocolo a seguir cuando el IA se enfrenta a un error persistente, fallo de compilación, o comportamiento inesperado reportado por el usuario en SeedCoin.

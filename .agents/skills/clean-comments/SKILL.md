@@ -1,8 +1,10 @@
 ---
-name: comentarios-limpios
+name: clean-comments
 description: >
   Use when writing, fixing, editing, or reviewing comments and inline documentation in TypeScript/React Native.
   Applies Clean Code principles — no metadata, no redundancy, no commented-out code. Allows removing obsolete comments.
+trigger: Dealing with comments or documentation
+allowed-tools: [Read, Edit, Write]
 metadata:
   author: seedcoin
   version: "1.1"

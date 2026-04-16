@@ -11,6 +11,7 @@ import { ModalHeader } from '@/components/ui/ModalHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { FloatingActionButton } from '@/components/ui/FloatingActionButton';
 import Colors from '@/constants/Colors';
+import { useSingleAction } from '@/src/hooks/useSingleAction';
 
 /**
  * Pantalla de gestión de cuentas.
@@ -20,6 +21,14 @@ import Colors from '@/constants/Colors';
 export default function ManageAccountsScreen() {
   const insets = useSafeAreaInsets();
   const { accounts, fetchAccounts, loading } = useAccounts();
+
+  const { execute: handleEditAccount } = useSingleAction((id: number) => 
+    router.push(`/add-account?id=${id}`)
+  );
+
+  const { execute: handleNewAccount } = useSingleAction(() => 
+    router.push('/add-account')
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -78,7 +87,7 @@ export default function ManageAccountsScreen() {
               >
                 <Pressable 
                   className="p-5 flex-row items-center justify-between active:bg-dark-700/50"
-                  onPress={() => router.push(`/add-account?id=${acc.account_id}`)}
+                  onPress={() => handleEditAccount(acc.account_id)}
                 >
                   <View className="flex-row items-center gap-4 flex-1">
                     <View className="w-12 h-12 rounded-2xl bg-seed-500/10 items-center justify-center">
@@ -127,7 +136,7 @@ export default function ManageAccountsScreen() {
         <FloatingActionButton 
           label="Nueva Cuenta"
           icon={Plus}
-          onPress={() => router.push('/add-account')}
+          onPress={handleNewAccount}
         />
       </View>
     </View>

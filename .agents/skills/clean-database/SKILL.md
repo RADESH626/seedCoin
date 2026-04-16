@@ -3,6 +3,8 @@ name: clean-database
 description: >
   Standards for database design, optimization, and query writing in SeedCoin.
   Trigger: When creating/modifying SQL schema, triggers, indexes, or queries.
+trigger: Adding or modifying database schema/queries
+allowed-tools: [Read, Edit, Write, Grep, Command]
 metadata:
   author: seedcoin
   version: "1.0"

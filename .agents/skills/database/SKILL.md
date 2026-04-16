@@ -1,3 +1,10 @@
+---
+name: database
+description: Core SQLite interaction and persistence standards for SeedCoin.
+trigger: Designing or optimizing SQLite
+allowed-tools: [Read, Edit, Write, Command]
+---
+
 # Database & Storage Skill (SQLite)
 
 Este skill alinea al Agente de IA para interactuar correctamente con la persistencia local de la bóveda usando la base local en SeedCoin.

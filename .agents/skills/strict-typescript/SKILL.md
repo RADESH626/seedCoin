@@ -3,6 +3,8 @@ name: strict-typescript
 description: >
   Strict TypeScript patterns and typing best practices.
   Trigger: When implementing or refactoring TypeScript in .ts/.tsx (types, interfaces, generics, const maps, type guards, removing any, tightening unknown).
+trigger: Writing or reviewing TypeScript types/interfaces
+allowed-tools: [Read, Edit, Write, Command]
 metadata:
   author: seedcoin
   version: "1.0"

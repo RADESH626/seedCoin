@@ -2,11 +2,16 @@ import { Pressable, Text } from 'react-native';
 import { PlusCircle } from 'lucide-react-native';
 import { router } from 'expo-router';
 import Colors from '@/constants/Colors';
+import { useSingleAction } from '@/src/hooks/useSingleAction';
 
 export function AddAccountButton() {
+  const { execute: handlePress } = useSingleAction(() => 
+    router.push('/add-account' as any)
+  );
+
   return (
     <Pressable 
-      onPress={() => router.push('/add-account' as any)}
+      onPress={handlePress}
       className="bg-dark-800 border-2 border-dashed border-dark-600 rounded-2xl p-4 items-center justify-center min-w-[120px]"
     >
       <PlusCircle color={Colors.seed[500]} size={24} className="mb-2" />

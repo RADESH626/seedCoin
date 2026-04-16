@@ -3,6 +3,8 @@ name: frontend-development
 description: >
   Golden rules for creating, modifying, or refactoring React Native components.
   Trigger: When creating interfaces, fixing styles or frontend logic.
+trigger: Creating / extract UI components
+allowed-tools: [Read, Edit, Write, Grep]
 metadata:
   author: seedcoin
   version: "1.1"

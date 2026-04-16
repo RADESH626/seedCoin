@@ -3,7 +3,8 @@ import { log } from '../services/logger';
 import { 
   getBudgetsWithProgress, 
   createBudget, 
-  deleteBudget 
+  deleteBudget,
+  updateBudget
 } from '../services/BudgetService';
 import type { BudgetWithProgress } from '../database/types';
 
@@ -33,6 +34,16 @@ export function useBudgets() {
     }
   }, [fetchBudgets]);
 
+  const updateExistingBudget = useCallback(async (budgetId: number, limit: number) => {
+    try {
+      await updateBudget(budgetId, limit);
+      await fetchBudgets();
+      log.info('useBudgets: Presupuesto actualizado con éxito');
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al actualizar presupuesto', error);
+    }
+  }, [fetchBudgets]);
+
   const removeBudget = useCallback(async (budgetId: number) => {
     try {
       await deleteBudget(budgetId);
@@ -47,6 +58,8 @@ export function useBudgets() {
     budgets,
     fetchBudgets,
     addBudget,
+    updateExistingBudget,
     removeBudget,
   };
 }
+

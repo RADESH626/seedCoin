@@ -1,3 +1,10 @@
+---
+name: styling
+description: NativeWind and Tailwind CSS implementation for React Native.
+trigger: Working with Tailwind classes
+allowed-tools: [Read, Edit, Write]
+---
+
 # Styling Protocol Skill (NativeWind / Tailwind)
 
 Este skill domina la manera preferencial de hacer "pintura" e implementación de paletas de software estético y responsivo dentro de React Native.

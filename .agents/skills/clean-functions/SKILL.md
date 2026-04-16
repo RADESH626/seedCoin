@@ -3,6 +3,8 @@ name: clean-functions
 description: >
   Use when writing, fixing, editing, or refactoring functions, hooks, and components in TypeScript/React Native.
   Applies Clean Code principles — max 3 arguments, single responsibility, no flag parameters.
+trigger: Writing, fixing, or refactoring functions/hooks
+allowed-tools: [Read, Edit, Write]
 metadata:
   author: seedcoin
   version: "1.1"
