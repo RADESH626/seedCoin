@@ -36,40 +36,65 @@ This file defines the context, skills, and development standards for AI agents w
 | `strict-typescript` | Type-first development, removing 'any' | [.agents/skills/strict-typescript/SKILL.md](.agents/skills/strict-typescript/SKILL.md) |
 | `skill-creator` | Create new AI agent specialized skills | [.agents/skills/skill-creator/SKILL.md](.agents/skills/skill-creator/SKILL.md) |
 | `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
+| `skill-updater` | Protocol to follow when editing or updating existing agent skills | [.agents/skills/skill-updater/SKILL.md](.agents/skills/skill-updater/SKILL.md) |
+| `clean-documentation`| Bilingual standards and documentation cleanup | [.agents/skills/clean-documentation/SKILL.md](.agents/skills/clean-documentation/SKILL.md) |
 | `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
 
-## Auto-invoke Skills
-When performing these actions, ALWAYS invoke the corresponding skill FIRST:
+## Sub-Agent Mission Control (SDD Flow)
+SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
 
-| Action | Skill |
-|--------|-------|
-| Adding or modifying database schema/queries | `clean-database` |
-| After creating or modifying any code | `verify-build` |
-| At the start of every task or session | `AI Knowledge Base (.agents/KNOWLEDGE.md)` |
-| Committing changes | `clean-commits` |
-| Creating / extract UI components | `frontend-development` |
-| Creating new skills | `skill-creator` |
-| Dealing with comments or documentation | `clean-comments` |
-| Debugging build or TSC errors | `verify-build` |
-| Designing or optimizing SQLite | `clean-database` |
-| Fixing, editing, or refactoring code | `boy-scout` |
-| Implementing feature or fixing bug | `tdd-workflow` |
-| Naming, renaming, or reviewing variables/functions | `clean-names` |
-| Performing a deep code audit | `deep-audit` |
-| Refactoring React components/performance | `modern-react` |
-| Regenerate AGENTS.md auto-invoke tables | `skill-sync` |
-| Writing or reviewing tests (Jest/Maestro) | `clean-tests` |
-| Writing or reviewing TypeScript types/interfaces | `strict-typescript` |
-| Writing React 19 / Expo / NativeWind code | `modern-react` |
+| Phase | Sub-Agent | Primary Action |
+|------|------------|------------------|
+| 1 | `sdd-init` | Project fingerprint and memory load (`engram`). |
+| 2 | `sdd-explore` | Code investigation and risk analysis. |
+| 3 | `sdd-propose` | Solution strategy and rollback plan. |
+| 4 | `sdd-spec` | Change specifications and criteria (Given/When/Then). |
+| 5 | `sdd-design` | Technical architecture, schemas, and contracts. |
+| 6 | `sdd-tasks` | Atomic task breakdown as a checklist. |
+| 7 | `sdd-apply` | Code implementation (TDD). |
+| 8 | `sdd-verify` | Type validation, testing, and quality check. |
+| 9 | `sdd-archive` | Session closure, cleanup, and persistence (`engram`). |
+
+## Auto-invoke Rules
+ALWAYS invoke the corresponding skill FIRST when starting an action:
+
+| Action | Mandatory Skill |
+|--------|-------------------|
+| New feature / Complex task | `sdd-orchestrator` |
+| Save/Load persistent knowledge | `engram` |
+| Modify Database schema or queries | `clean-database` |
+| Verify integrity after changes | `verify-build` |
+| Create or extract UI components | `frontend-development` |
+| Naming or Refactoring | `clean-names` |
+| Security or performance Audit | `deep-audit` |
+| Documentation or Comments (Bilingual) | `clean-documentation` |
+| Commit changes | `clean-commits` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
 
+### Architecture Components
 | Component | Location | Tech Stack |
 |-----------|----------|------------|
 | Mobile App | `mobile/` | React Native, Expo SDK 54, NativeWind, SQLite |
 | Documentation | `documentacion/` | Markdown, User Guides, Diagrams |
 | AI Protocols | `.agents/` | Agent Skills, Knowledge Base, Metadata |
+
+### Directory Structure
+```text
+seedCoin/
+├── .agents/          # AI Agent protocols, skills, and knowledge base
+├── documentacion/    # Project documentation, architecture diagrams, and user guides
+├── inconos/          # Image assets and application icons
+├── mobile/           # React Native / Expo source code for the app
+│   ├── app/          # Navigation and screens (Expo Router)
+│   ├── assets/       # Fonts, images, and other static assets
+│   ├── components/   # Reusable UI React components
+│   └── src/          # Core domain logic, tests, models, and SQLite database
+├── tareas/           # Task tracking and sprint management logs
+├── AGENTS.md         # Main entry point for AI instructions and context
+└── README.md         # Project overview and getting started guide
+```
 
 ## Development
 
@@ -95,5 +120,5 @@ Follow conventional-commit style: `<type>[scope]: <description>`
 1. Ensure all tests pass (`clean-tests`).
 2. Run `verify-build` to check TypeScript integrity.
 3. Update relevant documentation in `documentacion/` if feature changes.
-4. Ensure code follows "Financial Integrity" rules (KNOWLEDGE.md).
+4. Ensure code follows "Financial Integrity" rules (see `.agents/skills/README.md`).
 5. Link screenshots/recordings for UI changes.

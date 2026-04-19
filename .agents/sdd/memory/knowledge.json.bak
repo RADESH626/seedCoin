@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1713500000000",
+    "title": "Directory-Based Bilingual Policy",
+    "type": "architecture",
+    "context": {
+      "what": "Implemented a strict directory-based bilingual policy for the project.",
+      "why": "To serve humans in Spanish and maintain AI efficiency in English.",
+      "where": ".agents/skills/clean-documentation/SKILL.md, AGENTS.md, and documentation/",
+      "learned": "documentacion/ must be Spanish. .agents/ (skills, AGENTS.md) and code logic must be English. Comments in code must be Spanish."
+    },
+    "tags": ["documentation", "policy", "bilingual", "standard"]
+  },
+  {
+    "id": "1713506500000",
+    "title": "Environment Check-First Policy",
+    "type": "pattern",
+    "context": {
+      "what": "Adopted a policy of checking the local environment (terminal dependencies) before suggesting any software installation.",
+      "why": "To avoid redundancy, save disk space, and prevent conflict between software versions.",
+      "where": "Workflow and local developer setup instructions.",
+      "learned": "Always run commands like 'java -version', 'adb --version', or equivalent environment variable checks (ANDROID_HOME) before recommending a setup phase."
+    },
+    "tags": ["workflow", "setup", "efficiency", "best-practice"]
+  },
+  {
+    "id": "1713506580000",
+    "title": "Build Optimization and Environment Feature Toggling",
+    "type": "architecture",
+    "context": {
+      "what": "Configured custom EAS profiles and environment-based feature visibility (conditional rendering).",
+      "why": "To speed up builds via local execution and hide developer tools from end users.",
+      "where": "eas.json, ProfileMenu.tsx, ProfileScreen.tsx",
+      "learned": "Using EXPO_PUBLIC_ prefix for environment variables ensures they are baked into the build at compile time, allowing for reliable UI variant switching."
+    },
+    "tags": ["build", "env", "eas", "optimization"]
+  },
+  {
+    "id": "1713509820000",
+    "title": "Windows Path Length (MAX_PATH) Build Fix",
+    "type": "bugfix",
+    "context": {
+      "what": "Redirected native build (.cxx) and build cache to shorter root-level paths (D:/b/sc/).",
+      "why": "Ninja build fails on Windows if paths exceed 260 chars (common in RN New Arch).",
+      "where": "android/app/build.gradle, android/local.properties",
+      "learned": "Surgically redirecting 'externalNativeBuild.cmake.buildStagingDirectory' is safer than global 'buildDir' because it avoids breaking Expo autolinking."
+    },
+    "tags": ["android", "build", "windows", "native", "bugfix"]
+  },
+  {
+    "id": "1713511136000",
+    "title": "Mandatory 'Error-Solution-Code' Documentation Policy",
+    "type": "pattern",
+    "context": {
+      "what": "Established a mandatory policy for error reporting in the project.",
+      "why": "To ensure knowledge persistence and avoid repeating the same debugging efforts.",
+      "where": "documentacion/registro de errores/",
+      "learned": "Every bug or error must be documented with: 1. The root cause, 2. The solution implemented, 3. The failing code (before), and 4. The fixed code (after)."
+    },
+    "tags": ["documentation", "bugfix", "standard", "knowledge-base"]
+  },
+  {
+    "id": "1713511140000",
+    "title": "Dual-Mode Scheduled Transactions System",
+    "type": "architecture",
+    "context": {
+      "what": "Implemented a system for both fully automatic (Netflix) and semi-automated (Rent) transactions.",
+      "why": "To provide flexibility between silent processing and manual approval workflows.",
+      "where": "SchedulerService.ts, schema.ts, types.ts, app/scheduled-transactions.tsx",
+      "learned": "Using a single table with a 'SCHEDULED' template status is efficient. Semi-automated ones create a 'DUE' instance. Integration with expo-notifications ensures user feedback on background processes."
+    },
+    "tags": ["architecture", "logic", "database"]
+  },
+  {
+    "id": "1776543000000",
+    "title": "Environment-Safe Notification Service",
+    "type": "architecture",
+    "context": {
+      "what": "Implemented a wrapper service for notifications that uses dynamic imports and environment detection.",
+      "why": "expo-notifications (SDK 54) crashes on import in Expo Go (Android). Dynamic import prevents this crash.",
+      "where": "NotificationService.ts, app/_layout.tsx, SchedulerService.ts",
+      "learned": "Modules with side-effects on import (like native event emitters) must be loaded dynamically if they are incompatible with Expo Go."
+    },
+    "tags": ["notifications", "expo-go", "architecture", "bugfix"]
+  },
+  {
+    "id": "1776543100000",
+    "title": "Idempotent Incremental Migration (v6 Force)",
+    "type": "bugfix",
+    "context": {
+      "what": "Fixed a broken migration by forcing v6 and using per-column try-catch blocks.",
+      "why": "The v5 migration failed halfway due to a duplicate column but still bumped the version, leaving users with a broken schema.",
+      "where": "src/database/index.ts",
+      "learned": "Migrations must be idempotent. Never bump the version if any part of the migration fails, OR implement per-column existence checks to avoid stopping on 'duplicate column' errors."
+    },
+    "tags": ["sql", "sqlite", "migration", "bugfix"]
+  }
+]
