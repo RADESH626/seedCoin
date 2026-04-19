@@ -71,6 +71,8 @@ export default function ProfileScreen() {
       ]
     );
   };
+  
+  const showDeveloperFeatures = process.env.EXPO_PUBLIC_APP_VARIANT !== 'production';
 
   return (
     <KeyboardAvoidingView 
@@ -98,7 +100,10 @@ export default function ProfileScreen() {
           accountsCount={accounts.length}
         />
 
-        <ProfileMenu onResetDatabase={handleReset} />
+        <ProfileMenu 
+          onResetDatabase={handleReset} 
+          showDeveloperFeatures={showDeveloperFeatures}
+        />
 
         <ProfileFooter />
 

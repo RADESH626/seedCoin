@@ -16,9 +16,14 @@ export const TRANSACTION_STATUS = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
+  SCHEDULED: 'SCHEDULED', // Plantilla de recurrencia
+  DUE: 'DUE',             // Pendiente de aprobación manual
 } as const;
 
 export type TransactionStatus = keyof typeof TRANSACTION_STATUS;
+
+/** Frecuencias de recurrencia */
+export type RecurrenceFrequency = 'DAILY' | 'WEEKLY' | 'BIWEEKLY' | 'MONTHLY' | 'YEARLY';
 
 /** Filtros de historial */
 export type FilterType = 'ALL' | 'INCOME' | 'EXPENSE';
@@ -55,6 +60,8 @@ export interface Transaction {
   description: string;
   transaction_date: string;
   status: TransactionStatus;
+  recurrence_frequency?: RecurrenceFrequency;
+  is_automatic: number; // 0 o 1
   created_at: string;
 }
 
@@ -113,6 +120,8 @@ export interface CreateTransactionInput {
   description?: string;
   status?: TransactionStatus;
   transactionDate?: string;
+  recurrenceFrequency?: RecurrenceFrequency;
+  isAutomatic?: boolean;
 }
 
 export interface UpdateTransactionInput extends CreateTransactionInput {

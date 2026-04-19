@@ -46,6 +46,8 @@ export const createTransaction = async (data: CreateTransactionInput) => {
         $description: description,
         $transaction_date: transactionDate,
         $status: status,
+        $recurrence_frequency: data.recurrenceFrequency || null,
+        $is_automatic: data.isAutomatic !== undefined ? (data.isAutomatic ? 1 : 0) : 1,
       });
       return true;
     } finally {
@@ -104,7 +106,7 @@ export async function updateTransaction(data: UpdateTransactionInput) {
     categoryId,
     description = '',
     status = 'COMPLETED',
-    transactionDate,
+    transactionDate = new Date().toISOString(),
   } = data;
 
   const amountInCents = toCents(amount);
@@ -122,6 +124,8 @@ export async function updateTransaction(data: UpdateTransactionInput) {
         $description: description,
         $transaction_date: transactionDate,
         $status: status,
+        $recurrence_frequency: data.recurrenceFrequency || null,
+        $is_automatic: data.isAutomatic !== undefined ? (data.isAutomatic ? 1 : 0) : 1,
       });
       return true;
     } finally {
@@ -136,4 +140,13 @@ export async function deleteTransaction(id: number) {
     await db.runAsync(QUERIES_TRANSACTION.SOFT_DELETE_TRANSACTION, { $id: id });
     return true;
   }, 'TransactionService.deleteTransaction');
+}export async function getAllScheduledDetailedTransactions(): Promise<DetailedTransaction[]> {
+  return await withNativeRetry(async () => {
+    const db = await getDBConnection();
+    const result = await db.getAllAsync<DetailedTransaction>(QUERIES_TRANSACTION.GET_ALL_SCHEDULED_DETAILED);
+    return (result ?? []).map(tx => ({
+      ...tx,
+      amount: fromCents(tx.amount)
+    }));
+  }, 'TransactionService.getAllScheduled');
 }

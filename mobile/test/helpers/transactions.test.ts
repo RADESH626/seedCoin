@@ -23,11 +23,13 @@ describe('Transactions Helpers', () => {
           category_id: 1,
           transaction_date: '2026-04-15T10:00:00Z',
           status: 'COMPLETED',
-          is_active: 1,
           created_at: '2026-04-15T10:00:00Z',
           category_name: 'Salary',
           category_color: '#000',
-          category_icon: 'money'
+          category_icon: 'money',
+          account_name: 'Main',
+          description: 'Salary',
+          is_automatic: 1
         },
         {
           transaction_id: 2,
@@ -37,11 +39,13 @@ describe('Transactions Helpers', () => {
           category_id: 2,
           transaction_date: '2026-04-15T11:00:00Z',
           status: 'COMPLETED',
-          is_active: 1,
           created_at: '2026-04-15T11:00:00Z',
           category_name: 'Food',
           category_color: '#000',
-          category_icon: 'food'
+          category_icon: 'food',
+          account_name: 'Main',
+          description: 'Lunch',
+          is_automatic: 1
         },
         {
           transaction_id: 3,
@@ -51,11 +55,13 @@ describe('Transactions Helpers', () => {
           category_id: 2,
           transaction_date: '2026-04-14T15:00:00Z',
           status: 'COMPLETED',
-          is_active: 1,
           created_at: '2026-04-14T15:00:00Z',
           category_name: 'Food',
           category_color: '#000',
-          category_icon: 'food'
+          category_icon: 'food',
+          account_name: 'Main',
+          description: 'Dinner',
+          is_automatic: 1
         }
       ];
 

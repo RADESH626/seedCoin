@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { NotificationService } from '@/src/services/NotificationService';
 import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -29,6 +30,8 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// Lógica de notificaciones movida a NotificationService.initialize()
 
 const SeedCoinTheme = {
   ...DarkTheme,
@@ -53,9 +56,19 @@ export default function RootLayout() {
   const [dbLoaded, setDbLoaded] = useState(false);
 
   useEffect(() => {
-    getDBConnection()
-      .then(() => setDbLoaded(true))
-      .catch((e) => console.error("Error initializing DB:", e));
+    async function initialize() {
+      try {
+        await getDBConnection();
+        setDbLoaded(true);
+
+        // Inicializar y pedir permisos de notificaciones
+        await NotificationService.initialize();
+        await NotificationService.requestPermissions();
+      } catch (e) {
+        console.error("Error initializing App:", e);
+      }
+    }
+    initialize();
   }, []);
 
 
@@ -66,6 +79,11 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded && dbLoaded) {
+      // Procesamos transacciones programadas al iniciar
+      import('@/src/services/SchedulerService')
+        .then(({ SchedulerService }) => SchedulerService.processDueTransactions())
+        .catch(e => console.error("Error processing schedules:", e));
+
       SplashScreen.hideAsync();
     }
   }, [loaded, dbLoaded]);

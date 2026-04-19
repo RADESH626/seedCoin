@@ -4,7 +4,7 @@ import { INITIAL_CATEGORIES, SEED_CATEGORIES_QUERY } from './seed';
 import { log } from '@/src/services/logger';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 4;
+  const DATABASE_VERSION = 6;
 
   const result = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
   let currentDbVersion = result?.user_version ?? 0;
@@ -87,5 +87,52 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     } catch (err) {
       log.error('migrateDbIfNeeded: Error en migración v4', err);
     }
+  }
+
+  // MIGRACIÓN A V5 (Columnas de transacciones programadas)
+  if (currentDbVersion === 4) {
+    log.info('migrateDbIfNeeded: Migrando base de datos de v4 a v5 (Columnas de programación)...');
+    
+    // Intentamos añadir cada columna de forma independiente
+    try {
+      await db.execAsync('ALTER TABLE TRANSACTIONS ADD COLUMN recurrence_frequency TEXT;');
+      log.info('migrateDbIfNeeded: Columna recurrence_frequency añadida.');
+    } catch (e) {
+      log.info('migrateDbIfNeeded: Columna recurrence_frequency ya existía o hubo un error manejado.');
+    }
+
+    try {
+      await db.execAsync('ALTER TABLE TRANSACTIONS ADD COLUMN is_automatic BOOLEAN NOT NULL DEFAULT 1;');
+      log.info('migrateDbIfNeeded: Columna is_automatic añadida.');
+    } catch (e) {
+      log.info('migrateDbIfNeeded: Columna is_automatic ya existía o hubo un error manejado.');
+    }
+
+    currentDbVersion = 5;
+    await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
+    log.info('migrateDbIfNeeded: Migración a v5 completada exitosamente.');
+  }
+
+  // MIGRACIÓN A V6 (Fuerza la adición de columnas si v5 falló)
+  if (currentDbVersion === 5) {
+    log.info('migrateDbIfNeeded: Migrando base de datos de v5 a v6 (Asegurando columnas)...');
+    
+    try {
+      await db.execAsync('ALTER TABLE TRANSACTIONS ADD COLUMN recurrence_frequency TEXT;');
+      log.info('migrateDbIfNeeded: Columna recurrence_frequency añadida.');
+    } catch (e) {
+      log.info('migrateDbIfNeeded: Columna recurrence_frequency ya existía.');
+    }
+
+    try {
+      await db.execAsync('ALTER TABLE TRANSACTIONS ADD COLUMN is_automatic BOOLEAN NOT NULL DEFAULT 1;');
+      log.info('migrateDbIfNeeded: Columna is_automatic añadida.');
+    } catch (e) {
+      log.info('migrateDbIfNeeded: Columna is_automatic ya existía.');
+    }
+
+    currentDbVersion = 6;
+    await db.execAsync(`PRAGMA user_version = ${currentDbVersion}`);
+    log.info('migrateDbIfNeeded: Migración a v6 completada exitosamente.');
   }
 }

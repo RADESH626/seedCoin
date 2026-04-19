@@ -40,7 +40,7 @@ export const QUERIES_TRANSACTION = {
     SELECT 
       transaction_id, account_id, debt_id, transfer_transaction_id, 
       is_income, amount, category_id, description, transaction_date, 
-      status, recurrence_frequency, is_active 
+      status, recurrence_frequency, is_automatic, is_active 
     FROM TRANSACTIONS 
     WHERE account_id = ? AND is_active = 1 
     ORDER BY transaction_date DESC;
@@ -50,7 +50,7 @@ export const QUERIES_TRANSACTION = {
     SELECT 
       transaction_id, account_id, debt_id, transfer_transaction_id, 
       is_income, amount, category_id, description, transaction_date, 
-      status, recurrence_frequency, is_active 
+      status, recurrence_frequency, is_automatic, is_active 
     FROM TRANSACTIONS 
     WHERE is_active = 1 
     ORDER BY transaction_date DESC 
@@ -79,13 +79,14 @@ export const QUERIES_TRANSACTION = {
   `,
   
   INSERT_NAMED: `
-    INSERT INTO TRANSACTIONS (account_id, is_income, amount, category_id, description, transaction_date, status) 
-    VALUES ($account_id, $is_income, $amount, $category_id, $description, $transaction_date, $status);
+    INSERT INTO TRANSACTIONS (account_id, is_income, amount, category_id, description, transaction_date, status, recurrence_frequency, is_automatic) 
+    VALUES ($account_id, $is_income, $amount, $category_id, $description, $transaction_date, $status, $recurrence_frequency, $is_automatic);
   `,
 
   GET_ALL_DETAILED: `
     SELECT 
       T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
+      T.status, T.recurrence_frequency, T.is_automatic,
       C.name as category_name, C.icon as category_icon, C.color as category_color,
       A.name as account_name
     FROM TRANSACTIONS T
@@ -99,7 +100,7 @@ export const QUERIES_TRANSACTION = {
     SELECT 
       transaction_id, account_id, debt_id, transfer_transaction_id, 
       is_income, amount, category_id, description, transaction_date, 
-      status, recurrence_frequency, is_active 
+      status, recurrence_frequency, is_automatic, is_active 
     FROM TRANSACTIONS 
     WHERE transaction_id = ? AND is_active = 1;
   `,
@@ -112,7 +113,9 @@ export const QUERIES_TRANSACTION = {
       category_id = $category_id,
       description = $description,
       transaction_date = $transaction_date,
-      status = $status
+      status = $status,
+      recurrence_frequency = $recurrence_frequency,
+      is_automatic = $is_automatic
     WHERE transaction_id = $transaction_id;
   `,
 
@@ -120,7 +123,20 @@ export const QUERIES_TRANSACTION = {
     UPDATE TRANSACTIONS SET is_active = 0 WHERE transaction_id = $id;
   `,
 
-  COUNT_BY_ACCOUNT: `SELECT COUNT(*) as total FROM TRANSACTIONS WHERE account_id = $id AND is_active = 1;`
+  COUNT_BY_ACCOUNT: `SELECT COUNT(*) as total FROM TRANSACTIONS WHERE account_id = $id AND is_active = 1;`,
+
+  GET_ALL_SCHEDULED_DETAILED: `
+    SELECT 
+      T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
+      T.status, T.recurrence_frequency, T.is_automatic, T.account_id, T.category_id,
+      C.name as category_name, C.icon as category_icon, C.color as category_color,
+      A.name as account_name
+    FROM TRANSACTIONS T
+    LEFT JOIN CATEGORY C ON T.category_id = C.category_id
+    LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
+    WHERE T.is_active = 1 AND (T.status = 'SCHEDULED' OR T.status = 'DUE')
+    ORDER BY T.status DESC, T.transaction_date ASC;
+  `
 };
 
 export const QUERIES_BUDGET = {

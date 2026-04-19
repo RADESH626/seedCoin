@@ -11,15 +11,15 @@ export function getDateLabel(dateStr: string): string {
   if (dateObj.toDateString() === today.toDateString()) {
     return 'Hoy';
   }
-  
+
   if (dateObj.toDateString() === yesterday.toDateString()) {
     return 'Ayer';
   }
 
-  return dateObj.toLocaleDateString('es-CO', { 
-    day: 'numeric', 
-    month: 'long', 
-    year: 'numeric' 
+  return dateObj.toLocaleDateString('es-CO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
   });
 }
 
@@ -27,11 +27,13 @@ export function getDateLabel(dateStr: string): string {
  * Obtiene una etiqueta de hora amigable (HH:MM AM/PM).
  */
 export function getTimeLabel(dateString: string): string {
-  if (!dateString) return '';
+  if (!dateString) {
+    return '';
+  }
   const date = new Date(dateString);
-  return date.toLocaleTimeString([], { 
-    hour: '2-digit', 
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
     minute: '2-digit',
-    hour12: true 
+    hour12: true
   }).toUpperCase();
 }

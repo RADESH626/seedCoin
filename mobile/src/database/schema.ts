@@ -41,6 +41,7 @@ export const CREATE_TABLES = `
         transaction_date TEXT NOT NULL,
         status TEXT NOT NULL,
         recurrence_frequency TEXT,
+        is_automatic BOOLEAN NOT NULL DEFAULT 1,
         is_active BOOLEAN NOT NULL DEFAULT 1,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id),
