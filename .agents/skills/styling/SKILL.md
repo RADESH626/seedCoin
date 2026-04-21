@@ -17,13 +17,26 @@ Prohibir confusiones en la estilización y asegurar el diseño vanguardista bajo
 - **Configuraciones UI / Color:** `mobile/tailwind.config.js` y `mobile/constants/Colors.ts`
 
 ## 3. Reglas del Proyecto (Estrictas)
-1. **NativeWind por encima de Stylesheets:** Evita el uso de `StyleSheet.create({})` a menos que sean animaciones o propágos calculadas dinámicamente extremadamente raras. Utiliza la propiedad `className=""` pasando las propiedades utilitarias de Tailwind.
-2. **Paleta de Colores oficial:**
-   - La paleta principal oscura va usualmente atada a los prefijos `bg-dark-xxx` (`bg-dark-900` para fondo base, `bg-dark-800` para componentes top-level).
-   - El color acento vibrante está envuelto en el prefijo `text-seed-xxx`, `bg-seed-xxx`. (Revisar los tokens definidos).
-   - NUNCA inventes clases como `text-blue-500` usa `text-seed-400` u otros mapeados para mantener la cohesión de marca.
-3. **Flexbox:** Estructura primordialmente con utilidades de `flex-row`, `justify-center`, `gap-4`. 
+
+1. **NativeWind v4 por encima de Stylesheets:** Utiliza la propiedad `className=""` pasando las propiedades utilitarias de Tailwind. Evita `StyleSheet.create({})`.
+2. **Jerarquía Tipográfica (Alias):** NUNCA definas estilos de texto complejos en el JSX. Utiliza los siguientes alias definidos en `global.css`:
+   - `text-h1`: Títulos principales de pantalla.
+   - `text-h2`: Títulos de secciones o encabezados secundarios.
+   - `text-body-lg`: Texto de cuerpo destacado o etiquetas grandes.
+   - `text-body-sm`: Texto de cuerpo estándar o secundario.
+   - `text-caption`: Micro-copy, fechas o estados.
+3. **Márgenes y Layout:**
+   - Usa `standard-screen-px` para el padding horizontal de las pantallas base (equivale a `px-standard` / 24px).
+   - Prefiere `gap-x` en contenedores Flexbox en lugar de márgenes individuales entre hermanos.
+4. **Paleta de Colores oficial:**
+   - **Fondo:** `bg-dark-900`.
+   - **Tarjetas/Contenedores:** `bg-dark-800`.
+   - **Bordes/Separadores:** `border-dark-700`.
+   - **Acento:** `text-seed-400`, `bg-seed-500`, etc.
+5. **Transparencias y Profundidad:** Utiliza el modificador de opacidad de Tailwind (ej. `bg-seed-600/20`) para efectos de glassmorphism y capas sutiles.
 
 ## 4. Flujo de Trabajo Estándar
-1. Definir la UI con tailwind puro en JSX.
-2. Extraer a `Colors.ts` de la carpeta Constants si un objeto estático necesita recibir un fill SVG y no puede leer `className`.
+
+1. Si un componente UI se repite más de 2 veces, extráelo a `components/ui/`.
+2. Usa `standard-screen-px` para asegurar que el contenido esté alineado en toda la app.
+3. Define la lógica de colores dinámicos (ej. rojo para gastos) usando variables condicionales en el `className`.

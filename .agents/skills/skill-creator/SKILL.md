@@ -90,10 +90,10 @@ metadata:
 |------|---------|----------|
 | Generic skill | `{technology}` | `strict-typescript`, `modern-react` |
 | Domain skill | `{domain}-{aspect}` | `clean-functions`, `clean-tests` |
-| Workflow skill | `{action}` | `commits-limpios`, `tdd-workflow` |
+| Workflow skill | `{action}` | `clean-commits`, `tdd-workflow` |
 | Meta skill | `skill-{action}` | `skill-creator`, `skill-sync` |
 
-> **Rule:** Names in Spanish with kebab-case. Max 2-3 words.
+> **Rule:** Names in English with kebab-case. Max 2-3 words. Example: `clean-code`.
 
 ---
 
