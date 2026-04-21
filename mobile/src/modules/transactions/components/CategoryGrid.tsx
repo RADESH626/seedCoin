@@ -35,7 +35,7 @@ export function CategoryGrid({ categories = [], selectedCategoryId, onSelectCate
 
   return (
     <View className="mb-8">
-      <Text className="text-gray-400 text-sm font-medium mb-4 ml-1">Selecciona una categoría</Text>
+      <Text className="text-body-sm mb-4 ml-1">Selecciona una categoría</Text>
       <View className="flex-row flex-wrap justify-between gap-y-4">
         {filteredCategories.map((cat) => {
           const Icon = ICON_MAP[cat.icon] || PlusCircle;
@@ -54,7 +54,7 @@ export function CategoryGrid({ categories = [], selectedCategoryId, onSelectCate
               </View>
               <Text 
                 numberOfLines={1}
-                className={`text-[10px] text-center font-medium ${isSelected ? 'text-seed-100' : 'text-gray-500'}`}
+                className={`text-caption text-center font-medium ${isSelected ? 'text-seed-100' : ''}`}
               >
                 {cat.name}
               </Text>

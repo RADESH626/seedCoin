@@ -1,6 +1,7 @@
-import { View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { Calendar as CalendarIcon, ChevronDown } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
+import { Card } from '@/components/ui/Card';
 
 interface Props {
   date: Date;
@@ -11,12 +12,14 @@ interface Props {
 
 export function TransactionDateField({ date, description, onDatePress, onDescriptionChange }: Props) {
   return (
-    <View className="flex-row gap-4 mb-32">
+    <View className="flex-row gap-4 mb-8">
       <View className="flex-1">
         <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Fecha</Text>
-        <Pressable 
+        <Card 
           onPress={onDatePress}
-          className="bg-dark-800 border border-dark-700 rounded-2xl p-4 flex-row items-center justify-between"
+          rounded="2xl"
+          padding="md"
+          className="flex-row items-center justify-between"
         >
           <View className="flex-row items-center gap-2">
             <CalendarIcon size={18} color={Colors.seed[400]} />
@@ -25,7 +28,7 @@ export function TransactionDateField({ date, description, onDatePress, onDescrip
             </Text>
           </View>
           <ChevronDown size={16} color="#4b5563" />
-        </Pressable>
+        </Card>
       </View>
       
       <View className="flex-[1.5]">

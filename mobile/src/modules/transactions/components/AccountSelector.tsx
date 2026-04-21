@@ -10,7 +10,7 @@ interface Props {
 export function AccountSelector({ accounts, selectedAccountId, onSelectAccount }: Props) {
   return (
     <View className="mb-8">
-      <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Cuenta origen</Text>
+      <Text className="text-body-sm mb-3 ml-1">Cuenta origen</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
         {accounts.map((acc) => (
           <Pressable
@@ -20,7 +20,7 @@ export function AccountSelector({ accounts, selectedAccountId, onSelectAccount }
           >
             <View className={`w-2 h-2 rounded-full ${selectedAccountId === acc.account_id ? 'bg-seed-400' : 'bg-gray-600'}`} />
             <Text className={`font-bold ${selectedAccountId === acc.account_id ? 'text-seed-100' : 'text-gray-400'}`}>{acc.name}</Text>
-            <Text className="text-gray-500 text-xs">{formatMoney(acc.current_balance, 'COP')}</Text>
+            <Text className="text-caption">{formatMoney(acc.current_balance, 'COP')}</Text>
           </Pressable>
         ))}
       </ScrollView>
