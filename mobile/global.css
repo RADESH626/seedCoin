@@ -10,4 +10,34 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+
+    /* Typography Aliases */
+    .text-h1 {
+        @apply text-white text-3xl font-bold tracking-tight font-sans;
+    }
+    .text-h2 {
+        @apply text-white text-2xl font-bold font-sans;
+    }
+    .text-body-lg {
+        @apply text-gray-200 text-lg font-sans;
+    }
+    .text-body-sm {
+        @apply text-gray-400 text-sm font-sans;
+    }
+    .text-caption {
+        @apply text-gray-500 text-xs uppercase tracking-widest font-sans;
+    }
+
+    /* Layout Standards */
+    .standard-screen-px {
+        @apply px-standard;
+    }
+
+    /* Action Aliases */
+    .btn-primary {
+        @apply bg-seed-600 active:bg-seed-700 py-4 rounded-2xl items-center justify-center;
+    }
+    .btn-secondary {
+        @apply bg-dark-800 border border-dark-700 active:bg-dark-700 py-3 rounded-xl items-center justify-center;
+    }
 }

@@ -29,6 +29,9 @@ module.exports = {
             800: '#0F172A', // Tarjetas principales
             700: '#1E293B', // Bordes ligeros
         }
+      },
+      spacing: {
+        'standard': '24px', // Equivale a px-6
       }
     },
   },

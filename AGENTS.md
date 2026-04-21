@@ -38,6 +38,7 @@ This file defines the context, skills, and development standards for AI agents w
 | `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
 | `skill-updater` | Protocol to follow when editing or updating existing agent skills | [.agents/skills/skill-updater/SKILL.md](.agents/skills/skill-updater/SKILL.md) |
 | `clean-documentation`| Bilingual standards and documentation cleanup | [.agents/skills/clean-documentation/SKILL.md](.agents/skills/clean-documentation/SKILL.md) |
+| `bug-logger` | Specialized bug documentation and Engram persistence | [.agents/skills/bug-logger/SKILL.md](.agents/skills/bug-logger/SKILL.md) |
 | `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
 
 ## Sub-Agent Mission Control (SDD Flow)
@@ -68,6 +69,8 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 | Naming or Refactoring | `clean-names` |
 | Security or performance Audit | `deep-audit` |
 | Documentation or Comments (Bilingual) | `clean-documentation` |
+| Documenting a complex bug fix | `bug-logger` |
+| Working with Tailwind / Design | `styling` |
 | Commit changes | `clean-commits` |
 
 ## Project Overview
@@ -110,6 +113,12 @@ npm start
 - **Static Analysis**: `npm run lint` (in `mobile/`).
 - **Build Verification**: Run `verify-build` skill after changes.
 - **Testing**: `npm test` for unit and integration tests.
+
+## Design System Standards
+SeedCoin uses a **Dark-First** design system powered by **NativeWind v4**.
+- **Official Margin**: Use `standard-screen-px` for all screen containers.
+- **Typography Aliases**: Use `text-h1`, `text-h2`, `text-body-lg`, `text-body-sm`, `text-caption` instead of raw font classes.
+- **Color Palette**: Stick to `bg-dark-900` (background), `bg-dark-800` (cards), and `seed-xxx` (accent).
 
 ## Commit & Pull Request Guidelines
 Follow conventional-commit style: `<type>[scope]: <description>`
