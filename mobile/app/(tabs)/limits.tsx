@@ -5,8 +5,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Target, Plus, ShieldCheck } from 'lucide-react-native';
 
 import { useBudgets } from '@/src/hooks/useBudgets';
-import { BudgetCard } from '@/components/transactions/BudgetCard';
+import { BudgetCard } from '@/src/modules/transactions/components/BudgetCard';
+
 import { AddBudgetModal } from '@/components/modals/AddBudgetModal';
+import { Card } from '@/components/ui/Card';
+import { IconBadge } from '@/components/ui/IconBadge';
 import { log } from '@/src/services/logger';
 import Colors from '@/constants/Colors';
 import type { BudgetWithProgress } from '@/src/database/types';
@@ -43,13 +46,13 @@ export default function LimitsScreen() {
   return (
     <View className="flex-1 bg-dark-900">
       <View 
-        className="px-6"
+        className="standard-screen-px"
         style={{ paddingTop: Math.max(insets.top, 24) }}
       >
         <View className="flex-row justify-between items-center mb-6">
           <View>
-            <Text className="text-white text-2xl font-bold">Límites</Text>
-            <Text className="text-gray-500 text-xs">Control de gastos mensuales</Text>
+            <Text className="text-h2">Límites</Text>
+            <Text className="text-caption">Control de gastos mensuales</Text>
           </View>
           <Pressable 
             onPress={handleCreateNew}
@@ -60,18 +63,18 @@ export default function LimitsScreen() {
         </View>
 
         {/* Info Box */}
-        <View className="bg-dark-800 border border-dark-700 rounded-3xl p-4 flex-row items-center gap-3 mb-8">
-          <View className="w-10 h-10 rounded-full bg-blue-500/10 items-center justify-center">
+        <Card padding="md" rounded="3xl" className="flex-row items-center gap-3 mb-8">
+          <IconBadge color="blue">
             <ShieldCheck size={20} color="#3b82f6" />
-          </View>
+          </IconBadge>
           <View className="flex-1">
             <Text className="text-white text-[11px] font-bold">Salud Financiera</Text>
-            <Text className="text-gray-400 text-[10px]">Tus límites te ayudan a no gastar más de lo que ganas el mes.</Text>
+            <Text className="text-body-sm text-[10px]">Tus límites te ayudan a no gastar más de lo que ganas el mes.</Text>
           </View>
-        </View>
+        </Card>
       </View>
 
-      <ScrollView className="flex-1 px-6 pb-32" showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1 standard-screen-px pb-32" showsVerticalScrollIndicator={false}>
         {loading && budgets.length === 0 ? (
           <View className="py-20 items-center">
             <ActivityIndicator color={Colors.seed[400]} />
@@ -79,15 +82,15 @@ export default function LimitsScreen() {
           </View>
         ) : budgets.length === 0 ? (
           <View className="py-20 items-center opacity-50">
-            <View className="w-20 h-20 bg-dark-800 rounded-full items-center justify-center mb-4 border border-dark-700">
+            <IconBadge size="xl" color="dark" showBorder className="mb-4">
               <Target size={32} color="#475569" />
-            </View>
+            </IconBadge>
             <Text className="text-white font-bold text-base mb-1">Sin presupuestos</Text>
             <Text className="text-gray-500 text-xs text-center px-10">Crea tu primer límite de gasto para empezar a ahorrar hoy mismo.</Text>
             
             <Pressable 
               onPress={handleCreateNew}
-              className="mt-6 bg-dark-800 border border-dark-700 px-6 py-3 rounded-full"
+              className="mt-6 btn-secondary px-6 py-2"
             >
               <Text className="text-seed-400 font-bold text-sm">Crear Presupuesto</Text>
             </Pressable>

@@ -26,7 +26,7 @@ export function AccountTypeSelector({ selectedType, onSelect }: AccountTypeSelec
 
   return (
     <View className="mb-6">
-      <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Tipo de fondo</Text>
+      <Text className="text-body-sm mb-3 ml-1">Tipo de fondo</Text>
       <View className="flex-row flex-wrap justify-between gap-y-3">
         {types.map((type) => {
           const IconComponent = ICON_MAP[type.icon as keyof typeof ICON_MAP] || MoreHorizontal;

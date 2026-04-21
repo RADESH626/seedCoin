@@ -3,27 +3,29 @@ import { View, Text, ScrollView } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useTransactions } from '@/src/hooks/useTransactions';
+import { useDetailedTransactions } from '@/src/modules/transactions';
 import { log } from '@/src/services/logger';
 import { groupTransactionsByDate } from '@/src/helpers/transactions';
 import type { FilterType } from '@/src/database/types';
 
-import { HistoryFilters } from '@/components/transactions/HistoryFilters';
-import { TransactionGroup } from '@/components/transactions/TransactionGroup';
+import { HistoryFilters } from '@/src/modules/transactions/components/HistoryFilters';
+import { TransactionGroup } from '@/src/modules/transactions/components/TransactionGroup';
+
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 
 export default function HistoryScreen() {
   const insets = useSafeAreaInsets();
-  const { history, fetchHistory, loading } = useTransactions();
+  const { data: history = [], isPending, refetch } = useDetailedTransactions();
   const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
 
   useFocusEffect(
     useCallback(() => {
       log.info('HistoryScreen: Enfocado. Recargando historial...');
-      fetchHistory();
-    }, [fetchHistory])
+      refetch();
+    }, [refetch])
   );
+
 
   // Filtrado de datos
   const filteredHistory = useMemo(() => {
@@ -42,26 +44,27 @@ export default function HistoryScreen() {
   return (
     <View className="flex-1 bg-dark-900">
       <View
-        className="px-6"
+        className="standard-screen-px"
         style={{ paddingTop: Math.max(insets.top, 24) }}
       >
-        <ScreenHeader title="Historial" subtitle="Tus movimientos financieros">
-          <HistoryFilters
-            activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
-          />
-        </ScreenHeader>
+        <ScreenHeader title="Historial" subtitle="Tus movimientos financieros" />
+        <HistoryFilters
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
+
       </View>
 
       <ScrollView
-        className="flex-1 px-6 pb-32"
+        className="flex-1 standard-screen-px pb-32"
         showsVerticalScrollIndicator={false}
       >
-        {loading && history.length === 0 ? (
+        {isPending && history.length === 0 ? (
+
           <LoadingOverlay message="Cargando movimientos..." />
         ) : groupKeys.length === 0 ? (
           <View className="py-20 items-center opacity-50">
-            <Text className="text-gray-400 text-sm">No se encontraron movimientos</Text>
+            <Text className="text-body-sm">No se encontraron movimientos</Text>
           </View>
         ) : (
           groupKeys.map((date) => (

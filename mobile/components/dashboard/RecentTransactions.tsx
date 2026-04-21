@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { View, Text } from 'react-native';
-import { TransactionItem } from '../transactions/TransactionItem';
+import { TransactionItem } from '@/src/modules/transactions/components/TransactionItem';
+
 import { SectionHeader } from '../ui/SectionHeader';
 import { router } from 'expo-router';
 import type { RecentTransaction } from '@/src/database/types';

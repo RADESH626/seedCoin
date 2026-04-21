@@ -3,6 +3,7 @@ import { View, Text, TextInput } from 'react-native';
 import { Landmark } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
 import { PrimaryButton } from '../ui/PrimaryButton';
+import { FormField } from '../ui/FormField';
 
 interface NameSelectionProps {
   nameInput: string;
@@ -30,10 +31,9 @@ export function NameSelection({ nameInput, setNameInput, onContinue }: NameSelec
         Personalicemos tu bóveda financiera.
       </Text>
 
-      <TextInput
-        className="w-full bg-dark-800 border border-dark-700 rounded-2xl p-4 text-white text-center text-lg mb-6 shadow-inner"
+      <FormField
+        className="text-center text-lg"
         placeholder="escribe tu nombre"
-        placeholderTextColor="#4b5563"
         value={nameInput}
         onChangeText={setNameInput}
         autoFocus={true}

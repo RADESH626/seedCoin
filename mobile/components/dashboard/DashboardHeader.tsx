@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
 import { RefreshCcw } from 'lucide-react-native';
+import { IconBadge } from '@/components/ui/IconBadge';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
@@ -52,25 +53,26 @@ export function DashboardHeader() {
 
   return (
     <View
-      className="flex-row justify-between items-center px-6 pb-4 z-10"
+      className="flex-row justify-between items-center standard-screen-px pb-4 z-10"
       style={{ paddingTop: Math.max(insets.top, 24) }}
     >
       <View className="flex-row items-center gap-3">
-        <View className="w-10 h-10 rounded-full bg-seed-600 items-center justify-center shadow-md shadow-seed-600/30">
+        <IconBadge color="seed" className="shadow-md shadow-seed-600/30">
           <Text className="text-white text-sm font-bold">{initials}</Text>
-        </View>
+        </IconBadge>
         <View>
-          <Text className="text-[10px] text-gray-400 font-medium tracking-wide uppercase">Buenos días</Text>
-          <Text className="text-lg font-bold text-white -mt-0.5">{userName} 👋</Text>
+          <Text className="text-caption">Buenos días</Text>
+          <Text className="text-body-lg -mt-0.5">{userName} 👋</Text>
         </View>
       </View>
 
       <View className="flex-row items-center gap-2">
         <Pressable
           onPress={handleReset}
-          className="w-10 h-10 rounded-full bg-dark-800 border border-dark-700 items-center justify-center"
         >
-          <RefreshCcw color="#d1d5db" size={18} />
+          <IconBadge color="dark" showBorder>
+            <RefreshCcw color="#d1d5db" size={18} />
+          </IconBadge>
         </Pressable>
       </View>
     </View>

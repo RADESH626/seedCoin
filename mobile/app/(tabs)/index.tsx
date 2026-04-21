@@ -1,9 +1,7 @@
-import { useCallback, useEffect } from 'react';
-import { log } from '@/src/services/logger';
 import { View, ScrollView } from 'react-native';
-import { useFocusEffect, Redirect } from 'expo-router';
-import { useDashboard } from '@/src/hooks/useDashboard';
-import { useAccounts } from '@/src/hooks/useAccounts';
+import { Redirect } from 'expo-router';
+
+import { useDashboardLogic } from '@/src/modules/dashboard/hooks/useDashboardLogic';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { TotalBalanceCard } from '@/components/dashboard/TotalBalanceCard';
 import { MonthlySummary } from '@/components/dashboard/MonthlySummary';
@@ -13,23 +11,10 @@ import { BackgroundAtmosphere } from '@/components/ui/BackgroundAtmosphere';
 import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 
 export default function IndexRoute() {
-  const { loading, totalBalance, balanceGrowthPct, monthlyIncome, monthlyExpense, recentTransactions, fetchDashboardData } = useDashboard();
-  const { accounts, fetchAccounts } = useAccounts();
+  const { state } = useDashboardLogic();
+  const { dashboardData, accounts, isLoading, shouldRedirectToOnboarding } = state;
 
-  useFocusEffect(
-    useCallback(() => {
-      log.info('IndexRoute: Enfocado. Cargando datos del dashboard...');
-      fetchDashboardData();
-      fetchAccounts();
-    }, [fetchDashboardData, fetchAccounts])
-  );
-
-  useEffect(() => {
-    log.debug('IndexRoute: Cambio de estado detectado', { loading, accountsCount: accounts.length });
-  }, [loading, accounts]);
-
-  // Redirigir a estado Cero (Onboarding)
-  if (!loading && accounts.length === 0) {
+  if (shouldRedirectToOnboarding) {
     return <Redirect href={"/onboarding" as any} />;
   }
 
@@ -39,17 +24,23 @@ export default function IndexRoute() {
 
       <DashboardHeader />
 
-      {loading ? (
+      {isLoading ? (
         <LoadingOverlay message="Actualizando balance..." />
       ) : (
         <ScrollView
-          contentContainerClassName="px-6 pt-4 pb-32 gap-6"
+          contentContainerClassName="standard-screen-px pt-4 pb-32 gap-6"
           showsVerticalScrollIndicator={false}
         >
-          <TotalBalanceCard totalBalance={totalBalance} balanceGrowthPct={balanceGrowthPct} />
-          <MonthlySummary monthlyIncome={monthlyIncome} monthlyExpense={monthlyExpense} />
+          <TotalBalanceCard 
+            totalBalance={dashboardData.totalBalance} 
+            balanceGrowthPct={dashboardData.balanceGrowthPct} 
+          />
+          <MonthlySummary 
+            monthlyIncome={dashboardData.monthlyIncome} 
+            monthlyExpense={dashboardData.monthlyExpense} 
+          />
           <QuickAccounts accounts={accounts} />
-          <RecentTransactions recentTransactions={recentTransactions} />
+          <RecentTransactions recentTransactions={dashboardData.recentTransactions} />
         </ScrollView>
       )}
     </View>

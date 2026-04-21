@@ -17,6 +17,10 @@ import { useColorScheme, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { getDBConnection } from '@/src/database/connection';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -103,14 +107,18 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={SeedCoinTheme}>
-      <StatusBar style="light" />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
-        <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="manage-accounts" options={{ presentation: 'modal', headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={SeedCoinTheme}>
+        <StatusBar style="light" />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="add-transaction" options={{ title: 'Nuevo Movimiento', headerShown: false }} />
+          <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="manage-accounts" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="scheduled-transactions" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
+
 }

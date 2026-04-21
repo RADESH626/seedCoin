@@ -1,5 +1,7 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { User, Save } from 'lucide-react-native';
+import { Card } from '@/components/ui/Card';
+import { IconBadge } from '@/components/ui/IconBadge';
 
 interface ProfileIdentityCardProps {
   userName: string;
@@ -19,10 +21,10 @@ export function ProfileIdentityCard({
   onTempNameChange,
 }: ProfileIdentityCardProps) {
   return (
-    <View className="bg-dark-800 border border-dark-700 rounded-[32px] p-6 mb-8 items-center">
-      <View className="w-20 h-20 rounded-full bg-seed-600 items-center justify-center mb-4 shadow-xl shadow-seed-600/30">
+    <Card rounded="extra" padding="xl" className="mb-8 items-center">
+      <IconBadge size="xl" color="seed" className="mb-4 shadow-xl shadow-seed-600/30">
         <User color="#fff" size={40} />
-      </View>
+      </IconBadge>
       
       {isEditing ? (
         <View className="w-full flex-row gap-2 items-center">
@@ -48,6 +50,6 @@ export function ProfileIdentityCard({
           <Text className="text-seed-400 text-xs mt-1 font-medium">Toca para editar nombre</Text>
         </Pressable>
       )}
-    </View>
+    </Card>
   );
 }

@@ -80,7 +80,7 @@ export default function ProfileScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView 
-        className="flex-1 px-6"
+        className="flex-1 standard-screen-px"
         style={{ paddingTop: Math.max(insets.top, 24) }}
         showsVerticalScrollIndicator={false}
       >
