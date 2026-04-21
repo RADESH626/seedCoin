@@ -17,7 +17,7 @@ export function ModalHeader({ title, onClose, Icon }: ModalHeaderProps) {
     <View className="flex-row justify-between items-center pb-6">
       <View className="flex-row items-center gap-3">
         {Icon && <Icon size={24} color="#3b82f6" />}
-        <Text className="text-white text-2xl font-bold">{title}</Text>
+        <Text className="text-h2">{title}</Text>
       </View>
       <Pressable 
         testID="close-modal-button"

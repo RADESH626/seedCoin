@@ -24,8 +24,8 @@ export function PrimaryButton({
     <Pressable 
       disabled={disabled || loading}
       onPress={onPress}
-      className={`w-full py-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-seed-600/20
-        ${(disabled || loading) ? 'bg-dark-700 opacity-60' : 'bg-seed-600 active:bg-seed-700'}
+      className={`btn-primary shadow-lg shadow-seed-600/20
+        ${(disabled || loading) ? 'bg-dark-700 opacity-60' : ''}
         ${className}
       `}
     >

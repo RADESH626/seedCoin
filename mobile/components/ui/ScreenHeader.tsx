@@ -16,9 +16,9 @@ export function ScreenHeader({ title, subtitle, children }: ScreenHeaderProps) {
     <View className="mb-8">
       <View className="flex-row justify-between items-center">
         <View>
-          <Text className="text-white text-2xl font-bold tracking-tight">{title}</Text>
+          <Text className="text-h2">{title}</Text>
           {subtitle && (
-            <Text className="text-gray-400 text-sm mt-1">{subtitle}</Text>
+            <Text className="text-body-sm mt-1">{subtitle}</Text>
           )}
         </View>
         {children}
