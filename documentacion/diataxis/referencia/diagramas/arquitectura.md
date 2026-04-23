@@ -5,7 +5,7 @@ SeedCoin está construido de forma puramente nativa bajo el marco conceptual de 
 ## Diagrama Estructural (Capa de Bloques)
 
 ```mermaid
-  graph TD
+graph TD
     %% Definir colores basados en Tailwind/NativeWind preferido
     classDef ui fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff;
     classDef logic fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#e2e8f0;

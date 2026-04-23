@@ -8,6 +8,15 @@ This file defines the context, skills, and development standards for AI agents w
 - Local skills in `.agents/skills/` provide detailed patterns on-demand.
 - ALWAYS consult the **Auto-invoke Skills** table before performing any action.
 
+## Constitutional Principles (`/speckit.constitution`)
+This section acts as the project's **Constitution**, governing all AI decisions:
+1. **Code Quality**: Enforce Clean Code principles (SRP, DRY). Leave code cleaner than you found it (Boy Scout rule).
+2. **Testing Standards**: Follow Test-Driven Development (TDD). Tests must be Fast, Isolated, Repeatable, Self-Validating, and Timely (F.I.R.S.T.).
+3. **UX & UI Consistency**: Follow the Dark-First design system. UI must be atomic, reusable, and strictly use NativeWind aliases (`text-h1`, `bg-dark-900`) instead of hardcoded values.
+4. **Financial Integrity**: All numeric calculations must use `Big.js` or integer cents to avoid floating-point errors. No exceptions.
+5. **Architectural Purity**: Offline-first using SQLite. Logic must be separated from UI hooks.
+6. **Doc-Driven Development**: Documentation precedes code. Specs and ADRs must be written in `documentacion/` (Diátaxis format) before implementation.
+
 ## Available Skills
 
 ### Generic Skills (Any Project)
@@ -40,6 +49,7 @@ This file defines the context, skills, and development standards for AI agents w
 | `clean-documentation`| Bilingual standards and documentation cleanup | [.agents/skills/clean-documentation/SKILL.md](.agents/skills/clean-documentation/SKILL.md) |
 | `bug-logger` | Specialized bug documentation and Engram persistence | [.agents/skills/bug-logger/SKILL.md](.agents/skills/bug-logger/SKILL.md) |
 | `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
+| `doc-writer` | Diátaxis, ADRs, and Docs-as-Code synchronization | [.agents/skills/doc-writer/SKILL.md](.agents/skills/doc-writer/SKILL.md) |
 
 ## Sub-Agent Mission Control (SDD Flow)
 SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
@@ -68,9 +78,11 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 | Create or extract UI components | `frontend-development` |
 | Naming or Refactoring | `clean-names` |
 | Security or performance Audit | `deep-audit` |
+| Code synchronization or Diátaxis/ADR creation | `doc-writer` |
 | Documentation or Comments (Bilingual) | `clean-documentation` |
 | Documenting a complex bug fix | `bug-logger` |
 | Working with Tailwind / Design | `styling` |
+| Working with architecture diagrams | `excalidraw` |
 | Commit changes | `clean-commits` |
 
 ## Project Overview
