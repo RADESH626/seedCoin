@@ -6,12 +6,12 @@ import { log } from '@/src/services/logger';
 import { useAccounts } from '@/src/hooks/useAccounts';
 import { useCategories } from '@/src/hooks/useCategories';
 import { RecurrenceFrequency } from '@/src/database/types';
+import { useTransactionById } from './useTransactionsQuery';
 import { 
-  useTransactionById, 
   useCreateTransaction, 
   useUpdateTransaction, 
   useDeleteTransaction 
-} from '@/src/modules/transactions';
+} from './useTransactionActions';
 import { SchedulerService } from '@/src/services/SchedulerService';
 import { NotificationService } from '@/src/services/NotificationService';
 

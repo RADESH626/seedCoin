@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { log } from '@/src/services/logger';
-import { useDashboardData } from '@/src/modules/dashboard';
+import { useDashboardData } from './useDashboardQuery';
 import { useAccounts } from '@/src/hooks/useAccounts';
 
 export function useDashboardLogic() {

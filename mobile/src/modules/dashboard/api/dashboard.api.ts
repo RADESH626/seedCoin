@@ -1,5 +1,5 @@
 import { getTotalBalance } from '@/src/services/AccountService';
-import { TransactionAPI } from '@/src/modules/transactions';
+import * as TransactionAPI from '@/src/modules/transactions/api/transaction.api';
 
 export const getDashboardSummary = async () => {
   const [balance, stats, transactions] = await Promise.all([
