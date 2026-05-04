@@ -11,14 +11,6 @@ build/
 dist/
 target/
 
-# Misc
-.DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # Logs
 *.log
 npm-debug.log*
@@ -33,8 +25,16 @@ log.txt
 *.iml
 
 # OS
+.DS_Store
 Thumbs.db
 
-*.log
+# Graphify
+graphify-out/
 
+# Project Specific
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 tareas/

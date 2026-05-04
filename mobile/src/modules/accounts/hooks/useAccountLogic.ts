@@ -33,6 +33,7 @@ export function useAccountLogic(id?: string) {
     }
 
     const initialBalance = parseFloat(balance) || 0;
+    const isFirstAccount = accounts.length === 0;
 
     try {
       setLoading(true);
@@ -42,9 +43,9 @@ export function useAccountLogic(id?: string) {
         await createAccount(name.trim(), accountType, initialBalance);
       }
       
-      await fetchAccounts();
+      const updatedAccounts = await fetchAccounts();
 
-      if (!isEditing && accounts.length === 0) {
+      if (!isEditing && isFirstAccount) {
         router.replace('/(tabs)');
       } else {
         router.back();

@@ -6,6 +6,7 @@ import { useAccountLogic } from '@/src/modules/accounts/hooks/useAccountLogic';
 import { AccountForm } from '@/src/modules/accounts/components/AccountForm';
 import { ModalHeader } from '@/components/ui/ModalHeader';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 
 export default function AddAccountScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -45,6 +46,10 @@ export default function AddAccountScreen() {
             loading={state.loading}
           />
         </View>
+
+        {state.loading && (
+          <LoadingOverlay message={state.isEditing ? "Actualizando..." : "Creando cuenta..."} />
+        )}
 
       </View>
     </KeyboardAvoidingView>

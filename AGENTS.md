@@ -50,6 +50,7 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 | `bug-logger` | Specialized bug documentation and Engram persistence | [.agents/skills/bug-logger/SKILL.md](.agents/skills/bug-logger/SKILL.md) |
 | `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
 | `doc-writer` | Diátaxis, ADRs, and Docs-as-Code synchronization | [.agents/skills/doc-writer/SKILL.md](.agents/skills/doc-writer/SKILL.md) |
+| `graphify` | Codebase architecture mapping and navigation | [.agents/skills/graphify/SKILL.md](.agents/skills/graphify/SKILL.md) |
 
 ## Sub-Agent Mission Control (SDD Flow)
 SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
@@ -83,6 +84,7 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 | Documenting a complex bug fix | `bug-logger` |
 | Working with Tailwind / Design | `styling` |
 | Working with architecture diagrams | `excalidraw` |
+| Codebase mapping or architecture navigation | `graphify` |
 | Commit changes | `clean-commits` |
 
 ## Project Overview

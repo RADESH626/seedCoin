@@ -5,8 +5,8 @@ import { useDashboardData } from '@/src/modules/dashboard';
 import { useAccounts } from '@/src/hooks/useAccounts';
 
 export function useDashboardLogic() {
-  const { data, isLoading, refetch: refetchDashboard } = useDashboardData();
-  const { accounts, fetchAccounts } = useAccounts();
+  const { data, isLoading: isDashboardLoading, refetch: refetchDashboard } = useDashboardData();
+  const { accounts, fetchAccounts, isInitialLoad, loading: isAccountsLoading } = useAccounts();
 
   useFocusEffect(
     useCallback(() => {
@@ -17,8 +17,13 @@ export function useDashboardLogic() {
   );
 
   useEffect(() => {
-    log.debug('useDashboardLogic: Estado actualizado', { isLoading, accountsCount: accounts.length });
-  }, [isLoading, accounts]);
+    log.debug('useDashboardLogic: Estado actualizado', { 
+      isDashboardLoading, 
+      isAccountsLoading,
+      isInitialLoad,
+      accountsCount: accounts.length 
+    });
+  }, [isDashboardLoading, isAccountsLoading, isInitialLoad, accounts]);
 
   const dashboardData = {
     totalBalance: data?.totalBalance ?? 0,
@@ -28,6 +33,7 @@ export function useDashboardLogic() {
     recentTransactions: data?.recentTransactions ?? [],
   };
 
+  const isLoading = isDashboardLoading || isAccountsLoading || isInitialLoad;
   const shouldRedirectToOnboarding = !isLoading && accounts.length === 0;
 
   return {

@@ -13,8 +13,10 @@ export function useAccounts() {
       setLoading(true);
       const result = await getAccounts();
       setAccounts(result);
+      return result;
     } catch (error: unknown) {
       log.error('useAccounts: Error fetching accounts', error);
+      return [];
     } finally {
       setLoading(false);
       setIsInitialLoad(false);

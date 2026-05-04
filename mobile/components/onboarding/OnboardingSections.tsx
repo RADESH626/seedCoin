@@ -32,7 +32,7 @@ export function NameSelection({ nameInput, setNameInput, onContinue }: NameSelec
       </Text>
 
       <FormField
-        className="text-center text-lg"
+        className="text-center text-lg text-white"
         placeholder="escribe tu nombre"
         value={nameInput}
         onChangeText={setNameInput}
