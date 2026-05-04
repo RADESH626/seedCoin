@@ -1,4 +1,4 @@
-import { ReactNode, Ref } from 'react';
+import { ReactNode, Ref, useState } from 'react';
 import { View, Text, TextInput, TextInputProps } from 'react-native';
 
 interface FormFieldProps extends TextInputProps {
@@ -30,10 +30,11 @@ export function FormField({
   containerClassName = '',
   labelClassName = '',
   ref,
+  onFocus,
+  onBlur,
   ...props
 }: FormFieldProps) {
-  // Ajustamos el padding horizontal dependiendo de si hay prefijo/sufijo
-  // para mantener la alineación visual con el borde del contenedor.
+  const [isFocused, setIsFocused] = useState(false);
   const hasIcons = !!(prefix || suffix);
 
   return (
@@ -47,9 +48,9 @@ export function FormField({
       )}
       
       <View
-        className={`flex-row items-center w-full bg-dark-800 rounded-2xl border border-dark-700 focus-within:border-seed-500 overflow-hidden ${
-          hasIcons ? 'px-4' : ''
-        }`}
+        className={`flex-row items-center w-full bg-dark-800 rounded-2xl border ${
+          isFocused ? 'border-seed-500' : 'border-dark-700'
+        } ${hasIcons ? 'px-4' : ''}`}
       >
         {prefix && (
           <View className="pr-1">
@@ -64,8 +65,14 @@ export function FormField({
           className={`flex-1 text-white font-medium text-base ${
             hasIcons ? 'py-4' : 'p-4'
           } ${props.className || ''}`}
-          // En NativeWind, focus: solo funciona si el elemento es el que recibe el foco.
-          // Si el borde está en el contenedor, usamos focus-within en el View.
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
           {...props}
         />
 

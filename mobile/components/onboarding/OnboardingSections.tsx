@@ -32,6 +32,7 @@ export function NameSelection({ nameInput, setNameInput, onContinue }: NameSelec
       </Text>
 
       <FormField
+        containerClassName="w-full"
         className="text-center text-lg text-white"
         placeholder="escribe tu nombre"
         value={nameInput}
@@ -40,6 +41,7 @@ export function NameSelection({ nameInput, setNameInput, onContinue }: NameSelec
       />
 
       <PrimaryButton
+        className="w-full"
         label="Continuar"
         onPress={onContinue}
         disabled={!nameInput.trim()}
@@ -73,6 +75,7 @@ export function AccountStart({ userName, onCreateAccount }: AccountStartProps) {
       </Text>
 
       <PrimaryButton
+        className="w-full"
         label="Crea tu primera cuenta"
         onPress={onCreateAccount}
       />
