@@ -86,6 +86,7 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 | Working with architecture diagrams | `excalidraw` |
 | Codebase mapping or architecture navigation | `graphify` |
 | Commit changes | `clean-commits` |
+| Executing commands in the terminal | `clean-terminal` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
