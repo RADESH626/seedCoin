@@ -131,6 +131,15 @@ Link to project files?      → references/ (with local path)
 - **Minimal examples**: Show patterns, not tutorials
 - **Under 300 lines**: If it exceeds, split into separate skills
 
+## Updating Existing Skills
+
+When asked to update, modify, or extend an existing `.md` skill file:
+1. **Language Validation (CRITICAL):**
+   - The SeedCoin project rule is: **English for AI/System (skills, code, logic) and Spanish for humans (docs, comments).**
+   - If the skill content is in **Spanish**, you must **Translate** the entire skill content to **English** while applying the requested updates.
+2. **Preserve Frontmatter**: Keep the YAML frontmatter intact. Update the `version` if making a significant structural change.
+3. **Sync After Update**: After updating any skill, you MUST invoke the `skill-sync` process to ensure `AGENTS.md` remains synchronized.
+
 ## Commands
 
 ```bash

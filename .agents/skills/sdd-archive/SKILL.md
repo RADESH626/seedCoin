@@ -10,7 +10,7 @@ allowed-tools: [Read, Edit, Write, Terminal]
 Your mission is to clean up the current session workspace, consolidate documentation, and save lessons learned to persistent memory.
 
 ## Objectives
-1. **Knowledge Persistence:** Invoke `engram` to save the task summary (Title, What was done, What was learned).
+1. **Knowledge Persistence:** Invoke `engram` to save the task summary. **NUEVO:** Si descubriste un patrón recurrente o resolviste un bug complejo, guárdalo en Engram como un observation de `type = 'instinct'`. Si usaste un instinto previo y funcionó, invoca a Engram para que incremente su `confidence`.
 2. **Cleanup:** Move files from `.agents/sdd/current/` to a new subfolder in `.agents/sdd/history/`.
 3. **Commit Ready:** Prepare the commit message following the `clean-commits` skill.
 

@@ -19,10 +19,11 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE TABLE IF NOT EXISTS observations (
     id INTEGER PRIMARY KEY, -- Changed from TEXT to INTEGER for FTS4 docid compatibility
     session_id TEXT,
-    type TEXT, -- bugfix, architecture, pattern, logic
+    type TEXT, -- bugfix, architecture, pattern, logic, instinct
     summary TEXT,
     content TEXT, -- The "What, Why, Learned" block
     tags TEXT,
+    confidence INTEGER DEFAULT 1, -- Confidence score for instincts
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES sessions(id)
 );
@@ -81,7 +82,7 @@ if (Test-Path $jsonPath) {
             $escapedContent = $content -replace "'", "''"
             $escapedTags = $tags -replace "'", "''"
             
-            "INSERT OR IGNORE INTO observations (id, type, summary, content, tags) VALUES ($id, '$type', '$escapedSummary', '$escapedContent', '$escapedTags');" | Out-File $sqlFile -Append -Encoding ASCII
+            "INSERT OR IGNORE INTO observations (id, type, summary, content, tags, confidence) VALUES ($id, '$type', '$escapedSummary', '$escapedContent', '$escapedTags', 1);" | Out-File $sqlFile -Append -Encoding ASCII
         }
         "COMMIT;" | Out-File $sqlFile -Append -Encoding ASCII
         

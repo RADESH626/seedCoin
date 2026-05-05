@@ -17,18 +17,23 @@ Stored in `.agents/sdd/memory/engram.db`.
 ## Main Commands (Agent Execution)
 - **mem_save:**
   ```bash
-  sqlite3 .agents/sdd/memory/engram.db "INSERT INTO observations (id, type, summary, content, tags) VALUES ($(date +%s), 'type', 'summary', 'content triad', 'tags');"
+  sqlite3 .agents/sdd/memory/engram.db "INSERT INTO observations (id, type, summary, content, tags, confidence) VALUES ($(date +%s), 'type', 'summary', 'content triad', 'tags', 1);"
   ```
 - **mem_search:**
   ```bash
   sqlite3 .agents/sdd/memory/engram.db "SELECT * FROM observations_fts WHERE observations_fts MATCH 'query';"
   ```
-- **mem_timeline:**
+- **instinct_status:**
   ```bash
-  sqlite3 .agents/sdd/memory/engram.db "SELECT * FROM observations ORDER BY created_at DESC LIMIT 5;"
+  sqlite3 .agents/sdd/memory/engram.db "SELECT id, summary, confidence FROM observations WHERE type='instinct' ORDER BY confidence DESC;"
+  ```
+- **instinct_upvote:**
+  ```bash
+  sqlite3 .agents/sdd/memory/engram.db "UPDATE observations SET confidence = confidence + 1 WHERE id = 'YOUR_ID';"
   ```
 
 ## Golden Rules
 1. **Density:** Be concise. The AI has a limited context window.
 2. **Integrity:** Do not delete old memories. Mark them as "obsolete" in the summary if needed.
 3. **FTS4:** Always use the `MATCH` operator for efficient searching.
+4. **Evolución (Instincts):** Si un instinto (observation de `type = 'instinct'`) alcanza un `confidence >= 3`, debes invocar la skill `skill-creator` para promover ese instinto a una Skill oficial en formato Markdown dentro de `.agents/skills/`.

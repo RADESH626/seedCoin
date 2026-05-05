@@ -16,6 +16,8 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 4. **Financial Integrity**: All numeric calculations must use `Big.js` or integer cents to avoid floating-point errors. No exceptions.
 5. **Architectural Purity**: Offline-first using SQLite. Logic must be separated from UI hooks.
 6. **Doc-Driven Development**: Documentation precedes code. Specs and ADRs must be written in `documentacion/` (Diátaxis format) before implementation.
+7. **Strict TypeScript**: NEVER use `any`. Use `unknown` + type guards. Use `as const` for enums. Prefer flat interfaces. Model coupled optionals as discriminated unions.
+8. **AI-Human Handshake Protocol**: NEVER execute destructive tools (Git commits, large refactors) without presenting a Mini-Plan first. Wait for explicit confirmation unless the user specifies "--force". Prioritize precise diffs over full-file replacements.
 
 ## Available Skills
 
@@ -32,25 +34,19 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 ### SeedCoin-Specific Skills
 | Skill | Description | URL |
 |-------|-------------|-----|
-| `boy-scout` | General refactoring and clean code orchestration | [.agents/skills/boy-scout/SKILL.md](.agents/skills/boy-scout/SKILL.md) |
-| `clean-database` | Standards for Schema, Queries, and Indexes | [.agents/skills/clean-database/SKILL.md](.agents/skills/clean-database/SKILL.md) |
-| `clean-functions` | SRP, max 3 arguments, hook modularity | [.agents/skills/clean-functions/SKILL.md](.agents/skills/clean-functions/SKILL.md) |
-| `clean-names` | CamelCase, descriptive naming, domain clarity | [.agents/skills/clean-names/SKILL.md](.agents/skills/clean-names/SKILL.md) |
-| `clean-tests` | F.I.R.S.T. principle, Jest, SQLite testing | [.agents/skills/clean-tests/SKILL.md](.agents/skills/clean-tests/SKILL.md) |
-| `clean-comments` | Metadata-free comments, bilingual documentation | [.agents/skills/clean-comments/SKILL.md](.agents/skills/clean-comments/SKILL.md) |
-| `clean-commits` | Professional commits (conventional-commits) | [.agents/skills/clean-commits/SKILL.md](.agents/skills/clean-commits/SKILL.md) |
+| `clean-code` | Max 3 args, SRP, Clean Names, F.I.R.S.T Tests, No unused code | [.agents/skills/clean-code/SKILL.md](.agents/skills/clean-code/SKILL.md) |
+| `ui-development` | React 19, UI Atomization, NativeWind styling (Dark First) | [.agents/skills/ui-development/SKILL.md](.agents/skills/ui-development/SKILL.md) |
+| `database-core` | SQLite Schema, Queries, Indexes, Financial Precision | [.agents/skills/database-core/SKILL.md](.agents/skills/database-core/SKILL.md) |
 | `deep-audit` | Exhaustive codebase review framework | [.agents/skills/deep-audit/SKILL.md](.agents/skills/deep-audit/SKILL.md) |
-| `frontend-development`| UI Atomization and Component extraction | [.agents/skills/frontend_development/SKILL.md](.agents/skills/frontend_development/SKILL.md) |
-| `modern-react` | Atomicity, refs as props, React 19 features | [.agents/skills/modern-react/SKILL.md](.agents/skills/modern-react/SKILL.md) |
-| `strict-typescript` | Type-first development, removing 'any' | [.agents/skills/strict-typescript/SKILL.md](.agents/skills/strict-typescript/SKILL.md) |
-| `skill-creator` | Create new AI agent specialized skills | [.agents/skills/skill-creator/SKILL.md](.agents/skills/skill-creator/SKILL.md) |
-| `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
-| `skill-updater` | Protocol to follow when editing or updating existing agent skills | [.agents/skills/skill-updater/SKILL.md](.agents/skills/skill-updater/SKILL.md) |
 | `clean-documentation`| Bilingual standards and documentation cleanup | [.agents/skills/clean-documentation/SKILL.md](.agents/skills/clean-documentation/SKILL.md) |
+| `clean-terminal` | Standards and protocols when executing terminal commands | [.agents/skills/clean-terminal/SKILL.md](.agents/skills/clean-terminal/SKILL.md) |
+| `skill-creator` | Create or update AI agent specialized skills | [.agents/skills/skill-creator/SKILL.md](.agents/skills/skill-creator/SKILL.md) |
+| `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
 | `bug-logger` | Specialized bug documentation and Engram persistence | [.agents/skills/bug-logger/SKILL.md](.agents/skills/bug-logger/SKILL.md) |
 | `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
 | `doc-writer` | Diátaxis, ADRs, and Docs-as-Code synchronization | [.agents/skills/doc-writer/SKILL.md](.agents/skills/doc-writer/SKILL.md) |
 | `graphify` | Codebase architecture mapping and navigation | [.agents/skills/graphify/SKILL.md](.agents/skills/graphify/SKILL.md) |
+| `spec-refiner` | Interactive protocol for refining user stories into specs | [.agents/skills/spec-refiner/SKILL.md](.agents/skills/spec-refiner/SKILL.md) |
 
 ## Sub-Agent Mission Control (SDD Flow)
 SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
@@ -74,19 +70,18 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 |--------|-------------------|
 | New feature / Complex task | `sdd-orchestrator` |
 | Save/Load persistent knowledge | `engram` |
-| Modify Database schema or queries | `clean-database` |
+| Modify Database schema or queries | `database-core` |
 | Verify integrity after changes | `verify-build` |
-| Create or extract UI components | `frontend-development` |
-| Naming or Refactoring | `clean-names` |
+| Creating interfaces or UI styling | `ui-development` |
+| Writing or refactoring any code | `clean-code` |
 | Security or performance Audit | `deep-audit` |
 | Code synchronization or Diátaxis/ADR creation | `doc-writer` |
 | Documentation or Comments (Bilingual) | `clean-documentation` |
 | Documenting a complex bug fix | `bug-logger` |
-| Working with Tailwind / Design | `styling` |
 | Working with architecture diagrams | `excalidraw` |
 | Codebase mapping or architecture navigation | `graphify` |
-| Commit changes | `clean-commits` |
 | Executing commands in the terminal | `clean-terminal` |
+| Refining user story specs and validating assumptions | `spec-refiner` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
@@ -139,10 +134,16 @@ SeedCoin uses a **Dark-First** design system powered by **NativeWind v4**.
 Follow conventional-commit style: `<type>[scope]: <description>`
 
 **Types:** `feat`, `fix`, `docs`, `chore`, `perf`, `refactor`, `test`, `style`
+**Scopes:** `mobile`, `backend`, `db`, `skills`, `docs`, `ci`
+
+**Critical Rules**:
+- ALWAYS keep the first line under 72 characters. No implementation details in title.
+- NEVER use specific counts (e.g., "6 files").
+- ALWAYS present a proposed commit message to the user BEFORE committing. Wait for confirmation.
 
 ### Before creating a PR:
-1. Ensure all tests pass (`clean-tests`).
+1. Ensure all tests pass (`clean-code`).
 2. Run `verify-build` to check TypeScript integrity.
 3. Update relevant documentation in `documentacion/` if feature changes.
-4. Ensure code follows "Financial Integrity" rules (see `.agents/skills/README.md`).
+4. Ensure code follows "Financial Integrity" rules (see Constitutional Principles).
 5. Link screenshots/recordings for UI changes.

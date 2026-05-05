@@ -11,12 +11,12 @@ Your mission is to identify the current project state and set the stage for the 
 
 ## Objectives
 1. **Project Fingerprint:** Identify stacks, critical versions (Expo 54, SQLite), and git state.
-2. **Memory Load (Engram):** Consult the `engram` skill and query the `engram.db` (FTS4) to search for previous contexts related to the current task.
+2. **Memory Load (Engram):** Consult the `engram` skill and query the `engram.db` (FTS4) to search for previous contexts related to the current task. **[NUEVO]** Busca específicamente observaciones de `type = 'instinct'` que tengan relevancia o alta confianza para cargar "memoria muscular" técnica antes de empezar.
 3. **Session Initialization:** Create or reset the `.agents/sdd/current/session.json` file with initial metadata.
 
 ## Workflow
 1. Run `ls -R` or similar command to confirm the structure if in doubt.
-2. Invoke `engram` with the current task as a query to check for "lessons learned" from the past.
+2. Invoke `engram` with the current task as a query to check for "lessons learned" and `instincts` from the past.
 3. Report to the `sdd-orchestrator` that Phase 1 is complete.
 
 ## Artifacts
