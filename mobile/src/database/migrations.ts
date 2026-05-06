@@ -99,5 +99,27 @@ export const MIGRATIONS: Record<number, (db: SQLiteDatabase) => Promise<void>> =
       await db.execAsync('ALTER TABLE TRANSACTIONS_NEW RENAME TO TRANSACTIONS;');
       await db.execAsync('DROP TABLE IF EXISTS CATEGORY;');
     });
+  },
+  10: async (db) => {
+    log.info('Migrando a v10: Saneamiento de BUDGET');
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(`
+        CREATE TABLE BUDGET_NEW (
+          budget_id INTEGER PRIMARY KEY AUTOINCREMENT,
+          category_id TEXT NOT NULL,
+          period TEXT NOT NULL,
+          limit_amount INTEGER NOT NULL,
+          alerts_enabled BOOLEAN NOT NULL DEFAULT 1
+        );
+      `);
+
+      await db.execAsync(`
+        INSERT INTO BUDGET_NEW (budget_id, category_id, period, limit_amount, alerts_enabled)
+        SELECT budget_id, category_id, period, limit_amount, alerts_enabled FROM BUDGET;
+      `);
+
+      await db.execAsync('DROP TABLE BUDGET;');
+      await db.execAsync('ALTER TABLE BUDGET_NEW RENAME TO BUDGET;');
+    });
   }
 };

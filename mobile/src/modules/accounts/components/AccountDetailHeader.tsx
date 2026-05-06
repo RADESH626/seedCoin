@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ACCOUNT_TYPES, type AccountType } from '@/src/database/types';
 import Colors from '@/src/shared/constants/Colors';
 
@@ -12,12 +13,17 @@ interface Props {
 /**
  * Header de la pantalla de detalle de cuenta.
  * Muestra el tipo de cuenta, nombre y botón de retroceso.
+ * Respeta la barra de notificaciones mediante useSafeAreaInsets.
  */
 export function AccountDetailHeader({ name, accountType }: Props) {
+  const insets = useSafeAreaInsets();
   const typeInfo = ACCOUNT_TYPES[accountType] ?? ACCOUNT_TYPES.OTHER;
 
   return (
-    <View className="standard-screen-px pt-4 pb-6 gap-4">
+    <View
+      className="standard-screen-px pb-6 gap-4"
+      style={{ paddingTop: Math.max(insets.top, 24) }}
+    >
       <Pressable
         onPress={() => router.back()}
         hitSlop={12}
@@ -37,3 +43,4 @@ export function AccountDetailHeader({ name, accountType }: Props) {
     </View>
   );
 }
+
