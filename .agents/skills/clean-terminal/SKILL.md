@@ -32,8 +32,9 @@ This skill is MANDATORY and must be applied BEFORE attempting to run any command
 3. **Verify Context First**
    - NEVER execute a command that relies on a specific path without first using `list_dir` or `view_file` to confirm the path or file exists. No guessing.
 
-4. **Step-by-Step Execution**
-   - Do NOT use one-liners with `&&` or `|` for complex operations.
+4. **Step-by-Step Execution (MANDATORY)**
+   - **NO ONE-LINERS**: Do NOT use `&&` or `|` to chain commands.
+   - **PowerShell Compatibility**: The current environment fails with `&&`. Chaining results in a `ParserError`.
    - Execute one command, wait for the result/status, verify success, then execute the next step.
 
 5. **NPM Scripts Over Raw Commands**

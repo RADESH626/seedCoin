@@ -49,12 +49,15 @@ metadata:
 
 ## Commands
 
+> [!CAUTION]
+> **PowerShell Warning**: Do NOT chain these commands with `&&`. Execute them sequentially as separate tool calls to avoid `ParserError`.
+
 ```powershell
-# To stage changes (use specific files if possible)
+# Step 1: Stage changes
 git add .
 
-# To commit (ONLY after confirmation)
-git commit -m "feat(mobile): remove maestro"
+# Step 2: Commit (ONLY after confirmation)
+git commit -m "feat(mobile): description"
 ```
 
 ## Resources
