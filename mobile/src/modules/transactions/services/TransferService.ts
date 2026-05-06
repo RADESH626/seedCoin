@@ -41,8 +41,8 @@ export const createTransfer = async (
       }, db);
 
       log.info(`TransferService: Transferencia completada atómicamente. TXs: ${expenseTxId}, ${incomeTxId}`);
-      return true;
     });
+    return true;
   } catch (error) {
     log.error('TransferService: Error al realizar transferencia', error);
     throw error;
