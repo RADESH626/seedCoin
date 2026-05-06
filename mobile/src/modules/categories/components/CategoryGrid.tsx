@@ -61,7 +61,8 @@ export function CategoryGrid({ selectedCategoryId, onSelectCategory, isIncome }:
                 <Icon color={isSelected ? '#fff' : safeColor} size={24} />
               </View>
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
+                adjustsFontSizeToFit
                 className={`text-[10px] text-center font-medium leading-tight ${isSelected ? 'text-seed-400 font-bold' : 'text-gray-400'}`}
               >
                 {cat.name}

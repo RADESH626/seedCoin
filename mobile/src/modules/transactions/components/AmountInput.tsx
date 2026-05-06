@@ -13,13 +13,14 @@ export function AmountInput({ amount, onAmountChange, isIncome }: Props) {
       <View className="flex-row items-center">
         <Text className={`text-4xl font-bold mr-2 ${isIncome ? 'text-seed-400' : 'text-red-400'}`}>$</Text>
         <TextInput
-          className="text-5xl font-black text-white"
+          className="text-5xl font-black text-white p-0"
           placeholder="0"
           placeholderTextColor="#334155"
           keyboardType="numeric"
           value={amount}
           onChangeText={onAmountChange}
           autoFocus={true}
+          textAlignVertical="center"
         />
       </View>
     </View>

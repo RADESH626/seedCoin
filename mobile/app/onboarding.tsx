@@ -7,7 +7,10 @@ import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
 import { useSingleAction } from '@/src/shared/hooks/useSingleAction';
 import { NameSelection, AccountStart } from '@/src/modules/onboarding/components/OnboardingSections';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export default function OnboardingScreen() {
+  const insets = useSafeAreaInsets();
   const { getPreference, setPreference } = usePreferences();
   const { accounts, fetchAccounts, isInitialLoad } = useAccounts();
   const [userName, setUserName] = useState<string | null>(null);
@@ -64,7 +67,10 @@ export default function OnboardingScreen() {
   if (!checked) return null;
 
   return (
-    <View className="flex-1 bg-dark-900">
+    <View 
+      className="flex-1 bg-dark-900"
+      style={{ paddingTop: Math.max(insets.top, 20) }}
+    >
       {!userName ? (
         <NameSelection 
           onContinue={handleSaveName}

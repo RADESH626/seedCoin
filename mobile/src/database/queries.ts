@@ -45,7 +45,7 @@ export const QUERIES_TRANSACTION = {
       is_income, amount, category_id, description, transaction_date, 
       status, recurrence_frequency, is_automatic, is_active 
     FROM TRANSACTIONS 
-    WHERE is_active = 1 
+    WHERE is_active = 1 AND transaction_date <= datetime('now')
     ORDER BY transaction_date DESC 
     LIMIT ?;
   `,
@@ -54,7 +54,7 @@ export const QUERIES_TRANSACTION = {
     SELECT 
       T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description, T.category_id
     FROM TRANSACTIONS T
-    WHERE T.is_active = 1
+    WHERE T.is_active = 1 AND T.transaction_date <= datetime('now')
     ORDER BY T.transaction_date DESC 
     LIMIT 5;
   `,
