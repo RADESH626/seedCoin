@@ -2,6 +2,16 @@
 
 Este documento describe el flujo de trabajo dinámico que sigo como asistente de IA para el proyecto **SeedCoin**, basado en el modelo de **Desarrollo Guiado por Especificaciones (SDD)** pero adaptado según el riesgo y tipo de tarea.
 
+## Glosario de Abreviaciones
+
+Para facilitar la lectura de los diagramas, se utilizan las siguientes abreviaciones:
+- **FS (File System)**: Sistema de Archivos (directorios y archivos del proyecto).
+- **SDD (Spec-Driven Development)**: Desarrollo Guiado por Especificaciones.
+- **TDD (Test-Driven Development)**: Desarrollo Guiado por Pruebas.
+- **ADR (Architecture Decision Record)**: Registro de Decisión Arquitectónica.
+- **UI (User Interface)**: Interfaz de Usuario.
+- **DB (Database)**: Base de Datos.
+
 ## Diagramas de Secuencias por Playbook
 
 El flujo de trabajo se adapta según la complejidad. Aquí se detallan las interacciones para cada escenario:
