@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { Landmark, Wallet, CreditCard, PiggyBank, MoreHorizontal } from 'lucide-react-native';
+import { Landmark, Wallet, CreditCard, PiggyBank, MoreHorizontal, TrendingUp } from 'lucide-react-native';
 import Colors from '@/src/shared/constants/Colors';
 import { ACCOUNT_TYPES, AccountType } from '@/src/database/types';
 
@@ -14,6 +14,7 @@ const ICON_MAP = {
   landmark: Landmark,
   'piggy-bank': PiggyBank,
   'credit-card': CreditCard,
+  'trending-up': TrendingUp,
   'more-horizontal': MoreHorizontal,
 };
 

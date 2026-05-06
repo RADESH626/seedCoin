@@ -6,6 +6,7 @@ export const ACCOUNT_TYPES = {
   BANK: { id: 'BANK', label: 'Banco', icon: 'landmark' },
   SAVINGS: { id: 'SAVINGS', label: 'Ahorros', icon: 'piggy-bank' },
   CREDIT: { id: 'CREDIT', label: 'Tarjeta', icon: 'credit-card' },
+  YIELD: { id: 'YIELD', label: 'Rendimiento', icon: 'trending-up' },
   OTHER: { id: 'OTHER', label: 'Otro', icon: 'more-horizontal' },
 } as const;
 

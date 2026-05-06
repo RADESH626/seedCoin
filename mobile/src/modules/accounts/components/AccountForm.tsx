@@ -1,6 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import { FormField } from '@/components/ui/FormField';
 import { AccountTypeSelector } from '@/src/modules/accounts/components/AccountTypeSelector';
+import { ACCOUNT_TYPES } from '@/src/database/types';
 
 interface AccountFormProps {
   name: string;
@@ -54,28 +55,31 @@ export function AccountForm({
         suffix={<Text className="text-gray-500 text-sm font-bold">COP</Text>}
       />
 
-      <View className="flex-row gap-4 mb-8">
-        <View className="flex-1">
-          <FormField
-            label="Rendimiento Anual (%)"
-            placeholder="0.0"
-            keyboardType="numeric"
-            value={yieldRate}
-            onChangeText={onYieldRateChange}
-            suffix={<Text className="text-gray-500 text-sm font-bold">%</Text>}
-          />
+      {accountType === ACCOUNT_TYPES.YIELD.id && (
+        <View className="mb-8">
+          <View className="mb-6">
+            <FormField
+              label="Rendimiento Anual (%)"
+              placeholder="0.0"
+              keyboardType="numeric"
+              value={yieldRate}
+              onChangeText={onYieldRateChange}
+              suffix={<Text className="text-gray-500 text-sm font-bold">%</Text>}
+            />
+          </View>
+          
+          <View>
+            <FormField
+              label="Día de Pago del rendimiento"
+              placeholder="1"
+              keyboardType="numeric"
+              value={paymentDay}
+              onChangeText={onPaymentDayChange}
+              suffix={<Text className="text-gray-500 text-sm font-bold">día</Text>}
+            />
+          </View>
         </View>
-        <View className="flex-1">
-          <FormField
-            label="Día de Pago"
-            placeholder="1"
-            keyboardType="numeric"
-            value={paymentDay}
-            onChangeText={onPaymentDayChange}
-            suffix={<Text className="text-gray-500 text-sm font-bold">día</Text>}
-          />
-        </View>
-      </View>
+      )}
       
       {isEditing && (
         <Text className="text-[10px] text-gray-500 mt-2 ml-1 italic">
