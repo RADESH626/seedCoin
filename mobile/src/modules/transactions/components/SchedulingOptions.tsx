@@ -1,5 +1,7 @@
-import { View, Text, Switch, Alert } from 'react-native';
+import { View, Text, Switch } from 'react-native';
+import { useState } from 'react';
 import { ChevronDown, Zap, Clock } from 'lucide-react-native';
+import { FrequencyPickerModal } from './FrequencyPickerModal';
 import { RecurrenceFrequency } from '@/src/database/types';
 import Colors from '@/src/shared/constants/Colors';
 import { Card } from '@/components/ui/Card';
@@ -27,19 +29,10 @@ export function SchedulingOptions({
   onAutomaticChange 
 }: Props) {
   
+  const [modalVisible, setModalVisible] = useState(false);
+  
   const showPicker = () => {
-    Alert.alert(
-      "Repetir movimiento",
-      "Selecciona la frecuencia de recurrencia",
-      [
-        ...FREQUENCIES.map(f => ({
-          text: f.label,
-          onPress: () => onFrequencyChange(f.value),
-          style: f.value === null ? 'destructive' : 'default' as any
-        })),
-        { text: "Cancelar", style: "cancel" }
-      ]
-    );
+    setModalVisible(true);
   };
 
   const selectedLabel = FREQUENCIES.find(f => f.value === frequency)?.label || 'No repetir';
@@ -86,6 +79,13 @@ export function SchedulingOptions({
           />
         </Card>
       )}
+
+      <FrequencyPickerModal 
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelect={onFrequencyChange}
+        currentValue={frequency}
+      />
     </View>
   );
 }
