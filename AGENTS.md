@@ -105,8 +105,10 @@ seedCoin/
 │   ├── app/          # Navigation and screens (Expo Router)
 │   ├── assets/       # Fonts, images, and other static assets
 │   ├── components/   # Reusable UI React components
-│   └── src/          # Core domain logic, tests, models, and SQLite database
-├── tareas/           # Task tracking and sprint management logs
+│   └── src/          # Core application logic
+│       ├── database/ # SQLite configuration and migrations
+│       ├── modules/  # Feature-driven modules (accounts, transactions, etc.)
+│       └── shared/   # Shared services, hooks, constants, and utils
 ├── AGENTS.md         # Main entry point for AI instructions and context
 └── README.md         # Project overview and getting started guide
 ```

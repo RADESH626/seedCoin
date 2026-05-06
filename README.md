@@ -25,15 +25,12 @@
 ```text
 mobile/
 ├── app/                  # Orquestadores de rutas (Expo Router)
-├── components/           # UI Atoms & Complex UI Sections
-│   ├── ui/               # Átomos reutilizables (Botones, Headers, Overlays)
-│   └── [feature]/        # Componentes específicos por funcionalidad
+├── components/           # UI Atoms & Shared UI Sections
 ├── src/
-│   ├── services/         # Lógica de negocio y acceso a datos (Single Source of Truth)
-│   ├── hooks/            # Puentes de orquestación entre UI y Servicios
-│   ├── helpers/          # Utilidades puras (Moneda, Fecha, Base de Datos)
-│   └── database/         # Esquemas, triggers y configuración de SQLite
-└── constants/            # Tokens de diseño y constantes de dominio
+│   ├── database/         # Esquemas, triggers y configuración de SQLite
+│   ├── modules/          # Módulos por funcionalidad (Transactions, Accounts, etc.)
+│   └── shared/           # Servicios, Hooks, Constantes y Utils compartidos
+└── assets/               # Fuentes, imágenes y recursos estáticos
 ```
 
 ## 🚀 Instalación y Ejecución
