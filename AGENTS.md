@@ -4,7 +4,7 @@ This file defines the context, skills, and development standards for AI agents w
 
 ## How to Use This Guide
 - Start here for project-wide norms and AI behaviors.
-- The repository follows a bilingual model: **Spanish** for humans (docs, comments), **English** for AI/System (skills, code, logic).
+- El repositorio sigue un modelo unificado: **Español** para humanos (docs, comentarios) y para la IA (instrucciones de Skills). El **Inglés** se reserva para el código fuente (lógica, nombres de variables, APIs estándar).
 - Local skills in `.agents/skills/` provide detailed patterns on-demand.
 - ALWAYS consult the **Auto-invoke Skills** table before performing any action.
 
@@ -21,69 +21,72 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 
 ## Available Skills
 
-### Generic Skills (Any Project)
-| Skill | Description | URL |
+### Skills Genéricos (Cualquier Proyecto)
+| Skill | Descripción | URL |
 |-------|-------------|-----|
-| `typescript` | Const types, flat interfaces, utility types | [TypeScript Docs](https://www.typescriptlang.org/) |
-| `react-19` | Modern React 19 patterns (no useMemo/useCallback by default) | [React Docs](https://react.dev/) |
-| `react-native` | Mobile Framework conventions | [React Native Docs](https://reactnative.dev/docs/getting-started) |
-| `expo-54` | App Router, SDK 54, SQLite, and Build | [Expo Docs](https://docs.expo.dev/) |
-| `nativewind-4` | Tailwind 3.4 for Native, className patterns | [NativeWind Docs](https://www.nativewind.dev/) |
-| `tdd` | Test-Driven Development workflow | [TDD Workflow](.agents/skills/tdd-workflow/SKILL.md) |
+| `typescript` | Tipos constantes, interfaces planas, tipos de utilidad | [TypeScript Docs](https://www.typescriptlang.org/) |
+| `react-19` | Patrones modernos de React 19 (sin useMemo/useCallback por defecto) | [React Docs](https://react.dev/) |
+| `react-native` | Convenciones del framework móvil | [React Native Docs](https://reactnative.dev/docs/getting-started) |
+| `expo-54` | App Router, SDK 54, SQLite y Build | [Expo Docs](https://docs.expo.dev/) |
+| `nativewind-4` | Tailwind 3.4 para Native, patrones de className | [NativeWind Docs](https://www.nativewind.dev/) |
+| `tdd` | Flujo de trabajo de Desarrollo Guiado por Pruebas | [TDD Workflow](.agents/skills/engineering/tdd-workflow/SKILL.md) |
 
-### SeedCoin-Specific Skills
-| Skill | Description | URL |
+### Skills Específicos de SeedCoin
+| Skill | Descripción | URL |
 |-------|-------------|-----|
-| `clean-code` | Max 3 args, SRP, Clean Names, F.I.R.S.T Tests, No unused code | [.agents/skills/clean-code/SKILL.md](.agents/skills/clean-code/SKILL.md) |
-| `ui-development` | React 19, UI Atomization, NativeWind styling (Dark First) | [.agents/skills/ui-development/SKILL.md](.agents/skills/ui-development/SKILL.md) |
-| `database-core` | SQLite Schema, Queries, Indexes, Financial Precision | [.agents/skills/database-core/SKILL.md](.agents/skills/database-core/SKILL.md) |
-| `deep-audit` | Exhaustive codebase review framework | [.agents/skills/deep-audit/SKILL.md](.agents/skills/deep-audit/SKILL.md) |
-| `clean-documentation`| Bilingual standards and documentation cleanup | [.agents/skills/clean-documentation/SKILL.md](.agents/skills/clean-documentation/SKILL.md) |
-| `clean-terminal` | Standards and protocols when executing terminal commands | [.agents/skills/clean-terminal/SKILL.md](.agents/skills/clean-terminal/SKILL.md) |
-| `skill-creator` | Create or update AI agent specialized skills | [.agents/skills/skill-creator/SKILL.md](.agents/skills/skill-creator/SKILL.md) |
-| `skill-sync` | Synchronize AGENTS.md with local skills | [.agents/skills/skill-sync/SKILL.md](.agents/skills/skill-sync/SKILL.md) |
-| `bug-logger` | Specialized bug documentation and Engram persistence | [.agents/skills/bug-logger/SKILL.md](.agents/skills/bug-logger/SKILL.md) |
-| `verify-build` | TypeScript and Build integrity checks | [.agents/skills/verify-build/SKILL.md](.agents/skills/verify-build/SKILL.md) |
-| `doc-writer` | Diátaxis, ADRs, and Docs-as-Code synchronization | [.agents/skills/doc-writer/SKILL.md](.agents/skills/doc-writer/SKILL.md) |
-| `graphify` | Codebase architecture mapping and navigation | [.agents/skills/graphify/SKILL.md](.agents/skills/graphify/SKILL.md) |
-| `spec-refiner` | Interactive protocol for refining user stories into specs | [.agents/skills/spec-refiner/SKILL.md](.agents/skills/spec-refiner/SKILL.md) |
-| `git-handshake` | Proactive protocol for suggesting commits after tasks | [.agents/skills/git-handshake/SKILL.md](.agents/skills/git-handshake/SKILL.md) |
+| `clean-code` | Máximo 3 argumentos, SRP, Nombres Limpios, Tests F.I.R.S.T., Sin código muerto | [.agents/skills/engineering/clean-code/SKILL.md](.agents/skills/engineering/clean-code/SKILL.md) |
+| `ui-development` | React 19, Atomización de UI, Estilizado con NativeWind (Dark First) | [.agents/skills/engineering/ui-development/SKILL.md](.agents/skills/engineering/ui-development/SKILL.md) |
+| `database-core` | Esquema SQLite, Consultas, Índices, Precisión Financiera | [.agents/skills/engineering/database-core/SKILL.md](.agents/skills/engineering/database-core/SKILL.md) |
+| `deep-audit` | Framework de revisión exhaustiva de la base de código | [.agents/skills/tools/deep-audit/SKILL.md](.agents/skills/tools/deep-audit/SKILL.md) |
+| `clean-documentation`| Estándares unificados y limpieza de documentación | [.agents/skills/tools/clean-documentation/SKILL.md](.agents/skills/tools/clean-documentation/SKILL.md) |
+| `clean-terminal` | Estándares y protocolos al ejecutar comandos de terminal | [.agents/skills/tools/clean-terminal/SKILL.md](.agents/skills/tools/clean-terminal/SKILL.md) |
+| `skill-creator` | Crear o actualizar skills especializadas para el agente | [.agents/skills/tools/skill-creator/SKILL.md](.agents/skills/tools/skill-creator/SKILL.md) |
+| `skill-sync` | Sincronizar AGENTS.md con los skills locales | [.agents/skills/tools/skill-sync/SKILL.md](.agents/skills/tools/skill-sync/SKILL.md) |
+| `bug-logger` | Documentación especializada de errores y persistencia en Engram | [.agents/skills/tools/bug-logger/SKILL.md](.agents/skills/tools/bug-logger/SKILL.md) |
+| `verify-build` | Chequeos de integridad de tipos TypeScript y Build | [.agents/skills/engineering/verify-build/SKILL.md](.agents/skills/engineering/verify-build/SKILL.md) |
+| `doc-writer` | Sincronización de Diátaxis, ADRs y Docs-as-Code | [.agents/skills/tools/doc-writer/SKILL.md](.agents/skills/tools/doc-writer/SKILL.md) |
+| `graphify` | Mapeo de arquitectura y navegación por el código | [.agents/skills/tools/graphify/SKILL.md](.agents/skills/tools/graphify/SKILL.md) |
+| `spec-refiner` | Protocolo interactivo para refinar historias de usuario en specs | [.agents/skills/tools/spec-refiner/SKILL.md](.agents/skills/tools/spec-refiner/SKILL.md) |
+| `git-handshake` | Protocolo proactivo para sugerir commits tras tareas | [.agents/skills/tools/git-handshake/SKILL.md](.agents/skills/git-handshake/SKILL.md) |
 
-## Sub-Agent Mission Control (SDD Flow)
-SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
+## Sub-Agent Mission Control (Adaptive SDD Flow)
+SeedCoin opera bajo un modelo de **Desarrollo Guiado por Especificaciones (SDD)** adaptativo. El orquestador selecciona un **Playbook** de ejecución según el nivel de riesgo detectado.
 
-| Phase | Sub-Agent | Primary Action |
+> [!IMPORTANT]
+> El flujo no es estático. Consulta la **Matriz de Decisión y Playbooks (Titan, Ninja, Flash)** en: [Proceso de Trabajo (SDD Flow)](file:///d:/Familia/Documents/emanuel/proyectos%20personales/seedCoin/documentacion/tecnica/proceso-trabajo.md)
+
+| Fase | Sub-Agente | Acción Principal |
 |------|------------|------------------|
-| 1 | `sdd-init` | Project fingerprint and memory load (`engram`). |
-| 2 | `sdd-explore` | Code investigation and risk analysis. |
-| 3 | `sdd-propose` | Solution strategy and rollback plan. |
-| 4 | `sdd-spec` | Change specifications and criteria (Given/When/Then). |
-| 5 | `sdd-design` | Technical architecture, schemas, and contracts. |
-| 6 | `sdd-tasks` | Atomic task breakdown as a checklist. |
-| 7 | `sdd-apply` | Code implementation (TDD). |
-| 8 | `sdd-verify` | Type validation, testing, and quality check. |
-| 9 | `sdd-archive` | Session closure, cleanup, and persistence (`engram`). |
+| 1 | `sdd-init` | Huella digital del proyecto y carga de memoria (`engram`). |
+| 2 | `sdd-explore` | Investigación del código y análisis de riesgos. |
+| 3 | `sdd-propose` | Estrategia de solución y plan de rollback. |
+| 4 | `sdd-spec` | Especificaciones de cambio y criterios (Given/When/Then). |
+| 5 | `sdd-design` | Arquitectura técnica, esquemas y contratos. |
+| 6 | `sdd-tasks` | Desglose de tareas atómicas como checklist. |
+| 7 | `sdd-apply` | Implementación de código (TDD). |
+| 8 | `sdd-verify` | Validación de tipos, pruebas y control de calidad. |
+| 9 | `sdd-archive` | Cierre de sesión, limpieza y persistencia (`engram`). |
 
 ## Auto-invoke Rules
 ALWAYS invoke the corresponding skill FIRST when starting an action:
 
-| Action | Mandatory Skill |
+| Acción | Skill Obligatorio |
 |--------|-------------------|
-| New feature / Complex task | `sdd-orchestrator` |
-| Save/Load persistent knowledge | `engram` |
-| Modify Database schema or queries | `database-core` |
-| Verify integrity after changes | `verify-build` |
-| Creating interfaces or UI styling | `ui-development` |
-| Writing or refactoring any code | `clean-code` |
-| Security or performance Audit | `deep-audit` |
-| Code synchronization or Diátaxis/ADR creation | `doc-writer` |
-| Documentation or Comments (Bilingual) | `clean-documentation` |
-| Documenting a complex bug fix | `bug-logger` |
-| Working with architecture diagrams | `excalidraw` |
-| Codebase mapping or architecture navigation | `graphify` |
-| Executing commands in the terminal | `clean-terminal` |
-| Refining user story specs and validating assumptions | `spec-refiner` |
-| Finishing a task or modification (Commit suggestion) | `git-handshake` |
+| Nueva funcionalidad / Tarea compleja | `sdd-orchestrator` |
+| Guardar/Cargar conocimiento persistente | `engram` |
+| Modificar esquemas o consultas de base de datos | `database-core` |
+| Verificar integridad después de los cambios | `verify-build` |
+| Crear interfaces o estilizado de UI | `ui-development` |
+| Escribir o refactorizar cualquier código | `clean-code` |
+| Auditoría de seguridad o rendimiento | `deep-audit` |
+| Sincronización de código o creación de Diátaxis/ADR | `doc-writer` |
+| Documentación o Comentarios | `clean-documentation` |
+| Documentar una corrección de error compleja | `bug-logger` |
+| Trabajar con diagramas de arquitectura | `excalidraw` |
+| Mapeo de código o navegación por la arquitectura | `graphify` |
+| Ejecutar comandos en la terminal | `clean-terminal` |
+| Refinar specs de historias de usuario y validar asunciones | `spec-refiner` |
+| Finalizar una tarea o modificación (Sugerencia de commit) | `git-handshake` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
@@ -98,7 +101,8 @@ SeedCoin is a personal financial management platform for secure and efficient of
 ### Directory Structure
 ```text
 seedCoin/
-├── .agents/          # AI Agent protocols, skills, and knowledge base
+├── .agents/          # AI Agent protocols, skills (categorized), and knowledge base
+│   └── skills/       # Categorized Skills (core/, engineering/, tools/, legacy/)
 ├── documentacion/    # Project documentation, architecture diagrams, and user guides
 ├── inconos/          # Image assets and application icons
 ├── mobile/           # React Native / Expo source code for the app
