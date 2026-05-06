@@ -72,7 +72,7 @@ export default function ProfileScreen() {
     );
   };
   
-  const showDeveloperFeatures = process.env.EXPO_PUBLIC_APP_VARIANT !== 'production';
+  const showDeveloperFeatures = process.env.EXPO_PUBLIC_APP_VARIANT === 'development';
 
   return (
     <KeyboardAvoidingView 

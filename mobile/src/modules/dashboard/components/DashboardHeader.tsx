@@ -71,13 +71,15 @@ export function DashboardHeader() {
       </View>
 
       <View className="flex-row items-center gap-2">
-        <Pressable
-          onPress={handleReset}
-        >
-          <IconBadge color="dark" showBorder>
-            <RefreshCcw color="#d1d5db" size={18} />
-          </IconBadge>
-        </Pressable>
+        {process.env.EXPO_PUBLIC_APP_VARIANT === 'development' && (
+          <Pressable
+            onPress={handleReset}
+          >
+            <IconBadge color="dark" showBorder>
+              <RefreshCcw color="#d1d5db" size={18} />
+            </IconBadge>
+          </Pressable>
+        )}
       </View>
     </View>
   );
