@@ -51,7 +51,7 @@ export default function LimitsScreen() {
       >
         <View className="flex-row justify-between items-center mb-6">
           <View>
-            <Text className="text-h2">Límites</Text>
+            <Text className="text-h2">Presupuestos</Text>
             <Text className="text-caption">Control de gastos mensuales</Text>
           </View>
           <Pressable 
@@ -69,7 +69,7 @@ export default function LimitsScreen() {
           </IconBadge>
           <View className="flex-1">
             <Text className="text-white text-[11px] font-bold">Salud Financiera</Text>
-            <Text className="text-body-sm text-[10px]">Tus límites te ayudan a no gastar más de lo que ganas el mes.</Text>
+            <Text className="text-body-sm text-[10px]">Tus presupuestos te ayudan a no gastar más de lo que ganas el mes.</Text>
           </View>
         </Card>
       </View>
@@ -86,7 +86,7 @@ export default function LimitsScreen() {
               <Target size={32} color="#475569" />
             </IconBadge>
             <Text className="text-white font-bold text-base mb-1">Sin presupuestos</Text>
-            <Text className="text-gray-500 text-xs text-center px-10">Crea tu primer límite de gasto para empezar a ahorrar hoy mismo.</Text>
+            <Text className="text-gray-500 text-xs text-center px-10">Crea tu primer presupuesto de gasto para empezar a ahorrar hoy mismo.</Text>
             
             <Pressable 
               onPress={handleCreateNew}

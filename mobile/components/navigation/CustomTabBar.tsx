@@ -14,7 +14,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   };
 
   const isHomeFocused = state.routes[state.index].name === 'index';
-  const isLimitsFocused = state.routes[state.index].name === 'limits';
+  const isBudgetsFocused = state.routes[state.index].name === 'budgets';
   const isHistoryFocused = state.routes[state.index].name === 'history';
   const isProfileFocused = state.routes[state.index].name === 'profile';
 
@@ -39,10 +39,10 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       <TabBarFAB onPress={() => router.push('/add-transaction' as any)} />
 
       <TabBarButton 
-        label="Límites" 
+        label="Presupuestos" 
         Icon={Target} 
-        isFocused={isLimitsFocused} 
-        onPress={() => navigation.navigate('limits')} 
+        isFocused={isBudgetsFocused} 
+        onPress={() => navigation.navigate('budgets')} 
       />
       <TabBarButton 
         label="Perfil" 

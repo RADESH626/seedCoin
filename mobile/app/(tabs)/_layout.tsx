@@ -13,8 +13,8 @@ export default function TabLayout() {
         options={{ title: 'Inicio' }}
       />
       <Tabs.Screen
-        name="limits"
-        options={{ title: 'Límites' }}
+        name="budgets"
+        options={{ title: 'Presupuestos' }}
       />
       <Tabs.Screen
         name="history"
