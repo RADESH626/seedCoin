@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { formatMoney } from '@/src/helpers/currency';
+import { formatMoney } from '@/src/shared/utils/currency';
 
 interface Props {
   accounts: any[];
@@ -27,3 +27,4 @@ export function AccountSelector({ accounts, selectedAccountId, onSelectAccount }
     </View>
   );
 }
+

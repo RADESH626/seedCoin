@@ -1,6 +1,6 @@
 import { Text, Pressable, ViewStyle } from 'react-native';
 import { LucideIcon } from 'lucide-react-native';
-import Colors from '@/constants/Colors';
+import Colors from '@/src/shared/constants/Colors';
 
 interface FloatingActionButtonProps {
   label: string;

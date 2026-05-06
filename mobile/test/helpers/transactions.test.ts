@@ -1,4 +1,4 @@
-import { groupTransactionsByDate } from '@/src/helpers/transactions';
+import { groupTransactionsByDate } from '@/src/shared/utils/transactions';
 import type { DetailedTransaction } from '@/src/database/types';
 
 describe('Transactions Helpers', () => {
@@ -20,7 +20,7 @@ describe('Transactions Helpers', () => {
           account_id: 1,
           is_income: 1,
           amount: 500,
-          category_id: 1,
+          category_id: 'income_salary',
           transaction_date: '2026-04-15T10:00:00Z',
           status: 'COMPLETED',
           created_at: '2026-04-15T10:00:00Z',
@@ -36,7 +36,7 @@ describe('Transactions Helpers', () => {
           account_id: 1,
           is_income: 0,
           amount: 200,
-          category_id: 2,
+          category_id: 'expense_food',
           transaction_date: '2026-04-15T11:00:00Z',
           status: 'COMPLETED',
           created_at: '2026-04-15T11:00:00Z',
@@ -52,7 +52,7 @@ describe('Transactions Helpers', () => {
           account_id: 1,
           is_income: 0,
           amount: 100,
-          category_id: 2,
+          category_id: 'expense_food',
           transaction_date: '2026-04-14T15:00:00Z',
           status: 'COMPLETED',
           created_at: '2026-04-14T15:00:00Z',
@@ -83,3 +83,4 @@ describe('Transactions Helpers', () => {
     });
   });
 });
+

@@ -5,10 +5,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { TransactionTypeSelector } from '../components/TransactionTypeSelector';
 import { AmountInput } from '../components/AmountInput';
 import { AccountSelector } from '../components/AccountSelector';
-import { CategoryGrid } from '../components/CategoryGrid';
+import { CategoryGrid } from '@/src/modules/categories/components/CategoryGrid';
 import { TransactionDateField } from '../components/TransactionDateField';
 import { SchedulingOptions } from '../components/SchedulingOptions';
-import { Account, Category, RecurrenceFrequency } from '@/src/database/types';
+import { Account, RecurrenceFrequency } from '@/src/database/types';
 
 interface TransactionFormProps {
   isIncome: boolean;
@@ -18,9 +18,8 @@ interface TransactionFormProps {
   accounts: Account[];
   selectedAccountId: number | null;
   onSelectAccount: (id: number) => void;
-  categories: Category[];
-  selectedCategoryId: number | null;
-  onSelectCategory: (id: number) => void;
+  selectedCategoryId: string | null;
+  onSelectCategory: (id: string) => void;
   date: Date;
   onDatePress: () => void;
   description: string;
@@ -43,7 +42,6 @@ export function TransactionForm({
   accounts,
   selectedAccountId,
   onSelectAccount,
-  categories,
   selectedCategoryId,
   onSelectCategory,
   date,
@@ -80,7 +78,6 @@ export function TransactionForm({
         />
 
         <CategoryGrid
-          categories={categories}
           selectedCategoryId={selectedCategoryId}
           onSelectCategory={onSelectCategory}
           isIncome={isIncome}

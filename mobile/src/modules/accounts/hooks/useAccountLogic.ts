@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
-import { useAccounts } from '@/src/hooks/useAccounts';
-import { createAccount, getAccountById, updateAccount } from '@/src/services/AccountService';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
+import { createAccount, getAccountById, updateAccount } from '@/src/modules/accounts/services/AccountService';
 import { ACCOUNT_TYPES } from '@/src/database/types';
 
 export function useAccountLogic(id?: string) {

@@ -1,4 +1,4 @@
-import { getDateLabel, getTimeLabel } from '@/src/helpers/date';
+import { getDateLabel, getTimeLabel } from '@/src/shared/utils/date';
 
 describe('Date Helpers', () => {
   beforeAll(() => {
@@ -47,3 +47,4 @@ describe('Date Helpers', () => {
     });
   });
 });
+

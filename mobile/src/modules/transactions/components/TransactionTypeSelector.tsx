@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
 import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react-native';
-import Colors from '@/constants/Colors';
+import Colors from '@/src/shared/constants/Colors';
 
 interface Props {
   isIncome: boolean;
@@ -27,3 +27,4 @@ export function TransactionTypeSelector({ isIncome, onTypeChange }: Props) {
     </View>
   );
 }
+

@@ -1,4 +1,4 @@
-import { ReactNode, Ref, useState } from 'react';
+import React, { ReactNode, Ref, useState } from 'react';
 import { View, Text, TextInput, TextInputProps } from 'react-native';
 
 interface FormFieldProps extends TextInputProps {
@@ -23,7 +23,7 @@ interface FormFieldProps extends TextInputProps {
  *   onChangeText={setName} 
  * />
  */
-export function FormField({
+export const FormField = React.memo(function FormField({
   label,
   prefix,
   suffix,
@@ -62,9 +62,11 @@ export function FormField({
           ref={ref}
           placeholderTextColor="#4b5563"
           selectionColor="#10b981" // seed-500 color approx
-          className={`flex-1 text-white font-medium text-base ${
-            hasIcons ? 'py-4' : 'p-4'
-          } ${props.className || ''}`}
+          style={[
+            { flex: 1, color: 'white', fontSize: 16, fontWeight: '500' },
+            hasIcons ? { paddingVertical: 16 } : { padding: 16 },
+            props.style
+          ]}
           onFocus={(e) => {
             setIsFocused(true);
             onFocus?.(e);
@@ -84,4 +86,4 @@ export function FormField({
       </View>
     </View>
   );
-}
+});

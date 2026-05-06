@@ -1,7 +1,7 @@
 import { View, Text, Switch, Alert } from 'react-native';
 import { ChevronDown, Zap, Clock } from 'lucide-react-native';
 import { RecurrenceFrequency } from '@/src/database/types';
-import Colors from '@/constants/Colors';
+import Colors from '@/src/shared/constants/Colors';
 import { Card } from '@/components/ui/Card';
 import { IconBadge } from '@/components/ui/IconBadge';
 
@@ -89,3 +89,4 @@ export function SchedulingOptions({
     </View>
   );
 }
+

@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { getCategoryIcon } from '@/src/helpers/ui';
-import { formatMoney } from '@/src/helpers/currency';
-import { getTimeLabel } from '@/src/helpers/date';
+import { getCategoryIcon } from '@/src/shared/utils/ui';
+import { formatMoney } from '@/src/shared/utils/currency';
+import { getTimeLabel } from '@/src/shared/utils/date';
 import type { RecentTransaction } from '@/src/database/types';
 
 interface Props {
@@ -16,7 +16,8 @@ interface Props {
  */
 export function TransactionItem({ transaction: tx, showAccountName = false }: Props) {
   const isIncome = tx.is_income === 1;
-  const iconBgStyle = { backgroundColor: `${tx.category_color}33` };
+  const safeColor = tx.category_color || '#9ca3af'; // Gris por defecto si no hay color
+  const iconBgStyle = { backgroundColor: `${safeColor}33` };
 
   const handlePress = () => {
     router.push({
@@ -33,12 +34,14 @@ export function TransactionItem({ transaction: tx, showAccountName = false }: Pr
     >
       <View className="flex-row items-center gap-3 flex-1">
         <View className="w-10 h-10 rounded-full items-center justify-center" style={iconBgStyle}>
-          {getCategoryIcon(tx.category_icon, tx.category_color, 20)}
+          {getCategoryIcon(tx.category_icon || 'default', safeColor, 20)}
         </View>
         <View className="flex-1">
-          <Text className="font-bold text-sm text-white">{tx.category_name}</Text>
+          <Text className="font-bold text-sm text-white" numberOfLines={1}>
+            {tx.description || tx.category_name}
+          </Text>
           <Text className="text-[11px] text-gray-400 mt-0.5" numberOfLines={1}>
-            {tx.description ? `${tx.description} • ` : ''}
+            {tx.description ? `${tx.category_name} • ` : ''}
             {showAccountName && tx.account_name ? `${tx.account_name} • ` : ''}
             {getTimeLabel(tx.transaction_date)}
           </Text>
@@ -52,3 +55,4 @@ export function TransactionItem({ transaction: tx, showAccountName = false }: Pr
     </TouchableOpacity>
   );
 }
+

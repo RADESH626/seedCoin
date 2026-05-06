@@ -1,7 +1,6 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { CREATE_TABLES, CREATE_TRIGGERS, CREATE_PREFERENCES_TABLE, CREATE_INDEXES } from './schema';
-import { INITIAL_CATEGORIES, SEED_CATEGORIES_QUERY } from './seed';
-import { log } from '@/src/services/logger';
+import { log } from '@/src/shared/services/logger';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   const DATABASE_VERSION = 6;
@@ -24,25 +23,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       await db.execAsync(CREATE_INDEXES);
       await db.execAsync(CREATE_PREFERENCES_TABLE);
       log.info('migrateDbIfNeeded: Esquema base creado correctamente.');
-
-      // Poblar (seed) las categorías de forma atómica
-      let insertedCount = 0;
-      const statement = await db.prepareAsync(SEED_CATEGORIES_QUERY);
-      try {
-        for (const category of INITIAL_CATEGORIES) {
-          await statement.executeAsync([
-            category.name,
-            category.is_income,
-            category.icon,
-            category.color,
-            category.is_default
-          ]);
-          insertedCount++;
-        }
-      } finally {
-        await statement.finalizeAsync();
-      }
-      log.info(`migrateDbIfNeeded: Categorías iniciales inyectadas: ${insertedCount} registros.`);
 
       // Solo después de TODO el éxito inicial, subimos a v2 (v1 + preferences)
       currentDbVersion = 2;
@@ -136,3 +116,4 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     log.info('migrateDbIfNeeded: Migración a v6 completada exitosamente.');
   }
 }
+

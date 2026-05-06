@@ -11,7 +11,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { NotificationService } from '@/src/services/NotificationService';
+import { NotificationService } from '@/src/shared/services/NotificationService';
 import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -84,7 +84,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded && dbLoaded) {
       // Procesamos transacciones programadas al iniciar
-      import('@/src/services/SchedulerService')
+      import('@/src/shared/services/SchedulerService')
         .then(({ SchedulerService }) => SchedulerService.processDueTransactions())
         .catch(e => console.error("Error processing schedules:", e));
 
@@ -122,3 +122,4 @@ function RootLayoutNav() {
   );
 
 }
+

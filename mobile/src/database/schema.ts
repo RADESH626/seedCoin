@@ -9,16 +9,6 @@ export const CREATE_TABLES = `
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
-    CREATE TABLE IF NOT EXISTS CATEGORY (
-        category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        is_income BOOLEAN NOT NULL,
-        icon TEXT,
-        color TEXT,
-        is_default BOOLEAN NOT NULL DEFAULT 0,
-        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-
     CREATE TABLE IF NOT EXISTS DEBT (
         debt_id INTEGER PRIMARY KEY AUTOINCREMENT,
         creditor TEXT NOT NULL,
@@ -36,7 +26,7 @@ export const CREATE_TABLES = `
         transfer_transaction_id INTEGER,
         is_income BOOLEAN NOT NULL,
         amount INTEGER NOT NULL,
-        category_id INTEGER NOT NULL,
+        category_id TEXT NOT NULL,
         description TEXT,
         transaction_date TEXT NOT NULL,
         status TEXT NOT NULL,
@@ -46,17 +36,15 @@ export const CREATE_TABLES = `
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id),
         FOREIGN KEY (debt_id) REFERENCES DEBT(debt_id),
-        FOREIGN KEY (transfer_transaction_id) REFERENCES TRANSACTIONS(transaction_id),
-        FOREIGN KEY (category_id) REFERENCES CATEGORY(category_id)
+        FOREIGN KEY (transfer_transaction_id) REFERENCES TRANSACTIONS(transaction_id)
     );
 
     CREATE TABLE IF NOT EXISTS BUDGET (
         budget_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        category_id INTEGER NOT NULL,
+        category_id TEXT NOT NULL,
         period TEXT NOT NULL,
         limit_amount INTEGER NOT NULL,
-        alerts_enabled BOOLEAN NOT NULL DEFAULT 1,
-        FOREIGN KEY (category_id) REFERENCES CATEGORY(category_id)
+        alerts_enabled BOOLEAN NOT NULL DEFAULT 1
     );
 `;
 
@@ -64,8 +52,6 @@ export const CREATE_INDEXES = `
     -- Índices para mejorar el rendimiento de consultas y ordenación
     CREATE INDEX IF NOT EXISTS idx_transactions_date ON TRANSACTIONS(transaction_date);
     CREATE INDEX IF NOT EXISTS idx_transactions_account ON TRANSACTIONS(account_id);
-    CREATE INDEX IF NOT EXISTS idx_transactions_category ON TRANSACTIONS(category_id);
-    CREATE INDEX IF NOT EXISTS idx_budget_category ON BUDGET(category_id);
 `;
 
 export const CREATE_TRIGGERS = `

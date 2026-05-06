@@ -1,7 +1,8 @@
 import { QUERIES_TRANSACTION } from '@/src/database/queries';
 import { getDBConnection } from '@/src/database/connection';
-import { fromCents, toCents } from '@/src/helpers/currency';
-import { withNativeRetry } from '@/src/helpers/database';
+import { fromCents, toCents } from '@/src/shared/utils/currency';
+import { withNativeRetry } from '@/src/shared/utils/database';
+import { getCategoryById } from '@/src/modules/categories/constants/categories';
 import type { 
   Transaction, 
   CreateTransactionInput, 
@@ -82,31 +83,51 @@ export const getMonthlyStats = async (): Promise<MonthlyStats> => {
 export const getAllDetailedTransactions = async (): Promise<DetailedTransaction[]> => {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getAllAsync<DetailedTransaction>(QUERIES_TRANSACTION.GET_ALL_DETAILED);
-    return (result ?? []).map(tx => ({
-      ...tx,
-      amount: fromCents(tx.amount)
-    }));
+    const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_ALL_DETAILED);
+    return (result ?? []).map(tx => {
+      const category = getCategoryById(tx.category_id);
+      return {
+        ...tx,
+        amount: fromCents(tx.amount),
+        category_name: category?.name || 'Desconocido',
+        category_icon: category?.icon || 'help-circle',
+        category_color: category?.color || '#9ca3af'
+      } as DetailedTransaction;
+    });
   }, 'TransactionAPI.getAllDetailed');
 };
 
 export const getRecentTransactionsWithCategory = async (): Promise<RecentTransaction[]> => {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getAllAsync<RecentTransaction>(QUERIES_TRANSACTION.GET_RECENT_WITH_CATEGORY);
-    return (result ?? []).map(tx => ({
-      ...tx,
-      amount: fromCents(tx.amount)
-    }));
+    const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_RECENT_WITH_CATEGORY);
+    return (result ?? []).map(tx => {
+      const category = getCategoryById(tx.category_id);
+      return {
+        ...tx,
+        amount: fromCents(tx.amount),
+        category_name: category?.name || 'Desconocido',
+        category_icon: category?.icon || 'help-circle',
+        category_color: category?.color || '#9ca3af'
+      } as RecentTransaction;
+    });
   }, 'TransactionAPI.getRecentWithCategory');
 };
 
-export async function getTransactionById(id: number): Promise<Transaction | null> {
+export async function getTransactionById(id: number): Promise<DetailedTransaction | null> {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getFirstAsync<Transaction>(QUERIES_TRANSACTION.GET_BY_ID, [id]);
+    const result = await db.getFirstAsync<any>(QUERIES_TRANSACTION.GET_BY_ID, [id]);
     if (!result) return null;
-    return { ...result, amount: fromCents(result.amount) };
+    
+    const category = getCategoryById(result.category_id);
+    return {
+      ...result,
+      amount: fromCents(result.amount),
+      category_name: category?.name || 'Desconocido',
+      category_icon: category?.icon || 'help-circle',
+      category_color: category?.color || '#9ca3af'
+    } as DetailedTransaction;
   }, 'TransactionAPI.getTransactionById');
 }
 
@@ -158,10 +179,17 @@ export async function deleteTransaction(id: number) {
 export async function getAllScheduledDetailedTransactions(): Promise<DetailedTransaction[]> {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getAllAsync<DetailedTransaction>(QUERIES_TRANSACTION.GET_ALL_SCHEDULED_DETAILED);
-    return (result ?? []).map(tx => ({
-      ...tx,
-      amount: fromCents(tx.amount)
-    }));
+    const result = await db.getAllAsync<any>(QUERIES_TRANSACTION.GET_ALL_SCHEDULED_DETAILED);
+    return (result ?? []).map(tx => {
+      const category = getCategoryById(tx.category_id);
+      return {
+        ...tx,
+        amount: fromCents(tx.amount),
+        category_name: category?.name || 'Desconocido',
+        category_icon: category?.icon || 'help-circle',
+        category_color: category?.color || '#9ca3af'
+      } as DetailedTransaction;
+    });
   }, 'TransactionAPI.getAllScheduled');
 }
+

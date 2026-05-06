@@ -1,6 +1,6 @@
 import { Text, ScrollView } from 'react-native';
 import { FormField } from '@/components/ui/FormField';
-import { AccountTypeSelector } from '@/components/accounts/AccountTypeSelector';
+import { AccountTypeSelector } from '@/src/modules/accounts/components/AccountTypeSelector';
 
 interface AccountFormProps {
   name: string;

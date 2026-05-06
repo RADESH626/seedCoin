@@ -35,7 +35,6 @@ export default function AddTransactionScreen() {
           accounts={state.accounts}
           selectedAccountId={state.selectedAccountId}
           onSelectAccount={handlers.setSelectedAccountId}
-          categories={state.categories}
           selectedCategoryId={state.selectedCategoryId}
           onSelectCategory={handlers.setSelectedCategoryId}
           date={state.date}

@@ -4,14 +4,14 @@ import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Target, Plus, ShieldCheck } from 'lucide-react-native';
 
-import { useBudgets } from '@/src/hooks/useBudgets';
+import { useBudgets } from '@/src/modules/budgets/hooks/useBudgets';
 import { BudgetCard } from '@/src/modules/transactions/components/BudgetCard';
 
-import { AddBudgetModal } from '@/components/modals/AddBudgetModal';
+import { AddBudgetModal } from '@/src/modules/budgets/components/AddBudgetModal';
 import { Card } from '@/components/ui/Card';
 import { IconBadge } from '@/components/ui/IconBadge';
-import { log } from '@/src/services/logger';
-import Colors from '@/constants/Colors';
+import { log } from '@/src/shared/services/logger';
+import Colors from '@/src/shared/constants/Colors';
 import type { BudgetWithProgress } from '@/src/database/types';
 
 export default function LimitsScreen() {
@@ -119,4 +119,5 @@ export default function LimitsScreen() {
     </View>
   );
 }
+
 

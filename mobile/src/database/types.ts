@@ -42,19 +42,10 @@ export interface Account {
   created_at: string;
 }
 
-export interface Category {
-  category_id: number;
-  name: string;
-  is_income: number;
-  icon: string;
-  color: string;
-  is_default: number;
-}
-
 export interface Transaction {
   transaction_id: number;
   account_id: number;
-  category_id: number;
+  category_id: string;
   amount: number;
   is_income: number;
   description: string;
@@ -98,7 +89,7 @@ export interface PreferenceRow {
 /** Resultado para presupuestos con progreso calculado */
 export interface BudgetWithProgress {
   budget_id: number;
-  category_id: number;
+  category_id: string;
   category_name: string;
   category_color: string;
   category_icon: string;
@@ -116,7 +107,7 @@ export interface CreateTransactionInput {
   accountId: number;
   isIncome: boolean;
   amount: number;
-  categoryId: number;
+  categoryId: string;
   description?: string;
   status?: TransactionStatus;
   transactionDate?: string;

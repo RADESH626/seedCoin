@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import { DB_NAME } from './connection';
-import { log } from '../services/logger';
+import { log } from '@/src/shared/services/logger';
 
 /**
  * Elimina todas las tablas de usuario y reinicia la versión de la base de datos.
@@ -34,3 +34,4 @@ export async function resetDatabase(): Promise<void> {
     throw error;
   }
 }
+

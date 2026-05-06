@@ -1,0 +1,66 @@
+import { useCallback, useState } from 'react';
+import { log } from '@/src/shared/services/logger';
+import { 
+  getBudgetsWithProgress, 
+  createBudget, 
+  deleteBudget,
+  updateBudget
+} from '@/src/modules/budgets/services/BudgetService';
+import type { BudgetWithProgress } from '@/src/database/types';
+
+export function useBudgets() {
+  const [loading, setLoading] = useState(false);
+  const [budgets, setBudgets] = useState<BudgetWithProgress[]>([]);
+
+  const fetchBudgets = useCallback(async () => {
+    try {
+      setLoading(true);
+      const result = await getBudgetsWithProgress();
+      setBudgets(result);
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al obtener presupuestos', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const addBudget = useCallback(async (categoryId: string, limit: number) => {
+    try {
+      await createBudget(categoryId, limit);
+      await fetchBudgets();
+      log.info('useBudgets: Presupuesto creado con éxito');
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al crear presupuesto', error);
+    }
+  }, [fetchBudgets]);
+
+  const updateExistingBudget = useCallback(async (budgetId: number, limit: number) => {
+    try {
+      await updateBudget(budgetId, limit);
+      await fetchBudgets();
+      log.info('useBudgets: Presupuesto actualizado con éxito');
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al actualizar presupuesto', error);
+    }
+  }, [fetchBudgets]);
+
+  const removeBudget = useCallback(async (budgetId: number) => {
+    try {
+      await deleteBudget(budgetId);
+      await fetchBudgets();
+    } catch (error: unknown) {
+      log.error('useBudgets: Error al eliminar presupuesto', error);
+    }
+  }, [fetchBudgets]);
+
+  return {
+    loading,
+    budgets,
+    fetchBudgets,
+    addBudget,
+    updateExistingBudget,
+    removeBudget,
+  };
+}
+
+

@@ -1,6 +1,6 @@
 import { View, Text, TextInput } from 'react-native';
 import { Calendar as CalendarIcon, ChevronDown } from 'lucide-react-native';
-import Colors from '@/constants/Colors';
+import Colors from '@/src/shared/constants/Colors';
 import { Card } from '@/components/ui/Card';
 
 interface Props {
@@ -44,3 +44,4 @@ export function TransactionDateField({ date, description, onDatePress, onDescrip
     </View>
   );
 }
+

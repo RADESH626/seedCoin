@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { log } from '@/src/services/logger';
+import { log } from '@/src/shared/services/logger';
 import { useDashboardData } from './useDashboardQuery';
-import { useAccounts } from '@/src/hooks/useAccounts';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
 
 export function useDashboardLogic() {
   const { data, isLoading: isDashboardLoading, refetch: refetchDashboard } = useDashboardData();
@@ -48,3 +48,4 @@ export function useDashboardLogic() {
     }
   };
 }
+

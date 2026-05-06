@@ -1,4 +1,4 @@
-import { formatMoney, toCents, fromCents } from '@/src/helpers/currency';
+import { formatMoney, toCents, fromCents } from '@/src/shared/utils/currency';
 
 describe('currency helpers', () => {
   describe('formatMoney', () => {
@@ -32,3 +32,4 @@ describe('currency helpers', () => {
     });
   });
 });
+

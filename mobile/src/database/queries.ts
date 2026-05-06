@@ -22,14 +22,7 @@ export const QUERIES_ACCOUNT = {
   GET_TOTAL_BALANCE: `SELECT SUM(current_balance) as total FROM ACCOUNT WHERE is_active = 1;`
 };
 
-// ====================
-// CATEGORIES (CATEGORIAS)
-// ====================
-
-export const QUERIES_CATEGORY = {
-  GET_ALL: `SELECT category_id, name, is_income, icon, color, is_default FROM CATEGORY ORDER BY name ASC;`,
-  GET_ALL_EXPENSES: `SELECT category_id, name, is_income, icon, color, is_default FROM CATEGORY WHERE is_income = 0 ORDER BY name ASC;`
-};
+// Categorías son ahora estáticas en src/constants/categories.ts
 
 // ====================
 // TRANSACTIONS (TRANSACCIONES)
@@ -59,10 +52,8 @@ export const QUERIES_TRANSACTION = {
   
   GET_RECENT_WITH_CATEGORY: `
     SELECT 
-      T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
-      C.name as category_name, C.icon as category_icon, C.color as category_color
+      T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description, T.category_id
     FROM TRANSACTIONS T
-    LEFT JOIN CATEGORY C ON T.category_id = C.category_id
     WHERE T.is_active = 1
     ORDER BY T.transaction_date DESC 
     LIMIT 5;
@@ -86,11 +77,9 @@ export const QUERIES_TRANSACTION = {
   GET_ALL_DETAILED: `
     SELECT 
       T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
-      T.status, T.recurrence_frequency, T.is_automatic,
-      C.name as category_name, C.icon as category_icon, C.color as category_color,
+      T.status, T.recurrence_frequency, T.is_automatic, T.category_id,
       A.name as account_name
     FROM TRANSACTIONS T
-    LEFT JOIN CATEGORY C ON T.category_id = C.category_id
     LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
     WHERE T.is_active = 1
     ORDER BY T.transaction_date DESC;
@@ -129,10 +118,8 @@ export const QUERIES_TRANSACTION = {
     SELECT 
       T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description,
       T.status, T.recurrence_frequency, T.is_automatic, T.account_id, T.category_id,
-      C.name as category_name, C.icon as category_icon, C.color as category_color,
       A.name as account_name
     FROM TRANSACTIONS T
-    LEFT JOIN CATEGORY C ON T.category_id = C.category_id
     LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
     WHERE T.is_active = 1 AND (T.status = 'SCHEDULED' OR T.status = 'DUE')
     ORDER BY T.status DESC, T.transaction_date ASC;
@@ -142,8 +129,7 @@ export const QUERIES_TRANSACTION = {
 export const QUERIES_BUDGET = {
   GET_BUDGETS_WITH_PROGRESS: `
     SELECT 
-      B.budget_id, B.limit_amount, B.period,
-      C.category_id, C.name as category_name, C.icon as category_icon, C.color as category_color,
+      B.budget_id, B.limit_amount, B.period, B.category_id,
       COALESCE((
         SELECT SUM(amount) 
         FROM TRANSACTIONS T 
@@ -153,8 +139,7 @@ export const QUERIES_BUDGET = {
           AND T.status = 'COMPLETED'
           AND T.transaction_date >= date('now', 'start of month')
       ), 0) as total_spent
-    FROM BUDGET B
-    JOIN CATEGORY C ON B.category_id = C.category_id;
+    FROM BUDGET B;
   `,
 
   INSERT_BUDGET: `

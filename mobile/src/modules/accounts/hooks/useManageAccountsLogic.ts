@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { Alert } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { useAccounts } from '@/src/hooks/useAccounts';
-import { deleteAccount, hasTransactions } from '@/src/services/AccountService';
-import { useSingleAction } from '@/src/hooks/useSingleAction';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
+import { deleteAccount, hasTransactions } from '@/src/modules/accounts/services/AccountService';
+import { useSingleAction } from '@/src/shared/hooks/useSingleAction';
 
 export function useManageAccountsLogic() {
   const { accounts, fetchAccounts, loading } = useAccounts();
@@ -67,3 +67,4 @@ export function useManageAccountsLogic() {
     }
   };
 }
+

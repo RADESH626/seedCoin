@@ -1,4 +1,4 @@
-import { SchedulerService } from '../../src/services/SchedulerService';
+import { SchedulerService } from '@/src/shared/services/SchedulerService';
 
 describe('SchedulerService', () => {
   describe('calculateNextOccurrence', () => {

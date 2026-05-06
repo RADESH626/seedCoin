@@ -3,17 +3,17 @@ import { ScrollView, Alert, KeyboardAvoidingView, Platform, View } from 'react-n
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { usePreferences } from '@/src/hooks/usePreferences';
-import { useAccounts } from '@/src/hooks/useAccounts';
-import { log } from '@/src/services/logger';
-import { ProfileService } from '@/src/services/ProfileService';
-import { getTotalBalance } from '@/src/services/AccountService';
+import { usePreferences } from '@/src/modules/profile/hooks/usePreferences';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
+import { log } from '@/src/shared/services/logger';
+import { ProfileService } from '@/src/modules/profile/services/ProfileService';
+import { getTotalBalance } from '@/src/modules/accounts/services/AccountService';
 
 // Componentes Atómicos
-import { ProfileIdentityCard } from '@/components/profile/ProfileIdentityCard';
-import { ProfileStats } from '@/components/profile/ProfileStats';
-import { ProfileMenu } from '@/components/profile/ProfileMenu';
-import { ProfileFooter } from '@/components/profile/ProfileFooter';
+import { ProfileIdentityCard } from '@/src/modules/profile/components/ProfileIdentityCard';
+import { ProfileStats } from '@/src/modules/profile/components/ProfileStats';
+import { ProfileMenu } from '@/src/modules/profile/components/ProfileMenu';
+import { ProfileFooter } from '@/src/modules/profile/components/ProfileFooter';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 
 export default function ProfileScreen() {
@@ -112,3 +112,4 @@ export default function ProfileScreen() {
     </KeyboardAvoidingView>
   );
 }
+

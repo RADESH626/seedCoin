@@ -3,10 +3,10 @@ import { Redirect } from 'expo-router';
 
 import { useDashboardLogic } from '@/src/modules/dashboard/hooks/useDashboardLogic';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { TotalBalanceCard } from '@/components/dashboard/TotalBalanceCard';
-import { MonthlySummary } from '@/components/dashboard/MonthlySummary';
-import { QuickAccounts } from '@/components/dashboard/QuickAccounts';
-import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
+import { TotalBalanceCard } from '@/src/modules/dashboard/components/TotalBalanceCard';
+import { MonthlySummary } from '@/src/modules/dashboard/components/MonthlySummary';
+import { QuickAccounts } from '@/src/modules/dashboard/components/QuickAccounts';
+import { RecentTransactions } from '@/src/modules/dashboard/components/RecentTransactions';
 import { BackgroundAtmosphere } from '@/components/ui/BackgroundAtmosphere';
 import { LoadingOverlay } from '@/components/ui/LoadingOverlay';
 

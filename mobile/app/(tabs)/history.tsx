@@ -4,8 +4,8 @@ import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useDetailedTransactions } from '@/src/modules/transactions';
-import { log } from '@/src/services/logger';
-import { groupTransactionsByDate } from '@/src/helpers/transactions';
+import { log } from '@/src/shared/services/logger';
+import { groupTransactionsByDate } from '@/src/shared/utils/transactions';
 import type { FilterType } from '@/src/database/types';
 
 import { HistoryFilters } from '@/src/modules/transactions/components/HistoryFilters';
@@ -80,3 +80,4 @@ export default function HistoryScreen() {
     </View>
   );
 }
+

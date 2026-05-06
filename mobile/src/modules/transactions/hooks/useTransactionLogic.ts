@@ -2,9 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { log } from '@/src/services/logger';
-import { useAccounts } from '@/src/hooks/useAccounts';
-import { useCategories } from '@/src/hooks/useCategories';
+import { log } from '@/src/shared/services/logger';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
 import { RecurrenceFrequency } from '@/src/database/types';
 import { useTransactionById } from './useTransactionsQuery';
 import { 
@@ -12,14 +11,13 @@ import {
   useUpdateTransaction, 
   useDeleteTransaction 
 } from './useTransactionActions';
-import { SchedulerService } from '@/src/services/SchedulerService';
-import { NotificationService } from '@/src/services/NotificationService';
+import { SchedulerService } from '@/src/shared/services/SchedulerService';
+import { NotificationService } from '@/src/shared/services/NotificationService';
 
 export function useTransactionLogic(id?: string, type?: string) {
   const isEditing = !!id;
   
   const { accounts, fetchAccounts } = useAccounts();
-  const { categories, fetchCategories } = useCategories();
   
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
@@ -31,7 +29,7 @@ export function useTransactionLogic(id?: string, type?: string) {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,8 +44,7 @@ export function useTransactionLogic(id?: string, type?: string) {
   // Load initial data
   useEffect(() => {
     fetchAccounts();
-    fetchCategories();
-  }, [fetchAccounts, fetchCategories]);
+  }, [fetchAccounts]);
 
   // Load existing transaction data
   useEffect(() => {
@@ -177,7 +174,6 @@ export function useTransactionLogic(id?: string, type?: string) {
       isAutomatic,
       isEditing,
       accounts,
-      categories,
     },
     handlers: {
       setIsIncome,
@@ -194,3 +190,4 @@ export function useTransactionLogic(id?: string, type?: string) {
     }
   };
 }
+

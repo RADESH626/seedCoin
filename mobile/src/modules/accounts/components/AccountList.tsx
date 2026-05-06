@@ -1,9 +1,9 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Trash2, Landmark, ChevronRight } from 'lucide-react-native';
 import { Account } from '@/src/database/types';
-import { formatMoney } from '@/src/helpers/currency';
+import { formatMoney } from '@/src/shared/utils/currency';
 import { EmptyState } from '@/components/ui/EmptyState';
-import Colors from '@/constants/Colors';
+import Colors from '@/src/shared/constants/Colors';
 
 interface AccountListProps {
   accounts: Account[];
@@ -69,3 +69,4 @@ export function AccountList({ accounts, loading, onEdit, onDelete }: AccountList
     </ScrollView>
   );
 }
+

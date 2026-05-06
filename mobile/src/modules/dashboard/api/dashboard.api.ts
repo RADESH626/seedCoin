@@ -1,4 +1,4 @@
-import { getTotalBalance } from '@/src/services/AccountService';
+import { getTotalBalance } from '@/src/modules/accounts/services/AccountService';
 import * as TransactionAPI from '@/src/modules/transactions/api/transaction.api';
 
 export const getDashboardSummary = async () => {

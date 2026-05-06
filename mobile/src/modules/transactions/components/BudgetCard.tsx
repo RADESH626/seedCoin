@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
-import { getCategoryIcon } from '@/src/helpers/ui';
-import { formatMoney } from '@/src/helpers/currency';
+import { getCategoryIcon } from '@/src/shared/utils/ui';
+import { formatMoney } from '@/src/shared/utils/currency';
 import type { BudgetWithProgress } from '@/src/database/types';
 import { Card } from '@/components/ui/Card';
 import { IconBadge } from '@/components/ui/IconBadge';
@@ -74,3 +74,4 @@ export function BudgetCard({ budget, onEdit }: Props) {
   );
 
 }
+

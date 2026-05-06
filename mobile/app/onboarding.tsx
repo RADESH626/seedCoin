@@ -1,17 +1,16 @@
 import { useState, useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { log } from '@/src/services/logger';
-import { usePreferences } from '@/src/hooks/usePreferences';
-import { useAccounts } from '@/src/hooks/useAccounts';
-import { useSingleAction } from '@/src/hooks/useSingleAction';
-import { NameSelection, AccountStart } from '@/components/onboarding/OnboardingSections';
+import { log } from '@/src/shared/services/logger';
+import { usePreferences } from '@/src/modules/profile/hooks/usePreferences';
+import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
+import { useSingleAction } from '@/src/shared/hooks/useSingleAction';
+import { NameSelection, AccountStart } from '@/src/modules/onboarding/components/OnboardingSections';
 
 export default function OnboardingScreen() {
   const { getPreference, setPreference } = usePreferences();
   const { accounts, fetchAccounts, isInitialLoad } = useAccounts();
   const [userName, setUserName] = useState<string | null>(null);
-  const [nameInput, setNameInput] = useState('');
   const [checked, setChecked] = useState(false);
 
   const { execute: handleCreateAccount } = useSingleAction(() => 
@@ -53,9 +52,9 @@ export default function OnboardingScreen() {
     return () => { active = false; };
   }, [getPreference, fetchAccounts]));
 
-  const handleSaveName = async () => {
-    if (nameInput.trim().length > 0) {
-      const sanitizedName = nameInput.trim();
+  const handleSaveName = async (name: string) => {
+    if (name.trim().length > 0) {
+      const sanitizedName = name.trim();
       log.info('OnboardingScreen: Guardando nombre de usuario', { name: sanitizedName });
       await setPreference('user_name', sanitizedName);
       setUserName(sanitizedName);
@@ -68,8 +67,6 @@ export default function OnboardingScreen() {
     <View className="flex-1 bg-dark-900">
       {!userName ? (
         <NameSelection 
-          nameInput={nameInput}
-          setNameInput={setNameInput}
           onContinue={handleSaveName}
         />
       ) : (
@@ -81,3 +78,4 @@ export default function OnboardingScreen() {
     </View>
   );
 }
+

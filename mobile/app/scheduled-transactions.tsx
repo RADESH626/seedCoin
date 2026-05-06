@@ -9,8 +9,8 @@ import { IconBadge } from '@/components/ui/IconBadge';
 
 import { useScheduledTransactions, useUpdateTransaction, useDeleteTransaction } from '@/src/modules/transactions';
 import { DetailedTransaction } from '@/src/modules/transactions/types';
-import { log } from '@/src/services/logger';
-import { getDateLabel } from '@/src/helpers/date';
+import { log } from '@/src/shared/services/logger';
+import { getDateLabel } from '@/src/shared/utils/date';
 
 
 
@@ -214,3 +214,4 @@ export default function ScheduledTransactionsScreen() {
     </View>
   );
 }
+
