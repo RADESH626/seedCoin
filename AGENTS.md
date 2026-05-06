@@ -47,6 +47,7 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 | `doc-writer` | Diátaxis, ADRs, and Docs-as-Code synchronization | [.agents/skills/doc-writer/SKILL.md](.agents/skills/doc-writer/SKILL.md) |
 | `graphify` | Codebase architecture mapping and navigation | [.agents/skills/graphify/SKILL.md](.agents/skills/graphify/SKILL.md) |
 | `spec-refiner` | Interactive protocol for refining user stories into specs | [.agents/skills/spec-refiner/SKILL.md](.agents/skills/spec-refiner/SKILL.md) |
+| `git-handshake` | Proactive protocol for suggesting commits after tasks | [.agents/skills/git-handshake/SKILL.md](.agents/skills/git-handshake/SKILL.md) |
 
 ## Sub-Agent Mission Control (SDD Flow)
 SeedCoin operates under a **Spec-Driven Development (SDD)** model consisting of 9 phases. The orchestrator directs the flow and delegates work to specialized sub-agents.
@@ -82,6 +83,7 @@ ALWAYS invoke the corresponding skill FIRST when starting an action:
 | Codebase mapping or architecture navigation | `graphify` |
 | Executing commands in the terminal | `clean-terminal` |
 | Refining user story specs and validating assumptions | `spec-refiner` |
+| Finishing a task or modification (Commit suggestion) | `git-handshake` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
@@ -139,6 +141,7 @@ Follow conventional-commit style: `<type>[scope]: <description>`
 **Critical Rules**:
 - ALWAYS keep the first line under 72 characters. No implementation details in title.
 - NEVER use specific counts (e.g., "6 files").
+- PROACTIVE HANDSHAKE: ALWAYS suggest a git commit proactively after finishing any implementation, refactor, or task. Use the `git-handshake` skill.
 - ALWAYS present a proposed commit message to the user BEFORE committing. Wait for confirmation.
 
 ### Before creating a PR:
