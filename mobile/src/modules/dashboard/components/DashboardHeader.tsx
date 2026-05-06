@@ -8,6 +8,10 @@ import { log } from '@/src/shared/services/logger';
 import { usePreferences } from '@/src/modules/profile/hooks/usePreferences';
 import { resetDatabase } from '@/src/database/utils';
 
+/**
+ * Cabecera principal del Dashboard.
+ * Muestra el saludo al usuario, sus iniciales y opciones de administración rápidas (Reset DB en dev).
+ */
 export function DashboardHeader() {
   const insets = useSafeAreaInsets();
   const { getPreference } = usePreferences();

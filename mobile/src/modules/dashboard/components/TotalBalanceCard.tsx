@@ -9,6 +9,10 @@ interface Props {
   balanceGrowthPct: number;
 }
 
+/**
+ * Componente que muestra el balance total del usuario con un gradiente visual
+ * y un indicador de crecimiento porcentual respecto al inicio del mes.
+ */
 export function TotalBalanceCard({ totalBalance, balanceGrowthPct }: Props) {
   return (
     <LinearGradient

@@ -9,6 +9,10 @@ interface Props {
   monthlyExpense: number;
 }
 
+/**
+ * Resumen de ingresos y gastos mensuales mostrado en tarjetas paralelas.
+ * Utiliza IconBadge para diferenciar visualmente los flujos de dinero.
+ */
 export function MonthlySummary({ monthlyIncome, monthlyExpense }: Props) {
   return (
     <View className="flex-row gap-4">
