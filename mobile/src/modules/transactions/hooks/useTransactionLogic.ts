@@ -120,7 +120,7 @@ export function useTransactionLogic(id?: string, type?: string) {
         });
       } else if (mode === 'TRANSFER') {
         log.info('useTransactionLogic: Creando transferencia...', { amount: numericAmount });
-        await createTransfer(selectedAccountId, selectedToAccountId!, numericAmount, description.trim());
+        await createTransfer(selectedAccountId, selectedToAccountId!, numericAmount, description.trim(), date.toISOString());
       } else {
         log.info('useTransactionLogic: Creando transacción...', { amount: numericAmount });
         await createMutation.mutateAsync({

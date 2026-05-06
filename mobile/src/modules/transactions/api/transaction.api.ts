@@ -1,3 +1,4 @@
+import * as SQLite from 'expo-sqlite';
 import { QUERIES_TRANSACTION } from '@/src/database/queries';
 import { getDBConnection } from '@/src/database/connection';
 import { fromCents, toCents } from '@/src/shared/utils/currency';
@@ -33,7 +34,7 @@ export const getRecentTransactions = async (limit: number = 10): Promise<Transac
   }, 'TransactionAPI.getRecentTransactions');
 };
 
-export const createTransaction = async (data: CreateTransactionInput) => {
+export const createTransaction = async (data: CreateTransactionInput, externalDb?: SQLite.SQLiteDatabase) => {
   const {
     accountId,
     isIncome,
@@ -47,11 +48,11 @@ export const createTransaction = async (data: CreateTransactionInput) => {
   const amountInCents = toCents(amount);
 
   return await withNativeRetry(async () => {
-    const db = await getDBConnection();
+    const db = externalDb || await getDBConnection();
     const statement = await db.prepareAsync(QUERIES_TRANSACTION.INSERT_NAMED);
     try {
       const isIncomeInt = isIncome ? 1 : 0;
-      await statement.executeAsync({
+      const result = await statement.executeAsync({
         $account_id: accountId,
         $is_income: isIncomeInt,
         $amount: amountInCents,
@@ -64,8 +65,8 @@ export const createTransaction = async (data: CreateTransactionInput) => {
         $transfer_transaction_id: data.transferTransactionId || null,
         $debt_id: data.debtId || null,
       });
-      const result = await db.getFirstAsync<{ id: number }>('SELECT last_insert_rowid() as id');
-      return result?.id;
+      
+      return result.lastInsertRowId;
     } finally {
       await statement.finalizeAsync();
     }

@@ -23,6 +23,21 @@ export const setupTestDatabase = async (dbName: string = `test_seedcoin_${Date.n
     // Re-run the migration to create everything
     await db.execAsync('PRAGMA user_version = 0;');
     await migrateDbIfNeeded(db);
+
+    // Polyfill for withTransactionAsync if the mock doesn't have it
+    if (!(db as any).withTransactionAsync) {
+      (db as any).withTransactionAsync = async (callback: () => Promise<any>) => {
+        await db.execAsync('BEGIN TRANSACTION');
+        try {
+          const result = await callback();
+          await db.execAsync('COMMIT');
+          return result;
+        } catch (e) {
+          await db.execAsync('ROLLBACK');
+          throw e;
+        }
+      };
+    }
     
     return db;
   } catch (error) {
