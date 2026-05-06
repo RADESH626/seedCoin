@@ -12,10 +12,10 @@ interface Props {
 
 export function TransactionDateField({ date, description, onDatePress, onDescriptionChange }: Props) {
   return (
-    <View className="flex-row gap-4 mb-8">
-      <View className="flex-1">
+    <View className="gap-6 mb-8">
+      <View>
         <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Fecha</Text>
-        <Card 
+        <Card
           onPress={onDatePress}
           rounded="2xl"
           padding="md"
@@ -30,8 +30,8 @@ export function TransactionDateField({ date, description, onDatePress, onDescrip
           <ChevronDown size={16} color="#4b5563" />
         </Card>
       </View>
-      
-      <View className="flex-[1.5]">
+
+      <View>
         <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Descripción</Text>
         <TextInput
           className="bg-dark-800 border border-dark-700 rounded-2xl p-4 text-white font-medium"
