@@ -61,8 +61,11 @@ export const createTransaction = async (data: CreateTransactionInput) => {
         $status: status,
         $recurrence_frequency: data.recurrenceFrequency || null,
         $is_automatic: data.isAutomatic !== undefined ? (data.isAutomatic ? 1 : 0) : 1,
+        $transfer_transaction_id: data.transferTransactionId || null,
+        $debt_id: data.debtId || null,
       });
-      return true;
+      const result = await db.getFirstAsync<{ id: number }>('SELECT last_insert_rowid() as id');
+      return result?.id;
     } finally {
       await statement.finalizeAsync();
     }

@@ -35,6 +35,10 @@ export default function AddAccountScreen() {
           onAccountTypeChange={handlers.setAccountType}
           balance={state.balance}
           onBalanceChange={handlers.setBalance}
+          yieldRate={state.yieldRate}
+          onYieldRateChange={handlers.setYieldRate}
+          paymentDay={state.paymentDay}
+          onPaymentDayChange={handlers.setPaymentDay}
           isEditing={state.isEditing}
         />
 

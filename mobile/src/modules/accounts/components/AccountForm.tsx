@@ -1,4 +1,4 @@
-import { Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { FormField } from '@/components/ui/FormField';
 import { AccountTypeSelector } from '@/src/modules/accounts/components/AccountTypeSelector';
 
@@ -9,6 +9,10 @@ interface AccountFormProps {
   onAccountTypeChange: (val: string) => void;
   balance: string;
   onBalanceChange: (val: string) => void;
+  yieldRate: string;
+  onYieldRateChange: (val: string) => void;
+  paymentDay: string;
+  onPaymentDayChange: (val: string) => void;
   isEditing: boolean;
 }
 
@@ -19,6 +23,10 @@ export function AccountForm({
   onAccountTypeChange,
   balance,
   onBalanceChange,
+  yieldRate,
+  onYieldRateChange,
+  paymentDay,
+  onPaymentDayChange,
   isEditing,
 }: AccountFormProps) {
   return (
@@ -41,10 +49,33 @@ export function AccountForm({
         keyboardType="numeric"
         value={balance}
         onChangeText={onBalanceChange}
-        containerClassName="mb-8"
+        containerClassName="mb-6"
         prefix={<Text className="text-gray-400 text-lg font-bold">$</Text>}
         suffix={<Text className="text-gray-500 text-sm font-bold">COP</Text>}
       />
+
+      <View className="flex-row gap-4 mb-8">
+        <View className="flex-1">
+          <FormField
+            label="Rendimiento Anual (%)"
+            placeholder="0.0"
+            keyboardType="numeric"
+            value={yieldRate}
+            onChangeText={onYieldRateChange}
+            suffix={<Text className="text-gray-500 text-sm font-bold">%</Text>}
+          />
+        </View>
+        <View className="flex-1">
+          <FormField
+            label="Día de Pago"
+            placeholder="1"
+            keyboardType="numeric"
+            value={paymentDay}
+            onChangeText={onPaymentDayChange}
+            suffix={<Text className="text-gray-500 text-sm font-bold">día</Text>}
+          />
+        </View>
+      </View>
       
       {isEditing && (
         <Text className="text-[10px] text-gray-500 mt-2 ml-1 italic">

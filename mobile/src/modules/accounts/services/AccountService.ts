@@ -32,7 +32,13 @@ export const getAccountById = async (account_id: number): Promise<Account | null
   }, 'AccountService.getAccountById');
 };
 
-export const createAccount = async (name: string, account_type: string, initial_balance: number = 0) => {
+export const createAccount = async (
+  name: string, 
+  account_type: string, 
+  initial_balance: number = 0,
+  yield_rate: number = 0,
+  payment_day: number = 1
+) => {
   const balanceInCents = toCents(initial_balance);
   
   return await withNativeRetry(async () => {
@@ -43,7 +49,9 @@ export const createAccount = async (name: string, account_type: string, initial_
         $name: name,
         $type: account_type,
         $initial: balanceInCents,
-        $current: balanceInCents
+        $current: balanceInCents,
+        $yield_rate: yield_rate,
+        $payment_day: payment_day
       });
       return result.lastInsertRowId;
     } finally {
@@ -52,7 +60,14 @@ export const createAccount = async (name: string, account_type: string, initial_
   }, 'AccountService.createAccount');
 };
 
-export const updateAccount = async (account_id: number, name: string, account_type: string, initial_balance: number) => {
+export const updateAccount = async (
+  account_id: number, 
+  name: string, 
+  account_type: string, 
+  initial_balance: number,
+  yield_rate: number = 0,
+  payment_day: number = 1
+) => {
   const balanceInCents = toCents(initial_balance);
   
   return await withNativeRetry(async () => {
@@ -63,7 +78,9 @@ export const updateAccount = async (account_id: number, name: string, account_ty
         $id: account_id,
         $name: name,
         $type: account_type,
-        $initial: balanceInCents
+        $initial: balanceInCents,
+        $yield_rate: yield_rate,
+        $payment_day: payment_day
       });
       return result.changes > 0;
     } finally {

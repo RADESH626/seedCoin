@@ -13,6 +13,8 @@ import {
 } from './useTransactionActions';
 import { SchedulerService } from '@/src/shared/services/SchedulerService';
 import { NotificationService } from '@/src/shared/services/NotificationService';
+import { createTransfer } from '../services/TransferService';
+import { TransactionMode } from '../components/TransactionTypeSelector';
 
 export function useTransactionLogic(id?: string, type?: string) {
   const isEditing = !!id;
@@ -25,10 +27,11 @@ export function useTransactionLogic(id?: string, type?: string) {
   const { data: initialTx, isLoading: isLoadingDetail } = useTransactionById(isEditing ? parseInt(id!) : null);
 
   // States
-  const [isIncome, setIsIncome] = useState(false);
+  const [mode, setMode] = useState<TransactionMode>('EXPENSE');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
+  const [selectedToAccountId, setSelectedToAccountId] = useState<number | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -49,7 +52,7 @@ export function useTransactionLogic(id?: string, type?: string) {
   // Load existing transaction data
   useEffect(() => {
     if (isEditing && initialTx && !isInitialDataLoaded) {
-      setIsIncome(initialTx.is_income === 1);
+      setMode(initialTx.transfer_transaction_id ? 'TRANSFER' : (initialTx.is_income === 1 ? 'INCOME' : 'EXPENSE'));
       setAmount(initialTx.amount.toString());
       setDescription(initialTx.description || '');
       setSelectedAccountId(initialTx.account_id);
@@ -84,7 +87,11 @@ export function useTransactionLogic(id?: string, type?: string) {
       Alert.alert('Falta cuenta', 'Debes seleccionar una cuenta');
       return;
     }
-    if (!selectedCategoryId) {
+    if (mode === 'TRANSFER' && !selectedToAccountId) {
+      Alert.alert('Falta cuenta destino', 'Debes seleccionar la cuenta a la que enviarás el dinero');
+      return;
+    }
+    if (mode !== 'TRANSFER' && !selectedCategoryId) {
       Alert.alert('Falta categoría', 'Por favor selecciona una categoría');
       return;
     }
@@ -93,9 +100,9 @@ export function useTransactionLogic(id?: string, type?: string) {
       setLoading(true);
       const transactionData = {
         accountId: selectedAccountId,
-        isIncome,
+        isIncome: mode === 'INCOME',
         amount: numericAmount,
-        categoryId: selectedCategoryId,
+        categoryId: selectedCategoryId || 'expense_other',
         description: description.trim(),
         status: (recurrenceFrequency ? 'SCHEDULED' : 'COMPLETED') as any,
         transactionDate: date.toISOString(),
@@ -107,11 +114,21 @@ export function useTransactionLogic(id?: string, type?: string) {
         log.info('useTransactionLogic: Actualizando transacción...', { id, amount: numericAmount });
         await updateMutation.mutateAsync({
           ...transactionData,
+          isIncome: mode === 'INCOME',
+          categoryId: selectedCategoryId || 'expense_other',
           transactionId: parseInt(id),
         });
+      } else if (mode === 'TRANSFER') {
+        log.info('useTransactionLogic: Creando transferencia...', { amount: numericAmount });
+        await createTransfer(selectedAccountId, selectedToAccountId!, numericAmount, description.trim());
       } else {
         log.info('useTransactionLogic: Creando transacción...', { amount: numericAmount });
-        await createMutation.mutateAsync(transactionData);
+        await createMutation.mutateAsync({
+          ...transactionData,
+          isIncome: mode === 'INCOME',
+          categoryId: selectedCategoryId!,
+        });
+      }
         
         // Si es programada, procesar inmediatamente por si la fecha es hoy y enviar notificación
         if (recurrenceFrequency) {
@@ -121,8 +138,7 @@ export function useTransactionLogic(id?: string, type?: string) {
             `Se ha programado: ${description.trim() || 'Movimiento'} (${recurrenceFrequency})`
           );
         }
-      }
-
+      
       router.back();
     } catch (e) {
       log.error('useTransactionLogic: Error al guardar', e);
@@ -162,10 +178,12 @@ export function useTransactionLogic(id?: string, type?: string) {
 
   return {
     state: {
-      isIncome,
+      mode,
+      isIncome: mode === 'INCOME',
       amount,
       description,
       selectedAccountId,
+      selectedToAccountId,
       selectedCategoryId,
       date,
       showDatePicker,
@@ -176,10 +194,12 @@ export function useTransactionLogic(id?: string, type?: string) {
       accounts,
     },
     handlers: {
-      setIsIncome,
+      setMode,
+      setIsIncome: (val: boolean) => setMode(val ? 'INCOME' : 'EXPENSE'),
       setAmount,
       setDescription,
       setSelectedAccountId,
+      setSelectedToAccountId,
       setSelectedCategoryId,
       setShowDatePicker,
       handleDateChange,

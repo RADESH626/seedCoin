@@ -39,6 +39,8 @@ export interface Account {
   initial_balance: number;
   current_balance: number;
   is_active: number;
+  yield_rate?: number; // Tasa de rendimiento (anual)
+  payment_day?: number; // Día de pago del rendimiento (1-31)
   created_at: string;
 }
 
@@ -53,6 +55,9 @@ export interface Transaction {
   status: TransactionStatus;
   recurrence_frequency?: RecurrenceFrequency;
   is_automatic: number; // 0 o 1
+  transfer_transaction_id?: number;
+  debt_id?: number;
+  is_active: number;
   created_at: string;
 }
 
@@ -113,6 +118,8 @@ export interface CreateTransactionInput {
   transactionDate?: string;
   recurrenceFrequency?: RecurrenceFrequency;
   isAutomatic?: boolean;
+  transferTransactionId?: number;
+  debtId?: number;
 }
 
 export interface UpdateTransactionInput extends CreateTransactionInput {

@@ -5,12 +5,13 @@ interface Props {
   accounts: any[];
   selectedAccountId: number | null;
   onSelectAccount: (id: number) => void;
+  label?: string;
 }
 
-export function AccountSelector({ accounts, selectedAccountId, onSelectAccount }: Props) {
+export function AccountSelector({ accounts, selectedAccountId, onSelectAccount, label = 'Cuenta' }: Props) {
   return (
     <View className="mb-8">
-      <Text className="text-body-sm mb-3 ml-1">Cuenta origen</Text>
+      <Text className="text-body-sm mb-3 ml-1">{label}</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
         {accounts.map((acc) => (
           <Pressable

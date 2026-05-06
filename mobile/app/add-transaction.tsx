@@ -28,13 +28,15 @@ export default function AddTransactionScreen() {
         />
 
         <TransactionForm
-          isIncome={state.isIncome}
-          onTypeChange={(val) => { handlers.setIsIncome(val); handlers.setSelectedCategoryId(null); }}
+          mode={state.mode}
+          onModeChange={(val) => { handlers.setMode(val); handlers.setSelectedCategoryId(null); }}
           amount={state.amount}
           onAmountChange={handlers.setAmount}
           accounts={state.accounts}
           selectedAccountId={state.selectedAccountId}
           onSelectAccount={handlers.setSelectedAccountId}
+          selectedToAccountId={state.selectedToAccountId}
+          onSelectToAccount={handlers.setSelectedToAccountId}
           selectedCategoryId={state.selectedCategoryId}
           onSelectCategory={handlers.setSelectedCategoryId}
           date={state.date}

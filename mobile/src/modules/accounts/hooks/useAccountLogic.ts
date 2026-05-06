@@ -12,6 +12,8 @@ export function useAccountLogic(id?: string) {
   const [name, setName] = useState('');
   const [accountType, setAccountType] = useState<string>(ACCOUNT_TYPES.CASH.id);
   const [balance, setBalance] = useState('');
+  const [yieldRate, setYieldRate] = useState('');
+  const [paymentDay, setPaymentDay] = useState('1');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export function useAccountLogic(id?: string) {
           setName(acc.name);
           setAccountType(acc.account_type);
           setBalance(acc.initial_balance.toString());
+          setYieldRate(acc.yield_rate?.toString() || '');
+          setPaymentDay(acc.payment_day?.toString() || '1');
         }
       });
     }
@@ -33,14 +37,16 @@ export function useAccountLogic(id?: string) {
     }
 
     const initialBalance = parseFloat(balance) || 0;
+    const rate = parseFloat(yieldRate) || 0;
+    const day = parseInt(paymentDay) || 1;
     const isFirstAccount = accounts.length === 0;
 
     try {
       setLoading(true);
       if (isEditing && id) {
-        await updateAccount(parseInt(id), name.trim(), accountType, initialBalance);
+        await updateAccount(parseInt(id), name.trim(), accountType, initialBalance, rate, day);
       } else {
-        await createAccount(name.trim(), accountType, initialBalance);
+        await createAccount(name.trim(), accountType, initialBalance, rate, day);
       }
       
       const updatedAccounts = await fetchAccounts();
@@ -63,6 +69,8 @@ export function useAccountLogic(id?: string) {
       name,
       accountType,
       balance,
+      yieldRate,
+      paymentDay,
       loading,
       isEditing,
     },
@@ -70,6 +78,8 @@ export function useAccountLogic(id?: string) {
       setName,
       setAccountType,
       setBalance,
+      setYieldRate,
+      setPaymentDay,
       handleSave,
     }
   };
