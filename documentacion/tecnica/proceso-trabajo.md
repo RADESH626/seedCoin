@@ -53,7 +53,7 @@ Usuario          IA (Agente)           FS / Herramientas
 ```
 
 ### 🚀 Playbook "Flash" (Docs / Commits / UI Menor)
-Acción directa y lineal para tareas administrativas o visuales.
+Acción directa con validación de integridad para tareas administrativas o visuales.
 
 ```text
 Usuario          IA (Agente)           Git / FS
@@ -61,6 +61,7 @@ Usuario          IA (Agente)           Git / FS
   |--- Solicitud --->|                        |
   |                  |--- git status -------->|
   |                  |--[ ANALYZE ] ---------->|
+  |                  |--[ VERIFY (tsc/test) ]->|
   |<-- Propuesta ----|                        |
   |                  |                        |
   |--- Confirmar --->|                        |
