@@ -18,7 +18,7 @@ Este skill gestiona el grafo de conocimiento del proyecto usando la herramienta 
 ### 1. Actualizar/Generar Grafo
 Ejecuta esto para refrescar el grafo de conocimiento después de cambios significativos en el código o la documentación.
 ```bash
-& "C:\Users\FamiliaGalviz\AppData\Local\Programs\Python\Python312\Scripts\graphify.exe" .
+& "C:\Users\FamiliaGalviz\AppData\Local\Programs\Python\Python312\Scripts\graphify.exe" update .
 ```
 
 ### 2. Consultar el Grafo
