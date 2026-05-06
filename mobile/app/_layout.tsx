@@ -116,6 +116,7 @@ function RootLayoutNav() {
           <Stack.Screen name="add-account" options={{ presentation: 'modal', headerShown: false }} />
           <Stack.Screen name="manage-accounts" options={{ presentation: 'modal', headerShown: false }} />
           <Stack.Screen name="scheduled-transactions" options={{ headerShown: false }} />
+          <Stack.Screen name="account/[id]" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </QueryClientProvider>

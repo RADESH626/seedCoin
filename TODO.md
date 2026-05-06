@@ -12,7 +12,8 @@
 - [x] Separar visualmente las secciones de "Rendimiento Anual" y "Día de Pago" en el formulario de nueva cuenta.
 
 ## Mejoras y Nuevas Funcionalidades
-- [ ] **Vista de Dashboard Detallada:**
-    - [ ] Al hacer clic en una cuenta en el dashboard, redirigir a una vista detallada de la misma.
-    - [ ] En la vista detallada, mostrar información específica: saldo, transacciones, rendimiento (si aplica), etc.
-    - [ ] Agregar un botón "Ver más" o similar en el dashboard para acceder a esta vista.
+- [x] **Vista de Dashboard Detallada:**
+    - [x] Al hacer clic en una cuenta en el dashboard, redirigir a una vista detallada de la misma.
+    - [x] En la vista detallada, mostrar información específica: saldo, transacciones, rendimiento (si aplica), etc.
+    - [x] Agregar un botón "Ver más" o similar en el dashboard para acceder a esta vista.
+
