@@ -2,7 +2,7 @@ import { View, ScrollView } from 'react-native';
 import { Redirect } from 'expo-router';
 
 import { useDashboardLogic } from '@/src/modules/dashboard/hooks/useDashboardLogic';
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import { DashboardHeader } from '@/src/modules/dashboard/components/DashboardHeader';
 import { TotalBalanceCard } from '@/src/modules/dashboard/components/TotalBalanceCard';
 import { MonthlySummary } from '@/src/modules/dashboard/components/MonthlySummary';
 import { QuickAccounts } from '@/src/modules/dashboard/components/QuickAccounts';

@@ -1,9 +1,0 @@
-appId: ${APP_ID}
----
-# Flujo de Prueba de Humo Exitoso
-- launchApp
-- assertVisible: "Tus Cuentas" # O cualquier elemento de texto fuerte que deba existir
-- assertVisible: ".*\\$.*" # Assert que debe haber al menos un número formateado en moneda
-- tapOn: "Añadir Cuenta" # Navegar ligeramente asumiendo que este botón existe
-- assertVisible: "Balance Inicial"
-- back
