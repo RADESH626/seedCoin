@@ -7,17 +7,21 @@ import { AmountInput } from '../components/AmountInput';
 import { AccountSelector } from '../components/AccountSelector';
 import { CategoryGrid } from '@/src/modules/categories/components/CategoryGrid';
 import { TransactionDateField } from '../components/TransactionDateField';
+import { TransactionDescriptionField } from '../components/TransactionDescriptionField';
 import { SchedulingOptions } from '../components/SchedulingOptions';
 import { Account, RecurrenceFrequency } from '@/src/database/types';
+import { TransactionMode } from '../components/TransactionTypeSelector';
 
 interface TransactionFormProps {
-  isIncome: boolean;
-  onTypeChange: (val: boolean) => void;
+  mode: TransactionMode;
+  onModeChange: (val: TransactionMode) => void;
   amount: string;
   onAmountChange: (val: string) => void;
   accounts: Account[];
   selectedAccountId: number | null;
   onSelectAccount: (id: number) => void;
+  selectedToAccountId: number | null;
+  onSelectToAccount: (id: number) => void;
   selectedCategoryId: string | null;
   onSelectCategory: (id: string) => void;
   date: Date;
@@ -35,13 +39,15 @@ interface TransactionFormProps {
 }
 
 export function TransactionForm({
-  isIncome,
-  onTypeChange,
+  mode,
+  onModeChange,
   amount,
   onAmountChange,
   accounts,
   selectedAccountId,
   onSelectAccount,
+  selectedToAccountId,
+  onSelectToAccount,
   selectedCategoryId,
   onSelectCategory,
   date,
@@ -61,32 +67,47 @@ export function TransactionForm({
     <>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <TransactionTypeSelector
-          isIncome={isIncome}
-          onTypeChange={onTypeChange}
+          mode={mode}
+          onModeChange={onModeChange}
         />
 
         <AmountInput
           amount={amount}
           onAmountChange={onAmountChange}
-          isIncome={isIncome}
+          isIncome={mode === 'INCOME'}
         />
 
         <AccountSelector
           accounts={accounts}
           selectedAccountId={selectedAccountId}
           onSelectAccount={onSelectAccount}
+          label={mode === 'TRANSFER' ? 'Desde cuenta' : 'Cuenta'}
         />
 
-        <CategoryGrid
-          selectedCategoryId={selectedCategoryId}
-          onSelectCategory={onSelectCategory}
-          isIncome={isIncome}
-        />
+        {mode === 'TRANSFER' && (
+          <AccountSelector
+            accounts={accounts.filter(a => a.account_id !== selectedAccountId)}
+            selectedAccountId={selectedToAccountId}
+            onSelectAccount={onSelectToAccount}
+            label="Hacia cuenta"
+          />
+        )}
+
+        {mode !== 'TRANSFER' && (
+          <CategoryGrid
+            selectedCategoryId={selectedCategoryId}
+            onSelectCategory={onSelectCategory}
+            isIncome={mode === 'INCOME'}
+          />
+        )}
 
         <TransactionDateField
           date={date}
-          description={description}
           onDatePress={onDatePress}
+        />
+
+        <TransactionDescriptionField
+          description={description}
           onDescriptionChange={onDescriptionChange}
         />
 

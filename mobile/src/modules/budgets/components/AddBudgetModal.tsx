@@ -72,8 +72,8 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
     if (!initialBudget || !onDelete) return;
 
     Alert.alert(
-      'Eliminar Límite',
-      '¿Estás seguro de que quieres eliminar este límite? Esta acción no se puede deshacer.',
+      'Eliminar Presupuesto',
+      '¿Estás seguro de que quieres eliminar este presupuesto? Esta acción no se puede deshacer.',
       [
         { text: 'Cancelar', style: 'cancel' },
         { 
@@ -108,14 +108,32 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
             </View>
 
             <ModalHeader
-              title={initialBudget ? "Editar Límite" : "Añadir Límite"}
+              title={initialBudget ? "Editar Presupuesto" : "Añadir Presupuesto"}
               Icon={Target}
               onClose={onClose}
             />
 
             <ScrollView showsVerticalScrollIndicator={false} className="mt-4">
               <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
-                1. Seleccionar Categoría
+                1. Monto Presupuestado Mensual
+              </Text>
+
+              <View className="flex-row items-center bg-dark-800 border border-dark-700 rounded-[28px] p-6 mb-10">
+                <Text className="text-seed-400 text-3xl font-black mr-2">$</Text>
+                <TextInput
+                  className="flex-1 text-white text-3xl font-black"
+                  placeholder="0"
+                  placeholderTextColor="#334155"
+                  keyboardType="numeric"
+                  value={limitAmount}
+                  onChangeText={setLimitAmount}
+                  selectionColor="#3b82f6"
+                  autoFocus={!initialBudget}
+                />
+              </View>
+
+              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
+                2. Seleccionar Categoría
               </Text>
 
               <View className="flex-row flex-wrap gap-2 mb-8">
@@ -142,25 +160,8 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
                 })}
               </View>
 
-              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
-                2. Monto Límite Mensual
-              </Text>
-
-              <View className="flex-row items-center bg-dark-800 border border-dark-700 rounded-[28px] p-6 mb-10">
-                <Text className="text-seed-400 text-3xl font-black mr-2">$</Text>
-                <TextInput
-                  className="flex-1 text-white text-3xl font-black"
-                  placeholder="0"
-                  placeholderTextColor="#334155"
-                  keyboardType="numeric"
-                  value={limitAmount}
-                  onChangeText={setLimitAmount}
-                  selectionColor="#3b82f6"
-                />
-              </View>
-
               <PrimaryButton
-                label={initialBudget ? "Actualizar Límite" : "Activar Límite"}
+                label={initialBudget ? "Actualizar Presupuesto" : "Activar Presupuesto"}
                 onPress={handleSave}
                 disabled={!selectedCategoryId || !limitAmount}
               />
