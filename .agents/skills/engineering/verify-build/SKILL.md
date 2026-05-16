@@ -2,49 +2,80 @@
 name: verify-build
 description: >
   Verificación de la integridad del proyecto tras cambios de código.
-  Enfocado principalmente en el chequeo de tipos de TypeScript (tsc).
+  Incluye chequeo de tipos TypeScript, ESLint, tests y calidad de código.
 trigger: Después de crear o modificar cualquier código.
 allowed-tools: [Read, Command]
 metadata:
   author: seedcoin
-  version: "1.0"
+  version: "2.0"
   scope: [mobile]
   auto_invoke: "Tras crear o modificar código para asegurar que no se introducen errores críticos"
 ---
 
 # Verify Build Skill
 
-Este skill asegura que cada cambio de código mantenga la integridad estructural del proyecto mediante el chequeo de tipos.
+Este skill asegura que cada cambio de código mantenga la integridad estructural del proyecto.
+Dispone de dos niveles de verificación: rápido (uso diario) y completo (pre-commit).
 
 ## Directiva Central
 
-**OBLIGATORIO:** Tras completar cualquier modificación de código (.ts, .tsx), el agente DEBE ejecutar un chequeo de tipos para asegurar que no se han introducido errores de regresión.
+**OBLIGATORIO:** Tras completar cualquier modificación de código (.ts, .tsx), el agente DEBE
+ejecutar al menos el chequeo rápido para asegurar que no se han introducido regresiones.
 
-## Procedimiento de Verificación
+## Niveles de Verificación
 
-1. Navegar al directorio raíz del proyecto afectado (usualmente `mobile`).
-2. Ejecutar el chequeo de tipos silencioso:
+| Nivel | Script | Cuándo usar | Duración |
+| :--- | :--- | :--- | :--- |
+| **Rápido** | `check.ps1` | Tras cualquier cambio de código | ~10-15 seg |
+| **Completo** | `verify.ps1` | Antes de commits o releases | ~30-60 seg |
+
+## Scripts Disponibles
+
+```powershell
+# Chequeo rápido (TypeScript + ESLint + Tests)
+# Ejecutar desde la raíz del repositorio:
+.\.agents\scripts\check.ps1
+
+# Verificación completa (+ expo-doctor + console.log + any + TODOs)
+.\.agents\scripts\verify.ps1
+```
+
+## Checks por Nivel
+
+### Chequeo Rápido (`check.ps1`)
+- ✅ TypeScript sin errores (`tsc --noEmit`)
+- ✅ ESLint sin warnings críticos (`expo lint`)
+- ✅ Tests unitarios pasan (`jest --passWithNoTests`)
+
+### Verificación Completa (`verify.ps1`)
+Incluye todo lo anterior más:
+- ✅ Expo Doctor (salud de dependencias y configuración)
+- ⚠️ Detección de `console.log` de debug en `src/` (usar `react-native-logs`)
+- ⚠️ Detección de `: any` explícito en TypeScript (usar `unknown` + type guards)
+- ⚠️ Detección de TODOs / FIXMEs / HACs sin resolver
+
+## Procedimiento Manual (Alternativo)
+
+Si los scripts no están disponibles, ejecutar manualmente desde `mobile/`:
 
 ```powershell
 npx tsc --noEmit
 ```
 
-3. **Análisis de resultados:**
-   - Si no hay errores (Exit Code 0), la tarea se considera verificada.
-   - Si hay errores, identificar si fueron introducidos por el cambio actual.
-   - **Grep/Filtro:** Para aislar errores en archivos modificados (Windows/PowerShell):
-     ```powershell
-     npx tsc --noEmit | Select-String "FileName"
-     ```
+**Grep/Filtro** para aislar errores en archivos específicos:
+```powershell
+npx tsc --noEmit | Select-String "NombreArchivo"
+```
 
 ## Línea Base de Errores
 
-Si el proyecto ya tiene errores preexistentes (ruido), el agente debe asegurar que sus cambios **no incrementen** el conteo de errores ni afecten a archivos que antes estaban limpios.
+Si el proyecto ya tiene errores preexistentes, el agente debe asegurar que sus cambios
+**no incrementen** el conteo de errores ni afecten archivos que antes estaban limpios.
 
-## Comandos Útiles
+## Interpretación de Resultados
 
-| Acción | Comando |
-| :--- | :--- |
-| Chequeo Completo | `npx tsc --noEmit` |
-| Chequeo Filtrado (Win) | `npx tsc --noEmit \| Select-String "pattern"` |
-| Modo Watch | `npx tsc --noEmit --watch` |
+| Salida | Significado | Acción |
+| :--- | :--- | :--- |
+| `🟢 Todo limpio` | Sin errores ni warnings | Proceder con commit |
+| `🟡 Warnings` | Problemas de calidad no bloqueantes | Revisar antes de commit |
+| `🔴 Errores` | Fallos críticos | Resolver antes de cualquier commit |

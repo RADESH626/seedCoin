@@ -63,7 +63,7 @@ export function CategoryGrid({ selectedCategoryId, onSelectCategory, isIncome }:
               <Text
                 numberOfLines={1}
                 adjustsFontSizeToFit
-                className={`text-[10px] text-center font-medium leading-tight ${isSelected ? 'text-seed-400 font-bold' : 'text-gray-400'}`}
+                className={`text-[10px] text-center font-medium leading-tight ${isSelected ? 'text-seed-400 font-bold' : 'text-zinc-400'}`}
               >
                 {cat.name}
               </Text>

@@ -41,7 +41,7 @@ export const FormField = React.memo(function FormField({
     <View className={`mb-6 ${containerClassName}`}>
       {label && (
         <Text 
-          className={`text-gray-400 text-[10px] font-bold uppercase tracking-[2px] mb-2 ml-1 ${labelClassName}`}
+          className={`text-zinc-400 text-[10px] font-bold uppercase tracking-[2px] mb-2 ml-1 ${labelClassName}`}
         >
           {label}
         </Text>

@@ -114,7 +114,7 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
             />
 
             <ScrollView showsVerticalScrollIndicator={false} className="mt-4">
-              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
+              <Text className="text-zinc-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
                 1. Monto Presupuestado Mensual
               </Text>
 
@@ -132,7 +132,7 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
                 />
               </View>
 
-              <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
+              <Text className="text-zinc-500 text-[10px] font-bold uppercase mb-4 tracking-[2px]">
                 2. Seleccionar Categoría
               </Text>
 
@@ -152,7 +152,7 @@ export function AddBudgetModal({ visible, onClose, onSave, onUpdate, onDelete, i
                         } ${isDisabled ? 'opacity-30' : 'opacity-100'}`}
                     >
                       {getCategoryIcon(cat.icon, isSelected ? '#fff' : cat.color, 16)}
-                      <Text className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                      <Text className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-zinc-400'}`}>
                         {cat.name}
                       </Text>
                     </Pressable>

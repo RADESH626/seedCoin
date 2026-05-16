@@ -22,7 +22,7 @@ export function TabBarButton({ label, Icon, isFocused, onPress }: TabBarButtonPr
         numberOfLines={1}
         adjustsFontSizeToFit={true}
         minimumFontScale={0.8}
-        className={`text-[9px] font-bold uppercase tracking-tighter ${isFocused ? 'text-white' : 'text-gray-500'}`}
+        className={`text-[9px] font-bold uppercase tracking-tighter ${isFocused ? 'text-white' : 'text-zinc-500'}`}
       >
         {label}
       </Text>

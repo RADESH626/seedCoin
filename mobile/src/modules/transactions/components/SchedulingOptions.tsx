@@ -49,7 +49,7 @@ export function SchedulingOptions({
       >
         <View className="flex-row items-center gap-3">
           <Clock size={18} color={frequency ? Colors.seed[400] : '#64748b'} />
-          <Text className={`font-medium ${frequency ? 'text-white' : 'text-gray-400'}`}>
+          <Text className={`font-medium ${frequency ? 'text-white' : 'text-zinc-400'}`}>
             {selectedLabel}
           </Text>
         </View>

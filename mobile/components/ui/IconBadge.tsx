@@ -14,10 +14,10 @@ interface IconBadgeProps {
 }
 
 const sizeStyles: Record<BadgeSize, string> = {
-  sm: 'w-8 h-8',
-  md: 'w-10 h-10',
-  lg: 'w-12 h-12',
-  xl: 'w-16 h-16',
+  sm: 'size-8',
+  md: 'size-10',
+  lg: 'size-12',
+  xl: 'size-16',
 };
 
 const colorStyles: Record<BadgeColor, string> = {

@@ -56,7 +56,7 @@ export default function LimitsScreen() {
           </View>
           <Pressable 
             onPress={handleCreateNew}
-            className="w-12 h-12 bg-seed-600 rounded-2xl items-center justify-center shadow-lg shadow-seed-600/30"
+            className="size-12 bg-seed-600 rounded-2xl items-center justify-center shadow-lg shadow-seed-600/30"
           >
             <Plus color="#fff" size={24} />
           </Pressable>
@@ -78,7 +78,7 @@ export default function LimitsScreen() {
         {loading && budgets.length === 0 ? (
           <View className="py-20 items-center">
             <ActivityIndicator color={Colors.seed[400]} />
-            <Text className="text-gray-500 text-xs mt-4">Calculando consumo...</Text>
+            <Text className="text-zinc-500 text-xs mt-4">Calculando consumo…</Text>
           </View>
         ) : budgets.length === 0 ? (
           <View className="py-20 items-center opacity-50">
@@ -86,7 +86,7 @@ export default function LimitsScreen() {
               <Target size={32} color="#475569" />
             </IconBadge>
             <Text className="text-white font-bold text-base mb-1">Sin presupuestos</Text>
-            <Text className="text-gray-500 text-xs text-center px-10">Crea tu primer presupuesto de gasto para empezar a ahorrar hoy mismo.</Text>
+            <Text className="text-zinc-500 text-xs text-center px-10">Crea tu primer presupuesto de gasto para empezar a ahorrar hoy mismo.</Text>
             
             <Pressable 
               onPress={handleCreateNew}

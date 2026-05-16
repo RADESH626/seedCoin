@@ -51,8 +51,8 @@ export function AccountForm({
         value={balance}
         onChangeText={onBalanceChange}
         containerClassName="mb-6"
-        prefix={<Text className="text-gray-400 text-lg font-bold">$</Text>}
-        suffix={<Text className="text-gray-500 text-sm font-bold">COP</Text>}
+        prefix={<Text className="text-zinc-400 text-lg font-bold">$</Text>}
+        suffix={<Text className="text-zinc-500 text-sm font-bold">COP</Text>}
       />
 
       {accountType === ACCOUNT_TYPES.YIELD.id && (
@@ -64,7 +64,7 @@ export function AccountForm({
               keyboardType="numeric"
               value={yieldRate}
               onChangeText={onYieldRateChange}
-              suffix={<Text className="text-gray-500 text-sm font-bold">%</Text>}
+              suffix={<Text className="text-zinc-500 text-sm font-bold">%</Text>}
             />
           </View>
           
@@ -75,14 +75,14 @@ export function AccountForm({
               keyboardType="numeric"
               value={paymentDay}
               onChangeText={onPaymentDayChange}
-              suffix={<Text className="text-gray-500 text-sm font-bold">día</Text>}
+              suffix={<Text className="text-zinc-500 text-sm font-bold">día</Text>}
             />
           </View>
         </View>
       )}
       
       {isEditing && (
-        <Text className="text-[10px] text-gray-500 mt-2 ml-1 italic">
+        <Text className="text-[10px] text-zinc-500 mt-2 ml-1 italic">
           Nota: Cambiar el capital inicial ajustará automáticamente el saldo actual.
         </Text>
       )}

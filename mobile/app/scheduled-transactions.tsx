@@ -100,7 +100,7 @@ export default function ScheduledTransactionsScreen() {
     <Card padding="lg" rounded="3xl" className="mb-4 flex-row items-center justify-between">
       <View className="flex-row items-center flex-1 pr-4">
         <View 
-          className="w-12 h-12 rounded-2xl items-center justify-center mr-4"
+          className="size-12 rounded-2xl items-center justify-center mr-4"
           style={{ backgroundColor: `${item.category_color}20` }}
         >
           <Text style={{ fontSize: 20 }}>{item.category_icon}</Text>
@@ -169,7 +169,7 @@ export default function ScheduledTransactionsScreen() {
       style={{ paddingTop: Math.max(insets.top, 24) }}
     >
       <View className="flex-row items-center justify-between mb-8">
-        <Pressable onPress={() => router.back()} className="w-10 h-10 items-center justify-center rounded-full bg-dark-800 border border-dark-700">
+        <Pressable onPress={() => router.back()} className="size-10 items-center justify-center rounded-full bg-dark-800 border border-dark-700">
            <ArrowLeft size={20} color="white" />
         </Pressable>
         <Text className="text-h2">Transacciones Programadas</Text>
@@ -186,7 +186,7 @@ export default function ScheduledTransactionsScreen() {
       ) : sections.length === 0 ? (
 
         <View className="flex-1 items-center justify-center py-20 px-10">
-          <View className="w-20 h-20 bg-dark-800 rounded-full items-center justify-center mb-6">
+          <View className="size-20 bg-dark-800 rounded-full items-center justify-center mb-6">
             <Calendar size={40} color="#475569" />
           </View>
           <Text className="text-h2 mb-2">Sin programaciones</Text>

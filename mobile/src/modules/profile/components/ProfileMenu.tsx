@@ -12,7 +12,7 @@ interface ProfileMenuProps {
 export function ProfileMenu({ onResetDatabase, showDeveloperFeatures }: ProfileMenuProps) {
   return (
     <>
-      <Text className="text-gray-500 text-[10px] font-bold uppercase mb-4 ml-2 tracking-widest">Ajustes Generales</Text>
+      <Text className="text-zinc-500 text-[10px] font-bold uppercase mb-4 ml-2 tracking-widest">Ajustes Generales</Text>
       
       <Card padding="none" rounded="extra" className="overflow-hidden mb-8">
         <Pressable 

@@ -22,7 +22,7 @@ export function ModalHeader({ title, onClose, Icon }: ModalHeaderProps) {
       <Pressable 
         testID="close-modal-button"
         onPress={onClose} 
-        className="w-10 h-10 bg-dark-800 rounded-full items-center justify-center border border-dark-700 active:bg-dark-700"
+        className="size-10 bg-dark-800 rounded-full items-center justify-center border border-dark-700 active:bg-dark-700"
       >
         <X color="#9ca3af" size={20} />
       </Pressable>

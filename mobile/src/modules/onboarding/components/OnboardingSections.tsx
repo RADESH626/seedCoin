@@ -19,16 +19,16 @@ export function NameSelection({ onContinue }: NameSelectionProps) {
 
   return (
     <View className="flex-1 justify-center items-center px-6">
-      <View className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
+      <View className="absolute top-[-100px] left-[-100px] size-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
 
-      <View className="w-24 h-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
+      <View className="size-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
         <Landmark color={Colors.seed[400]} size={48} />
       </View>
 
       <Text className="text-white text-3xl font-extrabold text-center tracking-tight mb-2">
         ¡Hola! ¿Cómo te llamas?
       </Text>
-      <Text className="text-gray-400 text-base text-center mb-8 leading-relaxed px-4">
+      <Text className="text-zinc-400 text-base text-center mb-8 leading-relaxed px-4">
         Personalicemos tu bóveda financiera.
       </Text>
 
@@ -63,16 +63,16 @@ interface AccountStartProps {
 export function AccountStart({ userName, onCreateAccount }: AccountStartProps) {
   return (
     <View className="flex-1 justify-center items-center px-6">
-      <View className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
+      <View className="absolute top-[-100px] left-[-100px] size-[300px] rounded-full bg-seed-600/10 pointer-events-none blur-3xl scale-150" />
 
-      <View className="w-24 h-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
+      <View className="size-24 rounded-full bg-seed-600/20 items-center justify-center mb-8 border border-seed-500/30">
         <Landmark color={Colors.seed[400]} size={48} />
       </View>
 
       <Text className="text-white text-3xl font-extrabold text-center tracking-tight mb-3">
         Perfecto, <Text className="text-seed-400">{userName}</Text>
       </Text>
-      <Text className="text-gray-400 text-base text-center mb-10 leading-relaxed px-4">
+      <Text className="text-zinc-400 text-base text-center mb-10 leading-relaxed px-4">
         Ahora vamos a crear tu primera cuenta para comenzar a gestionar tus finanzas.
       </Text>
 

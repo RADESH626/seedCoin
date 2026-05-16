@@ -15,9 +15,9 @@ export function EmptyState({ icon: Icon, title, description, className = "" }: E
   return (
     <View className={`py-20 items-center opacity-50 ${className}`}>
       <Icon size={48} color="#475569" strokeWidth={1} />
-      <Text className="text-gray-400 mt-4 font-medium text-center">{title}</Text>
+      <Text className="text-zinc-400 mt-4 font-medium text-center">{title}</Text>
       {description && (
-        <Text className="text-gray-500 text-xs mt-1 text-center px-4">{description}</Text>
+        <Text className="text-zinc-500 text-xs mt-1 text-center px-4">{description}</Text>
       )}
     </View>
   );

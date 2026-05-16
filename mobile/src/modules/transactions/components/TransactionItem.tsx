@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { getCategoryIcon } from '@/src/shared/utils/ui';
 import { formatMoney } from '@/src/shared/utils/currency';
@@ -27,20 +27,20 @@ export function TransactionItem({ transaction: tx, showAccountName = false }: Pr
   };
 
   return (
-    <TouchableOpacity 
-      activeOpacity={0.7}
+    <Pressable
       onPress={handlePress}
+      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
       className="flex-row justify-between items-center p-3"
     >
       <View className="flex-row items-center gap-3 flex-1">
-        <View className="w-10 h-10 rounded-full items-center justify-center" style={iconBgStyle}>
+        <View className="size-10 rounded-full items-center justify-center" style={iconBgStyle}>
           {getCategoryIcon(tx.category_icon || 'default', safeColor, 20)}
         </View>
         <View className="flex-1">
           <Text className="font-bold text-sm text-white" numberOfLines={1}>
             {tx.description || tx.category_name}
           </Text>
-          <Text className="text-[11px] text-gray-400 mt-0.5" numberOfLines={1}>
+          <Text className="text-[11px] text-zinc-400 mt-0.5" numberOfLines={1}>
             {tx.description ? `${tx.category_name} • ` : ''}
             {showAccountName && tx.account_name ? `${tx.account_name} • ` : ''}
             {getTimeLabel(tx.transaction_date)}
@@ -52,7 +52,7 @@ export function TransactionItem({ transaction: tx, showAccountName = false }: Pr
           {isIncome ? '+' : '-'}{formatMoney(tx.amount, 'COP')}
         </Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

@@ -42,7 +42,7 @@ export function AccountTypeSelector({ selectedType, onSelect }: AccountTypeSelec
               `}
             >
               <IconComponent color={isSelected ? Colors.seed[400] : '#9ca3af'} size={18} />
-              <Text className={`font-semibold ${isSelected ? 'text-seed-400' : 'text-gray-400'}`}>
+              <Text className={`font-semibold ${isSelected ? 'text-seed-400' : 'text-zinc-400'}`}>
                 {type.label}
               </Text>
             </Pressable>

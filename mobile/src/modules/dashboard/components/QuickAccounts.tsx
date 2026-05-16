@@ -19,7 +19,7 @@ export function QuickAccounts({ accounts }: Props) {
   return (
     <View className="gap-3">
       <View className="flex-row justify-between items-center">
-        <Text className="text-xs font-bold text-gray-300 uppercase tracking-widest">Tus Cuentas</Text>
+        <Text className="text-xs font-bold text-zinc-300 uppercase tracking-widest">Tus Cuentas</Text>
         <Pressable onPress={() => router.push('/manage-accounts')} hitSlop={10}>
           <Text className="text-xs font-bold text-seed-400">Ver todo</Text>
         </Pressable>
@@ -28,7 +28,7 @@ export function QuickAccounts({ accounts }: Props) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-4 pb-2">
         {accounts.length === 0 ? (
           <Card padding="md" rounded="2xl" className="items-center justify-center opacity-50 min-w-[140px]">
-            <Text className="text-xs text-gray-400">Sin cuentas</Text>
+            <Text className="text-xs text-zinc-400">Sin cuentas</Text>
           </Card>
         ) : (
           <>
@@ -40,7 +40,7 @@ export function QuickAccounts({ accounts }: Props) {
               >
                 <Card padding="md" rounded="2xl" className="min-w-[140px]">
                   <Landmark color={Colors.seed[400]} size={24} className="mb-3" />
-                  <Text className="text-xs text-gray-400 font-medium">{acc.name}</Text>
+                  <Text className="text-xs text-zinc-400 font-medium">{acc.name}</Text>
                   <Text className="font-bold text-white text-base mt-0.5">{formatMoney(acc.current_balance, 'COP')}</Text>
                 </Card>
               </Pressable>

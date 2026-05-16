@@ -32,7 +32,7 @@ export function PrimaryButton({
       {loading ? (
         <ActivityIndicator color="white" size="small" />
       ) : (
-        <Text className={`font-bold text-lg ${disabled ? 'text-gray-400' : 'text-white'}`}>
+        <Text className={`font-bold text-lg ${disabled ? 'text-zinc-400' : 'text-white'}`}>
           {label}
         </Text>
       )}

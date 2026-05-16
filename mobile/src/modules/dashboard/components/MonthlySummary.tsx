@@ -21,7 +21,7 @@ export function MonthlySummary({ monthlyIncome, monthlyExpense }: Props) {
           <ArrowDown color="#4ade80" size={20} />
         </IconBadge>
         <View>
-          <Text className="text-[10px] text-gray-400 font-medium">Ingresos Mes</Text>
+          <Text className="text-[10px] text-zinc-400 font-medium">Ingresos Mes</Text>
           <Text className="font-bold text-white text-sm mt-0.5">{formatMoney(monthlyIncome, 'COP')}</Text>
         </View>
       </Card>
@@ -30,7 +30,7 @@ export function MonthlySummary({ monthlyIncome, monthlyExpense }: Props) {
           <ArrowUp color="#f87171" size={20} />
         </IconBadge>
         <View>
-          <Text className="text-[10px] text-gray-400 font-medium">Gastos Mes</Text>
+          <Text className="text-[10px] text-zinc-400 font-medium">Gastos Mes</Text>
           <Text className="font-bold text-white text-sm mt-0.5">{formatMoney(monthlyExpense, 'COP')}</Text>
         </View>
       </Card>

@@ -48,6 +48,7 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 | `graphify` | Mapeo de arquitectura y navegación por el código | [.agents/skills/tools/graphify/SKILL.md](.agents/skills/tools/graphify/SKILL.md) |
 | `spec-refiner` | Protocolo interactivo para refinar historias de usuario en specs | [.agents/skills/tools/spec-refiner/SKILL.md](.agents/skills/tools/spec-refiner/SKILL.md) |
 | `git-handshake` | Protocolo proactivo para sugerir commits tras tareas | [.agents/skills/tools/git-handshake/SKILL.md](.agents/skills/git-handshake/SKILL.md) |
+| `systematic-debugging` | Protocolo estructurado de diagnóstico: síntoma → hipótesis → fix → test | [.agents/skills/tools/systematic-debugging/SKILL.md](.agents/skills/tools/systematic-debugging/SKILL.md) |
 
 ## Sub-Agent Mission Control (Adaptive SDD Flow)
 SeedCoin opera bajo un modelo de **Desarrollo Guiado por Especificaciones (SDD)** adaptativo. El orquestador selecciona un **Playbook** de ejecución según el nivel de riesgo detectado.
@@ -70,23 +71,24 @@ SeedCoin opera bajo un modelo de **Desarrollo Guiado por Especificaciones (SDD)*
 ## Auto-invoke Rules
 ALWAYS invoke the corresponding skill FIRST when starting an action:
 
-| Acción | Skill Obligatorio |
-|--------|-------------------|
-| Nueva funcionalidad / Tarea compleja | `sdd-orchestrator` |
+| Acción | Skill / Workflow Obligatorio |
+|--------|------------------------------|
+| Nueva funcionalidad / Tarea compleja | `sdd-orchestrator` · `/feature` |
 | Guardar/Cargar conocimiento persistente | `engram` |
 | Modificar esquemas o consultas de base de datos | `database-core` |
-| Verificar integridad después de los cambios | `verify-build` |
+| Verificar integridad después de los cambios | `verify-build` · `/audit` |
 | Crear interfaces o estilizado de UI | `ui-development` |
 | Escribir o refactorizar cualquier código | `clean-code` |
-| Auditoría de seguridad o rendimiento | `deep-audit` |
+| Auditoría de seguridad o rendimiento | `deep-audit` · `/audit` |
 | Sincronización de código o creación de Diátaxis/ADR | `doc-writer` |
 | Documentación o Comentarios | `clean-documentation` |
+| Diagnosticar un error o comportamiento inesperado | `systematic-debugging` · `/debug` |
 | Documentar una corrección de error compleja | `bug-logger` |
 | Trabajar con diagramas de arquitectura | `excalidraw` |
 | Mapeo de código o navegación por la arquitectura | `graphify` |
 | Ejecutar comandos en la terminal | `clean-terminal` |
-| Refinar specs de historias de usuario y validar asunciones | `spec-refiner` |
-| Finalizar una tarea o modificación (Sugerencia de commit) | `git-handshake` |
+| Refinar specs de historias de usuario y validar asunciones | `spec-refiner` · `/spec` |
+| Finalizar una tarea o modificación (Sugerencia de commit) | `git-handshake` · `/commit` |
 
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
@@ -101,20 +103,22 @@ SeedCoin is a personal financial management platform for secure and efficient of
 ### Directory Structure
 ```text
 seedCoin/
-├── .agents/          # AI Agent protocols, skills (categorized), and knowledge base
-│   └── skills/       # Categorized Skills (core/, engineering/, tools/, legacy/)
-├── documentacion/    # Project documentation, architecture diagrams, and user guides
-├── inconos/          # Image assets and application icons
-├── mobile/           # React Native / Expo source code for the app
-│   ├── app/          # Navigation and screens (Expo Router)
-│   ├── assets/       # Fonts, images, and other static assets
-│   ├── components/   # Reusable UI React components
-│   └── src/          # Core application logic
-│       ├── database/ # SQLite configuration and migrations
-│       ├── modules/  # Feature-driven modules (accounts, transactions, etc.)
-│       └── shared/   # Shared services, hooks, constants, and utils
-├── AGENTS.md         # Main entry point for AI instructions and context
-└── README.md         # Project overview and getting started guide
+├── .agents/           # AI Agent protocols, skills (categorized), and knowledge base
+│   ├── scripts/       # Scripts de validación automática (check.ps1, verify.ps1)
+│   ├── skills/        # Categorized Skills (core/, engineering/, tools/, legacy/)
+│   └── workflows/     # Slash command workflows (/debug, /audit, /feature, /spec, /commit, /graphify)
+├── documentacion/     # Project documentation, architecture diagrams, and user guides
+├── inconos/           # Image assets and application icons
+├── mobile/            # React Native / Expo source code for the app
+│   ├── app/           # Navigation and screens (Expo Router)
+│   ├── assets/        # Fonts, images, and other static assets
+│   ├── components/    # Reusable UI React components
+│   └── src/           # Core application logic
+│       ├── database/  # SQLite configuration and migrations
+│       ├── modules/   # Feature-driven modules (accounts, transactions, etc.)
+│       └── shared/    # Shared services, hooks, constants, and utils
+├── AGENTS.md          # Main entry point for AI instructions and context
+└── README.md          # Project overview and getting started guide
 ```
 
 ## Development
@@ -131,6 +135,25 @@ npm start
 - **Static Analysis**: `npm run lint` (in `mobile/`).
 - **Build Verification**: Run `verify-build` skill after changes.
 - **Testing**: `npm test` for unit and integration tests.
+
+### Validation Scripts (desde la raíz del repo)
+```powershell
+# Chequeo rápido — TypeScript + ESLint + Tests (~15 seg)
+.agents\scripts\check.ps1
+
+# Verificación completa — todo lo anterior + expo-doctor + calidad (~60 seg)
+.agents\scripts\verify.ps1
+```
+
+### Workflows Disponibles
+| Slash Command | Propósito |
+|---|---|
+| `/graphify` | Mapear arquitectura del proyecto |
+| `/debug` | Debugging sistemático con protocolo de hipótesis |
+| `/audit` | Auditoría completa de código + reporte |
+| `/feature` | Flujo SDD completo para nueva funcionalidad |
+| `/spec` | Refinamiento de spec con preguntas progresivas |
+| `/commit` | Protocolo de commit con verificación previa |
 
 ## Design System Standards
 SeedCoin uses a **Dark-First** design system powered by **NativeWind v4**.

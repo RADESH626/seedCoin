@@ -36,7 +36,7 @@ export function AccountTransactionList({ transactions, accountName }: Props) {
         {transactions.length === 0 ? (
           <View className="py-10 items-center justify-center opacity-50 gap-2">
             <Text className="text-2xl">💸</Text>
-            <Text className="text-sm text-gray-400 text-center">
+            <Text className="text-sm text-zinc-400 text-center">
               No hay movimientos{'\n'}en esta cuenta
             </Text>
           </View>

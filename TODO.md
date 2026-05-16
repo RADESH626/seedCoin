@@ -19,4 +19,6 @@
 
 - quitar el boton de preferenciasde ui del apartado de perfil 
 
+- 
+
 

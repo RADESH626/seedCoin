@@ -23,9 +23,9 @@ export function FloatingActionButton({
   return (
     <Pressable 
       onPress={onPress}
-      className={`bg-seed-500 flex-row items-center justify-center p-5 rounded-2xl gap-3 shadow-xl ${className}`}
+      className={`bg-seed-500 flex-row items-center justify-center p-5 rounded-2xl gap-3 ${className}`}
       style={[
-        { shadowColor: Colors.seed[500], shadowOpacity: 0.4, shadowRadius: 10, elevation: 8 },
+        { boxShadow: `0px 4px 20px ${Colors.seed[500]}66` },
         style
       ]}
     >

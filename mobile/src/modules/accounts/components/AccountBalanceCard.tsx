@@ -19,13 +19,13 @@ export function AccountBalanceCard({ account }: Props) {
     <View className="standard-screen-px gap-3">
       {/* Saldo principal */}
       <View className="bg-dark-800 border border-dark-700 rounded-3xl p-6 gap-1">
-        <Text className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        <Text className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
           Saldo Actual
         </Text>
         <Text className="text-4xl font-bold text-white mt-1">
           {formatMoney(account.current_balance, 'COP')}
         </Text>
-        <Text className="text-xs text-gray-500 mt-1">
+        <Text className="text-xs text-zinc-500 mt-1">
           Balance inicial: {formatMoney(account.initial_balance, 'COP')}
         </Text>
       </View>
@@ -43,7 +43,7 @@ export function AccountBalanceCard({ account }: Props) {
             <Text className="text-2xl font-bold text-white">
               {(account.yield_rate ?? 0).toFixed(2)}%
             </Text>
-            <Text className="text-[11px] text-gray-400">Tasa anual</Text>
+            <Text className="text-[11px] text-zinc-400">Tasa anual</Text>
           </View>
 
           <View className="flex-1 bg-dark-800 border border-dark-700 rounded-2xl p-4 gap-2">
@@ -56,7 +56,7 @@ export function AccountBalanceCard({ account }: Props) {
             <Text className="text-2xl font-bold text-white">
               Día {account.payment_day ?? 1}
             </Text>
-            <Text className="text-[11px] text-gray-400">Día del mes</Text>
+            <Text className="text-[11px] text-zinc-400">Día del mes</Text>
           </View>
         </View>
       )}

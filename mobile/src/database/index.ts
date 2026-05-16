@@ -28,10 +28,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   if (currentDbVersion === 0) {
     log.info('migrateDbIfNeeded: Inicializando esquema por primera vez...');
     try {
-      await db.execAsync(CREATE_TABLES);
-      await db.execAsync(CREATE_TRIGGERS);
-      await db.execAsync(CREATE_INDEXES);
-      await db.execAsync(CREATE_PREFERENCES_TABLE);
+      await Promise.all([
+        db.execAsync(CREATE_TABLES),
+        db.execAsync(CREATE_TRIGGERS),
+        db.execAsync(CREATE_INDEXES),
+        db.execAsync(CREATE_PREFERENCES_TABLE),
+      ]);
       
       // Saltamos directamente a la versión más reciente
       await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);

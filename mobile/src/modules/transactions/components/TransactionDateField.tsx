@@ -11,7 +11,7 @@ interface Props {
 export function TransactionDateField({ date, onDatePress }: Props) {
   return (
     <View className="mb-8">
-      <Text className="text-gray-400 text-sm font-medium mb-3 ml-1">Fecha</Text>
+      <Text className="text-zinc-400 text-sm font-medium mb-3 ml-1">Fecha</Text>
       <Card
         onPress={onDatePress}
         rounded="2xl"

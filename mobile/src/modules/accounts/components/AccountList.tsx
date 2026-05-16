@@ -45,7 +45,7 @@ export function AccountList({ accounts, loading, onEdit, onDelete }: AccountList
                 </View>
                 <View className="flex-1">
                   <Text className="text-white font-bold text-base">{acc.name}</Text>
-                  <Text className="text-gray-400 text-xs mt-0.5 uppercase tracking-wider">{acc.account_type}</Text>
+                  <Text className="text-zinc-400 text-xs mt-0.5 uppercase tracking-wider">{acc.account_type}</Text>
                 </View>
                 <View className="items-end mr-2">
                    <Text className="text-white font-bold text-base">{formatMoney(acc.current_balance, 'COP')}</Text>

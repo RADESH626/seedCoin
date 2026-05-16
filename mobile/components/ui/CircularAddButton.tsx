@@ -19,9 +19,9 @@ export function CircularAddButton({
 }: CircularAddButtonProps) {
   // Dimensiones basadas en el tamaño
   const sizes = {
-    sm: { container: 'w-10 h-10', icon: 20, border: 'border-2' },
-    md: { container: 'w-14 h-14', icon: 28, border: 'border-4' },
-    lg: { container: 'w-20 h-20', icon: 40, border: 'border-4' },
+    sm: { container: 'size-10', icon: 20, border: 'border-2' },
+    md: { container: 'size-14', icon: 28, border: 'border-4' },
+    lg: { container: 'size-20', icon: 40, border: 'border-4' },
   };
 
   const currentSize = sizes[size];

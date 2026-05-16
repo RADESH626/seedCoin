@@ -42,12 +42,12 @@ export function BudgetCard({ budget, onEdit }: Props) {
           </IconBadge>
           <View>
             <Text className="text-white font-bold text-sm">{budget.category_name}</Text>
-            <Text className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Mensual</Text>
+            <Text className="text-zinc-500 text-[10px] uppercase font-black tracking-widest">Mensual</Text>
           </View>
         </View>
         <View className="items-end mr-1">
           <Text className="text-white font-black text-sm">{formatMoney(budget.limit_amount, 'COP')}</Text>
-          <Text className="text-gray-500 text-[10px]">Límite</Text>
+          <Text className="text-zinc-500 text-[10px]">Límite</Text>
         </View>
       </View>
 
@@ -62,7 +62,7 @@ export function BudgetCard({ budget, onEdit }: Props) {
 
       <View className="flex-row justify-between items-center">
         <View>
-          <Text className="text-gray-400 text-[11px]">Consumido: <Text className="text-white font-bold">{formatMoney(budget.total_spent, 'COP')}</Text></Text>
+          <Text className="text-zinc-400 text-[11px]">Consumido: <Text className="text-white font-bold">{formatMoney(budget.total_spent, 'COP')}</Text></Text>
         </View>
         <View className="bg-dark-900 px-3 py-1 rounded-full border border-dark-700">
           <Text className="text-[10px] font-bold" style={{ color: progressColor }}>

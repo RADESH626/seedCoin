@@ -27,7 +27,7 @@ export function RecentTransactions({ recentTransactions }: Props) {
 
         {recentTransactions.length === 0 ? (
           <View className="p-4 items-center justify-center opacity-50">
-            <Text className="text-xs text-gray-400">No hay actividad reciente</Text>
+            <Text className="text-xs text-zinc-400">No hay actividad reciente</Text>
           </View>
         ) : (
           recentTransactions.map((tx, index) => {

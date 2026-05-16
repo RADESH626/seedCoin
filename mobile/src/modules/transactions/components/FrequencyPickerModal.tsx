@@ -1,4 +1,4 @@
-import { View, Text, Modal, Pressable, ScrollView } from 'react-native';
+import { View, Text, Modal, Pressable, FlatList } from 'react-native';
 import { RecurrenceFrequency } from '@/src/database/types';
 import { ModalHeader } from '@/components/ui/ModalHeader';
 import { Clock } from 'lucide-react-native';
@@ -33,10 +33,12 @@ export function FrequencyPickerModal({ visible, onClose, onSelect, currentValue 
             onClose={onClose} 
           />
 
-          <ScrollView className="mt-4">
-            {FREQUENCIES.map((f) => (
+          <FlatList
+            className="mt-4"
+            data={FREQUENCIES}
+            keyExtractor={(item) => item.label}
+            renderItem={({ item: f }) => (
               <Pressable
-                key={f.label}
                 onPress={() => {
                   onSelect(f.value);
                   onClose();
@@ -47,12 +49,12 @@ export function FrequencyPickerModal({ visible, onClose, onSelect, currentValue 
                     : 'bg-dark-800 border-dark-700'
                 }`}
               >
-                <Text className={`font-bold ${currentValue === f.value ? 'text-white' : 'text-gray-400'}`}>
+                <Text className={`font-bold ${currentValue === f.value ? 'text-white' : 'text-zinc-400'}`}>
                   {f.label}
                 </Text>
               </Pressable>
-            ))}
-          </ScrollView>
+            )}
+          />
         </View>
       </View>
     </Modal>

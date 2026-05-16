@@ -6,7 +6,7 @@ import { CircularAddButton } from '../ui/CircularAddButton';
  */
 export function TabBarFAB({ onPress }: { onPress: () => void }) {
   return (
-    <View className="relative w-16 h-16 justify-center items-center -mt-10">
+    <View className="relative size-16 justify-center items-center -mt-10">
       <CircularAddButton 
         onPress={onPress}
         testID="fab-add-transaction"
