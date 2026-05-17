@@ -1,14 +1,14 @@
 # AGENTS.md - Context and Guidelines for AI Agents
 
-This file defines the context, skills, and development standards for AI agents working on the **SeedCoin** project.
+This file defines the context and development standards for AI agents working on the **SeedCoin** project.
+Agent capabilities are provided by **Gentle AI** (global skills + Engram memory).
 
 ## How to Use This Guide
 - Start here for project-wide norms and AI behaviors.
-- El repositorio sigue un modelo unificado: **Español** para humanos (docs, comentarios) y para la IA (instrucciones de Skills). El **Inglés** se reserva para el código fuente (lógica, nombres de variables, APIs estándar).
-- Local skills in `.agents/skills/` provide detailed patterns on-demand.
-- ALWAYS consult the **Auto-invoke Skills** table before performing any action.
+- El repositorio usa **Español** para humanos (docs, comentarios) e **Inglés** para el código fuente (lógica, nombres de variables, APIs).
+- ALWAYS follow the **Constitutional Principles** before making any decision.
 
-## Constitutional Principles (`/speckit.constitution`)
+## Constitutional Principles
 This section acts as the project's **Constitution**, governing all AI decisions:
 1. **Code Quality**: Enforce Clean Code principles (SRP, DRY). Leave code cleaner than you found it (Boy Scout rule).
 2. **Testing Standards**: Follow Test-Driven Development (TDD). Tests must be Fast, Isolated, Repeatable, Self-Validating, and Timely (F.I.R.S.T.).
@@ -19,77 +19,6 @@ This section acts as the project's **Constitution**, governing all AI decisions:
 7. **Strict TypeScript**: NEVER use `any`. Use `unknown` + type guards. Use `as const` for enums. Prefer flat interfaces. Model coupled optionals as discriminated unions.
 8. **AI-Human Handshake Protocol**: NEVER execute destructive tools (Git commits, large refactors) without presenting a Mini-Plan first. Wait for explicit confirmation unless the user specifies "--force". Prioritize precise diffs over full-file replacements.
 
-## Available Skills
-
-### Skills Genéricos (Cualquier Proyecto)
-| Skill | Descripción | URL |
-|-------|-------------|-----|
-| `typescript` | Tipos constantes, interfaces planas, tipos de utilidad | [TypeScript Docs](https://www.typescriptlang.org/) |
-| `react-19` | Patrones modernos de React 19 (sin useMemo/useCallback por defecto) | [React Docs](https://react.dev/) |
-| `react-native` | Convenciones del framework móvil | [React Native Docs](https://reactnative.dev/docs/getting-started) |
-| `expo-54` | App Router, SDK 54, SQLite y Build | [Expo Docs](https://docs.expo.dev/) |
-| `nativewind-4` | Tailwind 3.4 para Native, patrones de className | [NativeWind Docs](https://www.nativewind.dev/) |
-| `tdd` | Flujo de trabajo de Desarrollo Guiado por Pruebas | [TDD Workflow](.agents/skills/engineering/tdd-workflow/SKILL.md) |
-
-### Skills Específicos de SeedCoin
-| Skill | Descripción | URL |
-|-------|-------------|-----|
-| `clean-code` | Máximo 3 argumentos, SRP, Nombres Limpios, Tests F.I.R.S.T., Sin código muerto | [.agents/skills/engineering/clean-code/SKILL.md](.agents/skills/engineering/clean-code/SKILL.md) |
-| `ui-development` | React 19, Atomización de UI, Estilizado con NativeWind (Dark First) | [.agents/skills/engineering/ui-development/SKILL.md](.agents/skills/engineering/ui-development/SKILL.md) |
-| `database-core` | Esquema SQLite, Consultas, Índices, Precisión Financiera | [.agents/skills/engineering/database-core/SKILL.md](.agents/skills/engineering/database-core/SKILL.md) |
-| `deep-audit` | Framework de revisión exhaustiva de la base de código | [.agents/skills/tools/deep-audit/SKILL.md](.agents/skills/tools/deep-audit/SKILL.md) |
-| `clean-documentation`| Estándares unificados y limpieza de documentación | [.agents/skills/tools/clean-documentation/SKILL.md](.agents/skills/tools/clean-documentation/SKILL.md) |
-| `clean-terminal` | Estándares y protocolos al ejecutar comandos de terminal | [.agents/skills/tools/clean-terminal/SKILL.md](.agents/skills/tools/clean-terminal/SKILL.md) |
-| `skill-creator` | Crear o actualizar skills especializadas para el agente | [.agents/skills/tools/skill-creator/SKILL.md](.agents/skills/tools/skill-creator/SKILL.md) |
-| `skill-sync` | Sincronizar AGENTS.md con los skills locales | [.agents/skills/tools/skill-sync/SKILL.md](.agents/skills/tools/skill-sync/SKILL.md) |
-| `bug-logger` | Documentación especializada de errores y persistencia en Engram | [.agents/skills/tools/bug-logger/SKILL.md](.agents/skills/tools/bug-logger/SKILL.md) |
-| `verify-build` | Chequeos de integridad de tipos TypeScript y Build | [.agents/skills/engineering/verify-build/SKILL.md](.agents/skills/engineering/verify-build/SKILL.md) |
-| `doc-writer` | Sincronización de Diátaxis, ADRs y Docs-as-Code | [.agents/skills/tools/doc-writer/SKILL.md](.agents/skills/tools/doc-writer/SKILL.md) |
-| `graphify` | Mapeo de arquitectura y navegación por el código | [.agents/skills/tools/graphify/SKILL.md](.agents/skills/tools/graphify/SKILL.md) |
-| `spec-refiner` | Protocolo interactivo para refinar historias de usuario en specs | [.agents/skills/tools/spec-refiner/SKILL.md](.agents/skills/tools/spec-refiner/SKILL.md) |
-| `git-handshake` | Protocolo proactivo para sugerir commits tras tareas | [.agents/skills/tools/git-handshake/SKILL.md](.agents/skills/git-handshake/SKILL.md) |
-| `systematic-debugging` | Protocolo estructurado de diagnóstico: síntoma → hipótesis → fix → test | [.agents/skills/tools/systematic-debugging/SKILL.md](.agents/skills/tools/systematic-debugging/SKILL.md) |
-
-## Sub-Agent Mission Control (Adaptive SDD Flow)
-SeedCoin opera bajo un modelo de **Desarrollo Guiado por Especificaciones (SDD)** adaptativo. El orquestador selecciona un **Playbook** de ejecución según el nivel de riesgo detectado.
-
-> [!IMPORTANT]
-> El flujo no es estático. Consulta la **Matriz de Decisión y Playbooks (Titan, Ninja, Flash)** en: [Proceso de Trabajo (SDD Flow)](file:///d:/Familia/Documents/emanuel/proyectos%20personales/seedCoin/documentacion/tecnica/proceso-trabajo.md)
-
-| Fase | Sub-Agente | Acción Principal |
-|------|------------|------------------|
-| 1 | `sdd-init` | Huella digital del proyecto y carga de memoria (`engram`). |
-| 2 | `sdd-explore` | Investigación del código y análisis de riesgos. |
-| 3 | `sdd-propose` | Estrategia de solución y plan de rollback. |
-| 4 | `sdd-spec` | Especificaciones de cambio y criterios (Given/When/Then). |
-| 5 | `sdd-design` | Arquitectura técnica, esquemas y contratos. |
-| 6 | `sdd-tasks` | Desglose de tareas atómicas como checklist. |
-| 7 | `sdd-apply` | Implementación de código (TDD). |
-| 8 | `sdd-verify` | Validación de tipos, pruebas y control de calidad. |
-| 9 | `sdd-archive` | Cierre de sesión, limpieza y persistencia (`engram`). |
-
-## Auto-invoke Rules
-ALWAYS invoke the corresponding skill FIRST when starting an action:
-
-| Acción | Skill / Workflow Obligatorio |
-|--------|------------------------------|
-| Nueva funcionalidad / Tarea compleja | `sdd-orchestrator` · `/feature` |
-| Guardar/Cargar conocimiento persistente | `engram` |
-| Modificar esquemas o consultas de base de datos | `database-core` |
-| Verificar integridad después de los cambios | `verify-build` · `/audit` |
-| Crear interfaces o estilizado de UI | `ui-development` |
-| Escribir o refactorizar cualquier código | `clean-code` |
-| Auditoría de seguridad o rendimiento | `deep-audit` · `/audit` |
-| Sincronización de código o creación de Diátaxis/ADR | `doc-writer` |
-| Documentación o Comentarios | `clean-documentation` |
-| Diagnosticar un error o comportamiento inesperado | `systematic-debugging` · `/debug` |
-| Documentar una corrección de error compleja | `bug-logger` |
-| Trabajar con diagramas de arquitectura | `excalidraw` |
-| Mapeo de código o navegación por la arquitectura | `graphify` |
-| Ejecutar comandos en la terminal | `clean-terminal` |
-| Refinar specs de historias de usuario y validar asunciones | `spec-refiner` · `/spec` |
-| Finalizar una tarea o modificación (Sugerencia de commit) | `git-handshake` · `/commit` |
-
 ## Project Overview
 SeedCoin is a personal financial management platform for secure and efficient offline-first tracking.
 
@@ -98,15 +27,10 @@ SeedCoin is a personal financial management platform for secure and efficient of
 |-----------|----------|------------|
 | Mobile App | `mobile/` | React Native, Expo SDK 54, NativeWind, SQLite |
 | Documentation | `documentacion/` | Markdown, User Guides, Diagrams |
-| AI Protocols | `.agents/` | Agent Skills, Knowledge Base, Metadata |
 
 ### Directory Structure
 ```text
 seedCoin/
-├── .agents/           # AI Agent protocols, skills (categorized), and knowledge base
-│   ├── scripts/       # Scripts de validación automática (check.ps1, verify.ps1)
-│   ├── skills/        # Categorized Skills (core/, engineering/, tools/, legacy/)
-│   └── workflows/     # Slash command workflows (/debug, /audit, /feature, /spec, /commit, /graphify)
 ├── documentacion/     # Project documentation, architecture diagrams, and user guides
 ├── inconos/           # Image assets and application icons
 ├── mobile/            # React Native / Expo source code for the app
@@ -118,6 +42,7 @@ seedCoin/
 │       ├── modules/   # Feature-driven modules (accounts, transactions, etc.)
 │       └── shared/    # Shared services, hooks, constants, and utils
 ├── AGENTS.md          # Main entry point for AI instructions and context
+├── SOUL.md            # Agent persona definition (Gentle AI)
 └── README.md          # Project overview and getting started guide
 ```
 
@@ -133,27 +58,8 @@ npm start
 
 ### Code Quality
 - **Static Analysis**: `npm run lint` (in `mobile/`).
-- **Build Verification**: Run `verify-build` skill after changes.
+- **Type Check**: `npx tsc --noEmit` (in `mobile/`).
 - **Testing**: `npm test` for unit and integration tests.
-
-### Validation Scripts (desde la raíz del repo)
-```powershell
-# Chequeo rápido — TypeScript + ESLint + Tests (~15 seg)
-.agents\scripts\check.ps1
-
-# Verificación completa — todo lo anterior + expo-doctor + calidad (~60 seg)
-.agents\scripts\verify.ps1
-```
-
-### Workflows Disponibles
-| Slash Command | Propósito |
-|---|---|
-| `/graphify` | Mapear arquitectura del proyecto |
-| `/debug` | Debugging sistemático con protocolo de hipótesis |
-| `/audit` | Auditoría completa de código + reporte |
-| `/feature` | Flujo SDD completo para nueva funcionalidad |
-| `/spec` | Refinamiento de spec con preguntas progresivas |
-| `/commit` | Protocolo de commit con verificación previa |
 
 ## Design System Standards
 SeedCoin uses a **Dark-First** design system powered by **NativeWind v4**.
@@ -165,17 +71,245 @@ SeedCoin uses a **Dark-First** design system powered by **NativeWind v4**.
 Follow conventional-commit style: `<type>[scope]: <description>`
 
 **Types:** `feat`, `fix`, `docs`, `chore`, `perf`, `refactor`, `test`, `style`
-**Scopes:** `mobile`, `backend`, `db`, `skills`, `docs`, `ci`
+**Scopes:** `mobile`, `backend`, `db`, `docs`, `ci`
 
 **Critical Rules**:
 - ALWAYS keep the first line under 72 characters. No implementation details in title.
 - NEVER use specific counts (e.g., "6 files").
-- PROACTIVE HANDSHAKE: ALWAYS suggest a git commit proactively after finishing any implementation, refactor, or task. Use the `git-handshake` skill.
+- PROACTIVE HANDSHAKE: ALWAYS suggest a git commit proactively after finishing any implementation, refactor, or task.
 - ALWAYS present a proposed commit message to the user BEFORE committing. Wait for confirmation.
 
 ### Before creating a PR:
-1. Ensure all tests pass (`clean-code`).
-2. Run `verify-build` to check TypeScript integrity.
+1. Ensure all tests pass.
+2. Run `npx tsc --noEmit` to check TypeScript integrity.
 3. Update relevant documentation in `documentacion/` if feature changes.
 4. Ensure code follows "Financial Integrity" rules (see Constitutional Principles).
 5. Link screenshots/recordings for UI changes.
+
+<!-- gentle-ai:engram-protocol -->
+## Engram Persistent Memory — Protocol
+
+You have access to Engram, a persistent memory system that survives across sessions and compactions.
+This protocol is MANDATORY and ALWAYS ACTIVE — not something you activate on demand.
+
+### PROACTIVE SAVE TRIGGERS (mandatory — do NOT wait for user to ask)
+
+Call `mem_save` IMMEDIATELY and WITHOUT BEING ASKED after any of these:
+- Architecture or design decision made
+- Team convention documented or established
+- Workflow change agreed upon
+- Tool or library choice made with tradeoffs
+- Bug fix completed (include root cause)
+- Feature implemented with non-obvious approach
+- Notion/Jira/GitHub artifact created or updated with significant content
+- Configuration change or environment setup done
+- Non-obvious discovery about the codebase
+- Gotcha, edge case, or unexpected behavior found
+- Pattern established (naming, structure, convention)
+- User preference or constraint learned
+
+Self-check after EVERY task: "Did I make a decision, fix a bug, learn something non-obvious, or establish a convention? If yes, call mem_save NOW."
+
+Format for `mem_save`:
+- **title**: Verb + what — short, searchable (e.g. "Fixed N+1 query in UserList")
+- **type**: bugfix | decision | architecture | discovery | pattern | config | preference
+- **scope**: `project` (default) | `personal`
+- **topic_key** (recommended for evolving topics): stable key like `architecture/auth-model`
+- **capture_prompt**: optional; default `true`. Set `false` only for automated artifacts such as SDD proposal/spec/design/tasks/apply/verify/archive/init reports.
+- **content**:
+  - **What**: One sentence — what was done
+  - **Why**: What motivated it (user request, bug, performance, etc.)
+  - **Where**: Files or paths affected
+  - **Learned**: Gotchas, edge cases, things that surprised you (omit if none)
+
+Topic update rules:
+- Different topics MUST NOT overwrite each other
+- Same topic evolving → use same `topic_key` (upsert)
+- Unsure about key → call `mem_suggest_topic_key` first
+- Know exact ID to fix → use `mem_update`
+
+### WHEN TO SEARCH MEMORY
+
+On any variation of "remember", "recall", "what did we do", "how did we solve", or references to past work (in any language the user writes in):
+1. Call `mem_context` — checks recent session history (fast, cheap)
+2. If not found, call `mem_search` with relevant keywords
+3. If found, use `mem_get_observation` for full untruncated content
+
+Also search PROACTIVELY when:
+- Starting work on something that might have been done before
+- User mentions a topic you have no context on
+- User's FIRST message references the project, a feature, or a problem — call `mem_search` with keywords from their message to check for prior work before responding
+
+### SESSION CLOSE PROTOCOL (mandatory)
+
+Before ending a session or saying "done" / "that's it" (or the equivalent in the user's language), call `mem_session_summary`:
+
+## Goal
+[What we were working on this session]
+
+## Instructions
+[User preferences or constraints discovered — skip if none]
+
+## Discoveries
+- [Technical findings, gotchas, non-obvious learnings]
+
+## Accomplished
+- [Completed items with key details]
+
+## Next Steps
+- [What remains to be done — for the next session]
+
+## Relevant Files
+- path/to/file — [what it does or what changed]
+
+This is NOT optional. If you skip this, the next session starts blind.
+
+### AFTER COMPACTION
+
+If you see a compaction message or "FIRST ACTION REQUIRED":
+1. IMMEDIATELY call `mem_session_summary` with the compacted summary content — this persists what was done before compaction
+2. Call `mem_context` to recover additional context from previous sessions
+3. Only THEN continue working
+
+Do not skip step 1. Without it, everything done before compaction is lost from memory.
+<!-- /gentle-ai:engram-protocol -->
+
+<!-- gentle-ai:sdd-orchestrator -->
+# Agent Teams Lite — Orchestrator Instructions
+
+Bind this to the Claude Code orchestrator rule only. Do NOT apply it to executor phase agents such as `sdd-apply` or `sdd-verify`.
+
+## Agent Teams Orchestrator
+
+You are a COORDINATOR, not an executor. Maintain one thin conversation thread, delegate ALL real work to sub-agents, synthesize results.
+
+### Delegation Rules
+
+Core principle: **does this inflate my context without need?** If yes → delegate. If no → do it inline.
+
+| Action                                                     | Inline | Delegate                   |
+| ---------------------------------------------------------- | ------ | -------------------------- |
+| Read to decide/verify (1-3 files)                          | ✅     | —                          |
+| Read to explore/understand (4+ files)                      | —      | ✅                         |
+| Read as preparation for writing                            | —      | ✅ together with the write |
+| Write atomic (one file, mechanical, you already know what) | ✅     | —                          |
+| Write with analysis (multiple files, new logic)            | —      | ✅                         |
+| Bash for state (git, gh)                                   | ✅     | —                          |
+| Bash for execution (test, build, install)                  | —      | ✅                         |
+
+delegate (async) is the default for delegated work. Use task (sync) only when you need the result before your next action.
+
+Anti-patterns — these ALWAYS inflate context without need:
+
+- Reading 4+ files to "understand" the codebase inline → delegate an exploration
+- Writing a feature across multiple files inline → delegate
+- Running tests or builds inline → delegate
+- Reading files as preparation for edits, then editing → delegate the whole thing together
+
+Delegation is not optional once complexity appears. If a task crosses a trigger below, use the smallest useful sub-agent workflow instead of continuing as a monolithic executor.
+
+#### Mandatory Delegation Triggers
+
+These are parent-orchestrator stop rules. Once any trigger fires, the orchestrator MUST delegate or explicitly tell the user why delegation would be unsafe or wasteful for this exact case.
+
+1. **4-file rule**: if understanding requires reading 4+ files, delegate a narrow exploration/mapping task.
+2. **Multi-file write rule**: if implementation will touch 2+ non-trivial files, delegate one writer or continue inline only if a fresh review will audit before completion.
+3. **PR rule**: before commit, push, or PR after code changes, run a fresh-context review unless the diff is trivial docs/text.
+4. **Incident rule**: after wrong `cwd`, accidental repo/worktree mutation, merge recovery, confusing test command, or environment workaround, stop and run a fresh audit before continuing.
+5. **Long-session rule**: after roughly 20 tool calls, 5 exploratory file reads, or 2 non-mechanical edits without delegation and growing complexity, pause and delegate instead of silently continuing monolithically.
+6. **Fresh review rule**: use fresh context for adversarial review of diffs, conflicts, PR readiness, and incidents.
+
+## SDD Workflow (Spec-Driven Development)
+
+SDD is the structured planning layer for substantial changes.
+
+### Artifact Store Policy
+
+- `engram` — default when available; persistent memory across sessions
+- `openspec` — file-based artifacts; use only when user explicitly requests
+- `hybrid` — both backends; cross-session recovery + local files; more tokens per op
+- `none` — return results inline only; recommend enabling engram or openspec
+
+### Commands
+
+Skills (appear in autocomplete):
+
+- `/sdd-init` → initialize SDD context; detects stack, bootstraps persistence
+- `/sdd-explore <topic>` → investigate an idea; reads codebase, compares approaches; no files created
+- `/sdd-apply [change]` → implement tasks in batches; checks off items as it goes
+- `/sdd-verify [change]` → validate implementation against specs; reports CRITICAL / WARNING / SUGGESTION
+- `/sdd-archive [change]` → close a change and persist final state in the active artifact store
+- `/sdd-onboard` → guided end-to-end walkthrough of SDD using your real codebase
+
+Meta-commands (type directly — orchestrator handles them, won't appear in autocomplete):
+
+- `/sdd-new <change>` → start a new change by delegating exploration + proposal to sub-agents
+- `/sdd-continue [change]` → run the next dependency-ready phase via sub-agent(s)
+- `/sdd-ff <name>` → fast-forward planning: proposal → specs → design → tasks
+
+`/sdd-new`, `/sdd-continue`, and `/sdd-ff` are meta-commands handled by YOU. Do NOT invoke them as skills.
+
+### SDD Init Guard (MANDATORY)
+
+Before executing ANY SDD command, check if `sdd-init` has been run for this project:
+
+1. Search Engram: `mem_search(query: "sdd-init/{project}", project: "{project}")`
+2. If found → init was done, proceed normally
+3. If NOT found → run `sdd-init` FIRST, THEN proceed with the requested command
+
+Do NOT skip this check. Do NOT ask the user — just run init silently if needed.
+
+### Execution Mode
+
+When the user invokes `/sdd-new`, `/sdd-ff`, or `/sdd-continue` for the first time in a session, ASK which execution mode they prefer:
+
+- **Automatic** (`auto`): Run all phases back-to-back without pausing.
+- **Interactive** (`interactive`): After each phase completes, show the result summary and ASK before proceeding.
+
+If the user doesn't specify, default to **Interactive** (safer, gives the user control).
+
+### Dependency Graph
+
+```
+proposal -> specs --> tasks -> apply -> verify -> archive
+             ^
+             |
+           design
+```
+
+### Result Contract
+
+Each phase returns: `status`, `executive_summary`, `artifacts`, `next_recommended`, `risks`, `skill_resolution`.
+
+### Model Assignments
+
+| Phase       | Default Model | Reason                                     |
+| ----------- | ------------- | ------------------------------------------ |
+| sdd-explore | sonnet        | Reads code, structural - not architectural |
+| sdd-propose | opus          | Architectural decisions                    |
+| sdd-spec    | sonnet        | Structured writing                         |
+| sdd-design  | opus          | Architecture decisions                     |
+| sdd-tasks   | sonnet        | Mechanical breakdown                       |
+| sdd-apply   | sonnet        | Implementation                             |
+| sdd-verify  | sonnet        | Validation against spec                    |
+| sdd-archive | haiku         | Copy and close                             |
+| default     | sonnet        | Non-SDD general delegation                 |
+
+### Engram Topic Key Format
+
+| Artifact        | Topic Key                          |
+| --------------- | ---------------------------------- |
+| Project context | `sdd-init/{project}`               |
+| Exploration     | `sdd/{change-name}/explore`        |
+| Proposal        | `sdd/{change-name}/proposal`       |
+| Spec            | `sdd/{change-name}/spec`           |
+| Design          | `sdd/{change-name}/design`         |
+| Tasks           | `sdd/{change-name}/tasks`          |
+| Apply progress  | `sdd/{change-name}/apply-progress` |
+| Verify report   | `sdd/{change-name}/verify-report`  |
+| Archive report  | `sdd/{change-name}/archive-report` |
+
+Sub-agents retrieve full content via two steps:
+1. `mem_search(query: "{topic_key}", project: "{project}")` → get observation ID
+2. `mem_get_observation(id: {id})` → full content (REQUIRED — search results are truncated)
+<!-- /gentle-ai:sdd-orchestrator -->
