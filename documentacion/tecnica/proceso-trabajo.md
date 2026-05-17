@@ -100,21 +100,21 @@ No todas las peticiones requieren la misma ceremonia. Utilizo una matriz de ries
 
 ---
 
-## Modos de Operación y Skills (SDD Flow)
+## Modos de Operación (Orquestación SDD)
 
-El proceso se apoya en **Skills** (archivos de instrucciones en `.agents/skills/`) que se invocan automáticamente según la necesidad:
+El proceso se apoya en meta-comandos y reglas de orquestación integradas en la configuración base del proyecto (`AGENTS.md`). Los siguientes flujos son gestionados por la memoria de **Engram** y la delegación de agentes:
 
-| Fase | Modo / Skill Principal | Detalle Técnico |
-|------|------------------------|-----------------|
-| **1. INIT** | `sdd-init` / `engram` | Sincroniza la memoria a corto plazo con el estado global del proyecto. |
-| **2. EXPLORE** | `sdd-explore` / `graphify`| Mapea dependencias y busca "Dead Code" o riesgos arquitectónicos. |
-| **3. PROPOSE** | `sdd-propose` | Crea el `implementation_plan.md` con estrategias de rollback. |
-| **4. SPEC** | `sdd-spec` / `spec-refiner` | Refina historias de usuario en especificaciones técnicas (Given/When/Then). |
-| **5. DESIGN** | `sdd-design` / `database-core` | Define esquemas, tipos de TS y contratos de componentes. |
-| **6. TASKS** | `sdd-tasks` | Genera el `task.md` para tracking granular de ejecución. |
-| **7. APPLY** | `sdd-apply` / `tdd-workflow` | Fase de construcción. **Obligatorio**: Test -> Código -> Refactor. |
-| **8. VERIFY** | `sdd-verify` / `verify-build` | Ejecución de `tsc`, `lint` y validación de criterios de aceptación. |
-| **9. ARCHIVE** | `sdd-archive` / `git-handshake`| Cierre de sesión, documentación de bugs y sugerencia de commit. |
+| Fase | Meta-comando | Detalle Técnico |
+|------|--------------|-----------------|
+| **1. INIT** | `/sdd-init` | Detecta las capacidades de testing, inicializa la persistencia (Engram) y carga el contexto del proyecto. |
+| **2. EXPLORE** | `/sdd-explore` | Investiga y mapea la base de código. Se puede apoyar en `/graphify` (Workflow local) para ver dependencias. |
+| **3. PROPOSE** | `/sdd-propose` | Toma decisiones arquitectónicas y crea la propuesta técnica (`implementation_plan.md`). |
+| **4. SPEC** | `/sdd-spec` | Traduce los requerimientos o propuestas a especificaciones concretas. |
+| **5. DESIGN** | `/sdd-design` | Diseña esquemas, estructuras e interfaces técnicas. |
+| **6. TASKS** | `/sdd-tasks` | Rompe el diseño en unidades de trabajo ejecutables (`task.md`). |
+| **7. APPLY** | `/sdd-apply` | Fase de implementación (escritura de código y TDD). |
+| **8. VERIFY** | `/sdd-verify` | Ejecución de pruebas, validación de la especificación y resolución de conflictos. |
+| **9. ARCHIVE** | `/sdd-archive` | Cierra la iteración y persiste los resultados finales en el almacén de artefactos (Engram u Openspec). |
 
 ---
 
@@ -131,15 +131,15 @@ El proceso se apoya en **Skills** (archivos de instrucciones en `.agents/skills/
 *Nota: Este proceso asegura que cada cambio sea predecible, seguro y esté alineado con los estándares del proyecto.*
 ## Protocolo de Commits (Handshake)
 
-Para mantener un historial limpio y profesional, sigo un proceso de "Apretón de Manos" (Handshake) antes de cualquier confirmación.
+Para mantener un historial limpio y profesional, me apoyo en el protocolo "Handshake" utilizando los skills nativos de Gentle AI (como `work-unit-commits` y `branch-pr`).
 
 ### 1. Flujo de Ejecución OBLIGATORIO
 
-1.  **Revisión del Estado (`git status`)**: Antes de proponer, verifico qué archivos han cambiado realmente.
-2.  **Atomización de Cambios**: Separo los archivos por funcionalidad o propósito. Si hay cambios en UI y en Base de Datos, se proponen como commits distintos.
-3.  **Propuesta de Commits**: Presento una lista clara de los archivos a incluir y el mensaje de commit sugerido.
+1.  **Revisión del Estado (`git status`)**: Antes de proponer, verifico qué archivos han cambiado.
+2.  **Atomización de Cambios (`work-unit-commits`)**: Planifico commits como unidades de trabajo revisables (Work Units), separando refactors de nuevas funcionalidades o cambios visuales.
+3.  **Propuesta de Commits**: Presento una lista clara de los archivos a incluir y el mensaje de commit sugerido (siguiendo Conventional Commits).
 4.  **Aprobación del Usuario**: Espero el visto bueno explícito antes de ejecutar cualquier comando `git commit`.
-5.  **Ejecución Quirúrgica**: Utilizo `git add <archivo>` o `git add <carpeta>` de forma específica. **NUNCA** utilizo `git add .` por defecto.
+5.  **Ejecución Quirúrgica**: Utilizo `git add <archivo>` o `git add <carpeta>` de forma específica. **NUNCA** utilizo `git add .` por defecto sin autorización.
 
 ### 2. Estándar de Mensajes (Conventional Commits)
 
