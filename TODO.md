@@ -17,8 +17,8 @@
     - [x] En la vista detallada, mostrar información específica: saldo, transacciones, rendimiento (si aplica), etc.
     - [x] Agregar un botón "Ver más" o similar en el dashboard para acceder a esta vista.
 
-- quitar el boton de preferenciasde ui del apartado de perfil 
+- [x] quitar el boton de preferenciasde ui del apartado de perfil 
 
-- 
+- revisar en el proyecto si hay querys hechas directamente en el codigo y no en el archivo de querys 
 
 

@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
-import { Settings, RotateCcw, ChevronRight, Wallet, CalendarClock } from 'lucide-react-native';
+import { RotateCcw, ChevronRight, Wallet, CalendarClock } from 'lucide-react-native';
 import { Card } from '@/components/ui/Card';
 import { IconBadge } from '@/components/ui/IconBadge';
 
@@ -41,18 +41,7 @@ export function ProfileMenu({ onResetDatabase, showDeveloperFeatures }: ProfileM
           <ChevronRight size={18} color="#475569" />
         </Pressable>
 
-        <Pressable 
-          className="flex-row items-center justify-between p-5 border-b border-dark-700 active:bg-dark-700/50"
-          onPress={() => {/* TODO: Navegación a preferencias UI */}}
-        >
-          <View className="flex-row items-center gap-4">
-            <IconBadge color="orange" className="rounded-2xl">
-              <Settings size={20} color="#f97316" />
-            </IconBadge>
-            <Text className="text-white font-medium">Preferencias UI</Text>
-          </View>
-          <ChevronRight size={18} color="#475569" />
-        </Pressable>
+
 
         {showDeveloperFeatures && (
           <Pressable 
