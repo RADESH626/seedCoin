@@ -53,9 +53,8 @@ export const SchedulerService = {
       const now = new Date().toISOString();
       
       // 1. Obtener todas las transacciones programadas cuya fecha sea <= ahora
-      // Nota: Usamos una query directa aprovechando que ya conocemos la estructura
       const scheduled = await db.getAllAsync<Transaction>(
-        `SELECT * FROM TRANSACTIONS WHERE status = 'SCHEDULED' AND transaction_date <= ? AND is_active = 1`,
+        QUERIES_TRANSACTION.GET_DUE_SCHEDULED,
         [now]
       );
 

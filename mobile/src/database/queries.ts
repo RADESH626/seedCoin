@@ -4,21 +4,21 @@
 
 export const QUERIES_ACCOUNT = {
   GET_ALL_ACTIVE: `SELECT account_id, name, account_type, initial_balance, current_balance, yield_rate, payment_day, is_active FROM ACCOUNT WHERE is_active = 1;`,
-  
+
   GET_ALL_ACTIVE_ORDERED: `SELECT account_id, name, account_type, initial_balance, current_balance, yield_rate, payment_day, is_active FROM ACCOUNT WHERE is_active = 1 ORDER BY account_id DESC;`,
-  
+
   // Usado con parametros indexados (?)
   INSERT_INDEXED: `INSERT INTO ACCOUNT (name, account_type, initial_balance, current_balance) VALUES (?, ?, ?, ?);`,
-  
+
   // Usado con parametros nombrados ($name)
   INSERT_NAMED: `INSERT INTO ACCOUNT (name, account_type, initial_balance, current_balance, yield_rate, payment_day) VALUES ($name, $type, $initial, $current, $yield_rate, $payment_day);`,
-  
+
   SOFT_DELETE: `UPDATE ACCOUNT SET is_active = 0 WHERE account_id = $id;`,
-  
+
   GET_BY_ID: `SELECT account_id, name, account_type, initial_balance, current_balance, yield_rate, payment_day, is_active FROM ACCOUNT WHERE account_id = $id;`,
-  
+
   UPDATE_NAMED: `UPDATE ACCOUNT SET name = $name, account_type = $type, initial_balance = $initial, current_balance = current_balance + ($initial - initial_balance), yield_rate = $yield_rate, payment_day = $payment_day WHERE account_id = $id;`,
-  
+
   GET_TOTAL_BALANCE: `SELECT SUM(current_balance) as total FROM ACCOUNT WHERE is_active = 1;`
 };
 
@@ -38,7 +38,7 @@ export const QUERIES_TRANSACTION = {
     WHERE account_id = ? AND is_active = 1 
     ORDER BY transaction_date DESC;
   `,
-  
+
   GET_RECENT: `
     SELECT 
       transaction_id, account_id, debt_id, transfer_transaction_id, 
@@ -49,7 +49,7 @@ export const QUERIES_TRANSACTION = {
     ORDER BY transaction_date DESC 
     LIMIT ?;
   `,
-  
+
   GET_RECENT_WITH_CATEGORY: `
     SELECT 
       T.transaction_id, T.amount, T.is_income, T.transaction_date, T.description, T.category_id
@@ -58,7 +58,7 @@ export const QUERIES_TRANSACTION = {
     ORDER BY T.transaction_date DESC 
     LIMIT 5;
   `,
-  
+
   GET_MONTHLY_STATS: `
     SELECT 
       SUM(CASE WHEN is_income = 1 THEN amount ELSE 0 END) as total_income,
@@ -68,7 +68,7 @@ export const QUERIES_TRANSACTION = {
       AND status = 'COMPLETED'
       AND transaction_date >= datetime('now', 'start of month');
   `,
-  
+
   INSERT_NAMED: `
     INSERT INTO TRANSACTIONS (account_id, is_income, amount, category_id, description, transaction_date, status, recurrence_frequency, is_automatic, transfer_transaction_id, debt_id) 
     VALUES ($account_id, $is_income, $amount, $category_id, $description, $transaction_date, $status, $recurrence_frequency, $is_automatic, $transfer_transaction_id, $debt_id);
