@@ -5,7 +5,8 @@ import { log } from '@/src/shared/services/logger';
 import { usePreferences } from '@/src/modules/profile/hooks/usePreferences';
 import { useAccounts } from '@/src/modules/accounts/hooks/useAccounts';
 import { useSingleAction } from '@/src/shared/hooks/useSingleAction';
-import { NameSelection, AccountStart } from '@/src/modules/onboarding/components/OnboardingSections';
+import { NameSelection } from '@/src/modules/onboarding/components/NameSelection';
+import { AccountStart } from '@/src/modules/onboarding/components/AccountStart';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
