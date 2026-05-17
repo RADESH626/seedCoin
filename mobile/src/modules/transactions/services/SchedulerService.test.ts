@@ -1,4 +1,5 @@
-import { SchedulerService } from '@/src/shared/services/SchedulerService';
+import { SchedulerService } from '@/src/modules/transactions/services/SchedulerService';
+import { RecurrenceFrequency } from '@/src/database/types';
 
 describe('SchedulerService', () => {
   describe('calculateNextOccurrence', () => {

@@ -84,7 +84,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded && dbLoaded) {
       // Procesamos transacciones programadas al iniciar
-      import('@/src/shared/services/SchedulerService')
+      import('@/src/modules/transactions/services/SchedulerService')
         .then(({ SchedulerService }) => SchedulerService.processDueTransactions())
         .catch(e => console.error("Error processing schedules:", e));
 

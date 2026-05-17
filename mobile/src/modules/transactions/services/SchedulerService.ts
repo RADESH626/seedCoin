@@ -1,9 +1,9 @@
-import { NotificationService } from './NotificationService';
+import { NotificationService } from '@/src/shared/services/NotificationService';
 import { getDBConnection } from '@/src/database/connection';
 import { QUERIES_TRANSACTION } from '@/src/database/queries';
 import { Transaction, RecurrenceFrequency } from '@/src/database/types';
 import { withNativeRetry } from '@/src/shared/utils/database';
-import { log } from './logger';
+import { log } from '@/src/shared/services/logger';
 import { fromCents } from '@/src/shared/utils/currency';
 
 /**

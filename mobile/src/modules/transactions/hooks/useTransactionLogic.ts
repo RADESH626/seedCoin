@@ -11,7 +11,7 @@ import {
   useUpdateTransaction, 
   useDeleteTransaction 
 } from './useTransactionActions';
-import { SchedulerService } from '@/src/shared/services/SchedulerService';
+import { SchedulerService } from '@/src/modules/transactions/services/SchedulerService';
 import { NotificationService } from '@/src/shared/services/NotificationService';
 import { createTransfer } from '../services/TransferService';
 import { TransactionMode } from '../components/TransactionTypeSelector';
