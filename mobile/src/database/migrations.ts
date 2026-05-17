@@ -121,5 +121,26 @@ export const MIGRATIONS: Record<number, (db: SQLiteDatabase) => Promise<void>> =
       await db.execAsync('DROP TABLE BUDGET;');
       await db.execAsync('ALTER TABLE BUDGET_NEW RENAME TO BUDGET;');
     });
+  },
+  11: async (db) => {
+    log.info('Migrando a v11: Fix triggers para transacciones DUE -> COMPLETED');
+    // Eliminar el disparador antiguo defectuoso
+    await db.execAsync('DROP TRIGGER IF EXISTS update_account_balance_after_update;');
+    
+    // Crear el nuevo disparador que maneja correctamente los cambios de estado DUE -> COMPLETED
+    await db.execAsync(`
+      CREATE TRIGGER update_account_balance_after_update
+      AFTER UPDATE ON TRANSACTIONS
+      WHEN OLD.is_active = 1 AND NEW.is_active = 1 AND (OLD.status = 'COMPLETED' OR NEW.status = 'COMPLETED')
+      BEGIN
+          UPDATE ACCOUNT
+          SET current_balance = current_balance - CASE WHEN OLD.is_income THEN OLD.amount ELSE -OLD.amount END
+          WHERE account_id = OLD.account_id AND OLD.status = 'COMPLETED';
+
+          UPDATE ACCOUNT
+          SET current_balance = current_balance + CASE WHEN NEW.is_income THEN NEW.amount ELSE -NEW.amount END
+          WHERE account_id = NEW.account_id AND NEW.status = 'COMPLETED';
+      END;
+    `);
   }
 };

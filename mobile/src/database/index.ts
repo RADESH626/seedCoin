@@ -7,7 +7,7 @@ import { MIGRATIONS } from './migrations';
  * Versión actual de la base de datos.
  * Debe coincidir con la última llave en el objeto MIGRATIONS.
  */
-const DATABASE_VERSION = 10;
+const DATABASE_VERSION = 11;
 
 /**
  * Orquestador de inicialización y migración de la base de datos.
