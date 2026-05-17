@@ -123,6 +123,14 @@ export const QUERIES_TRANSACTION = {
     LEFT JOIN ACCOUNT A ON T.account_id = A.account_id
     WHERE T.is_active = 1 AND (T.status = 'SCHEDULED' OR T.status = 'DUE')
     ORDER BY T.status DESC, T.transaction_date ASC;
+  `,
+
+  GET_DUE_SCHEDULED: `
+    SELECT * FROM TRANSACTIONS WHERE status = 'SCHEDULED' AND transaction_date <= ? AND is_active = 1;
+  `,
+
+  UPDATE_SCHEDULE_DATE: `
+    UPDATE TRANSACTIONS SET transaction_date = ? WHERE transaction_id = ?;
   `
 };
 

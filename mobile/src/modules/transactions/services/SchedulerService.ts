@@ -96,7 +96,7 @@ export const SchedulerService = {
 
       // 2. Actualizar la fecha de la plantilla al siguiente ciclo
       await db.runAsync(
-        `UPDATE TRANSACTIONS SET transaction_date = ? WHERE transaction_id = ?`,
+        QUERIES_TRANSACTION.UPDATE_SCHEDULE_DATE,
         [nextDate, template.transaction_id]
       );
 
