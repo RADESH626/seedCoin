@@ -19,6 +19,6 @@
 
 - [x] quitar el boton de preferenciasde ui del apartado de perfil 
 
-- revisar en el proyecto si hay querys hechas directamente en el codigo y no en el archivo de querys 
+- [x] revisar en el proyecto si hay querys hechas directamente en el codigo y no en el archivo de querys 
 
 
