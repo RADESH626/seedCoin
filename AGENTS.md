@@ -223,6 +223,15 @@ These are parent-orchestrator stop rules. Once any trigger fires, the orchestrat
 
 SDD is the structured planning layer for substantial changes.
 
+### Graphify Knowledge Graph Integration (MANDATORY)
+
+SeedCoin uses `graphify` to maintain a queryable knowledge graph of the codebase, schemas, and architecture.
+When the `graphify-out/` directory exists, you MUST leverage it to reduce token usage and improve accuracy:
+
+- **During Exploration (`sdd-explore`)**: Before searching multiple files with `grep` or `view_file`, read `graphify-out/GRAPH_REPORT.md` and use the `/graphify` skill (if installed) to understand dependencies.
+- **Before Architecture Decisions (`sdd-propose` / `sdd-design`)**: Query the graph to check for coupling and ensure compliance with the Offline-first SQLite architecture.
+- **After Large Refactors**: Suggest the user run `/graphify .` to update the graph.
+
 ### Artifact Store Policy
 
 - `engram` — default when available; persistent memory across sessions
