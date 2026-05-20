@@ -5,10 +5,18 @@ import { fromCents, toCents } from '@/src/shared/utils/currency';
 import { withNativeRetry } from '@/src/shared/utils/database';
 import { getCategoryById } from '@/src/modules/categories/constants/categories';
 
+interface BudgetProgressDbRow {
+  budget_id: number;
+  limit_amount: number;
+  period: string;
+  category_id: string;
+  total_spent: number;
+}
+
 export const getBudgetsWithProgress = async (): Promise<BudgetWithProgress[]> => {
   return await withNativeRetry(async () => {
     const db = await getDBConnection();
-    const result = await db.getAllAsync<any>(QUERIES_BUDGET.GET_BUDGETS_WITH_PROGRESS);
+    const result = await db.getAllAsync<BudgetProgressDbRow>(QUERIES_BUDGET.GET_BUDGETS_WITH_PROGRESS);
     
     return (result ?? []).map(budget => {
       const category = getCategoryById(budget.category_id);

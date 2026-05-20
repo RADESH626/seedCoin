@@ -5,6 +5,8 @@ export const CREATE_TABLES = `
         account_type TEXT NOT NULL,
         initial_balance INTEGER NOT NULL DEFAULT 0,
         current_balance INTEGER NOT NULL DEFAULT 0,
+        yield_rate REAL DEFAULT 0,
+        payment_day INTEGER DEFAULT 1,
         is_active BOOLEAN NOT NULL DEFAULT 1,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );

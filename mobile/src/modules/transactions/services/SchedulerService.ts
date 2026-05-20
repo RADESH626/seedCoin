@@ -16,7 +16,6 @@ export const SchedulerService = {
    */
   calculateNextOccurrence(baseDateStr: string, frequency: RecurrenceFrequency): string {
     const date = new Date(baseDateStr);
-    const currentDate = new Date(baseDateStr);
     
     switch (frequency) {
       case 'DAILY':

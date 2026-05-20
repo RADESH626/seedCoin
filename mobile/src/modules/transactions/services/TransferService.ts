@@ -14,7 +14,7 @@ export const createTransfer = async (
   try {
     log.info(`TransferService: Iniciando transferencia atómica de ${amount} de ${fromAccountId} a ${toAccountId}`);
 
-    return await db.withTransactionAsync(async () => {
+    await db.withTransactionAsync(async () => {
       // 1. Crear transacción de salida (Gasto)
       const expenseTxId = await createTransaction({
         accountId: fromAccountId,
